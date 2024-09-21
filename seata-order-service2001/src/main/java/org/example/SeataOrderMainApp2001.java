@@ -18,6 +18,7 @@ public class SeataOrderMainApp2001
 {
     public static void main(String[] args)
     {
+        //test
         SpringApplication.run(SeataOrderMainApp2001.class,args);
     }
 }
