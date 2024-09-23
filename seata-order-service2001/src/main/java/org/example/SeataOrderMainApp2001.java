@@ -19,7 +19,7 @@ public class SeataOrderMainApp2001
     public static void main(String[] args)
     {
         //test111kiddy
-        System.out.println("test111kiddy");
+        System.out.println("test");
         SpringApplication.run(SeataOrderMainApp2001.class,args);
     }
 }
