@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.MUsersMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.MUsers">
+    <id column="username" jdbcType="VARCHAR" property="username" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nameEn" jdbcType="VARCHAR" property="nameEn" />
+    <result column="employeeId" jdbcType="VARCHAR" property="employeeId" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="entranceTime" jdbcType="DATE" property="entranceTime" />
+    <result column="leaveTime" jdbcType="DATE" property="leaveTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    username, createTime, createUser, updateTime, updateUser, delFlg, password, name, 
+    nameEn, employeeId, gender, birthday, email, tel, entranceTime, leaveTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from musers
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from musers
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.MUsers">
+    insert into musers (username, createTime, createUser, 
+      updateTime, updateUser, delFlg, 
+      password, name, nameEn, 
+      employeeId, gender, birthday, 
+      email, tel, entranceTime, 
+      leaveTime)
+    values (#{username,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{delFlg,jdbcType=CHAR}, 
+      #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nameEn,jdbcType=VARCHAR}, 
+      #{employeeId,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
+      #{email,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{entranceTime,jdbcType=DATE}, 
+      #{leaveTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.MUsers">
+    insert into musers
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="nameEn != null">
+        nameEn,
+      </if>
+      <if test="employeeId != null">
+        employeeId,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="entranceTime != null">
+        entranceTime,
+      </if>
+      <if test="leaveTime != null">
+        leaveTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="entranceTime != null">
+        #{entranceTime,jdbcType=DATE},
+      </if>
+      <if test="leaveTime != null">
+        #{leaveTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.MUsers">
+    update musers
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        nameEn = #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeId != null">
+        employeeId = #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="entranceTime != null">
+        entranceTime = #{entranceTime,jdbcType=DATE},
+      </if>
+      <if test="leaveTime != null">
+        leaveTime = #{leaveTime,jdbcType=DATE},
+      </if>
+    </set>
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.MUsers">
+    update musers
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      nameEn = #{nameEn,jdbcType=VARCHAR},
+      employeeId = #{employeeId,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      email = #{email,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      entranceTime = #{entranceTime,jdbcType=DATE},
+      leaveTime = #{leaveTime,jdbcType=DATE}
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+</mapper>

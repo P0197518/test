@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.dao.CommonUserMapper">
+
+    <select id="getUserInfoById" parameterType="java.lang.String"
+        resultType="com.fujias.common.db.entity.MUsers">
+        select
+        *
+        from MUsers
+        where username =
+        #{username,jdbcType=VARCHAR}
+        and delflg = '0'
+    </select>
+
+    <select id="getUserRoles" parameterType="java.lang.String"
+        resultType="com.fujias.common.db.entity.MRoles">
+        select
+        roles.id
+        ,roles.rolename
+        from MUserRoles as userroles
+        inner join
+        MRoles as roles
+        on userroles.roleid = roles.id
+        where
+        userroles.userid =
+        #{userId,jdbcType=VARCHAR}
+        and roles.delflg = '0'
+    </select>
+
+    <select id="getUserDepids" parameterType="java.lang.String"
+        resultType="String">
+        select
+        depid
+        from MUserDepartments
+        where userid =
+        #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getUserResources" parameterType="java.lang.String"
+        resultMap="ResourceFunctionResultMap">
+        select distinct
+        resource.resourcecd
+        , resource.resourcename
+        ,
+        functionresource.resourcecd as functionid
+        , functionresource.elementid as
+        elementid
+        from
+        MResource as resource
+        inner join MRoleResource as
+        roleresource
+        on resource.id = roleresource.resourceid
+        inner join
+        MUserRoles as userroles
+        on roleresource.roleid = userroles.roleid
+        and
+        userroles.userid = #{userId,jdbcType=VARCHAR}
+        left join MResource as
+        functionresource
+        on functionresource.parentid = resource.id
+        and
+        functionresource.type = '2'
+        and functionresource.delflg = '0'
+        left join
+        MRoleResource functionroleresource
+        on functionresource.id =
+        functionroleresource.resourceid
+        left join MUserRoles functionuserroles
+        on
+        functionroleresource.roleid = functionuserroles.roleid
+        and
+        functionuserroles.userid = #{userId,jdbcType=VARCHAR}
+        where
+        resource.type
+        = '1'
+        and resource.delflg = '0'
+        and (
+        functionresource.id is null
+        or (
+        functionresource.id is not null
+        and functionroleresource.resourceid is
+        not null
+        )
+        )
+        order by
+        resource.sortorder
+        , functionid
+
+    </select>
+    <select id="getUserResourcesByOne" parameterType="com.fujias.common.form.CommonUserResourceForm"
+        resultType="com.fujias.common.form.CommonResourceFunctions">
+        select
+        pageresource.id as resourcecd
+        ,functionresource.id as
+        functionid
+        , functionresource.elementid as elementid
+        from
+        MResource AS
+        functionresource
+        inner join MRoleResource as roleresource
+        on
+        functionresource.id = roleresource.resourceid
+        inner join MUserRoles as
+        userroles
+        on roleresource.roleid = userroles.roleid
+        and userroles.userid =
+        #{userid,jdbcType=VARCHAR}
+        INNER JOIN MResource as pageresource
+        on
+        functionresource.parentid = pageresource.id
+        and pageresource.type = '2'
+        and pageresource.resourcecd = #{resourcecd,jdbcType=VARCHAR}
+        where
+        functionresource.type = '3'
+        and functionresource.delflg = '0'
+        order by
+        functionresource.sortorder
+
+    </select>
+    <resultMap type="com.fujias.common.form.CommonResourceFunctions"
+        id="ResourceFunctionResultMap">
+        <id column="resourcecd" property="resourcecd" />
+        <collection property="elementids"
+            ofType="com.fujias.common.form.CommonResourceFunctions">
+            <id column="functionid" property="functioncd" />
+            <result column="elementid" property="elementid" />
+        </collection>
+
+    </resultMap>
+</mapper>

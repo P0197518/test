@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p02.P0241PickSettingMapper">
+    <select id="getListByPage"
+        parameterType="com.fujias.business.forms.p02.P0241PickSettingForm"
+        resultType="com.fujias.business.forms.p02.P0241PickSettingForm">
+        select
+        t.id
+        , itemName
+        , m.codeName as settingType
+        , setting
+        ,
+        t.option1
+        from
+        t0203adjustsettings t
+        left join mkbn m
+        on m.codeCd =
+        t.settingType
+        and m.codeTypeCd = '04'
+        where
+        t.delflg = '0'
+        <if test="itemName != null and itemName != ''">
+            AND itemName like '%${itemName}%'
+        </if>
+        <if test="settingType != null and settingType != ''">
+            AND settingType = #{settingType}
+        </if>
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+    <select id="getSettingType" resultType="com.fujias.common.entity.SelectItem">
+        select
+        codeCd AS value,
+        codeName AS text
+        from
+        mkbn
+        where
+        delFlg = '0'
+        and codeTypeCd = '04'
+    </select>
+    <select id="getAllByParentId"
+        resultType="com.fujias.business.forms.p02.P0241PickSettingForm"
+        parameterType="java.lang.String">
+        select
+        createTime, createUser, updateTime,
+        updateUser, delFlg, id,
+        resourceName, parentId, resourceUrl,
+        imgValue, showInMenu, sortOrder,
+        resourceCd, type, elementId
+        from
+        mresource
+        where
+        delFlg = '0' and parentId = #{parentId}
+        order by
+        sortOrder
+    </select>
+    <select id="getItemName" resultType="com.fujias.common.entity.SelectItem">
+        select
+        id AS value,
+        itemName AS text
+        from
+        t0203adjustsettings
+    </select>
+    <select id="userDepart" parameterType="String" resultType="String">
+        select
+        name
+        from muserdepartments
+        inner join mdepartment
+        on
+        muserdepartments.depId = mdepartment.depId
+        where
+        muserdepartments.depId = #{depId}
+    </select>
+    <select id="getSettingList"
+        parameterType="com.fujias.business.forms.p02.P0241PickSettingForm"
+        resultType="com.fujias.business.forms.p02.P0241PickSettingForm">
+        select
+        t.id
+        ,itemName
+        ,m.codeName as settingType
+        ,setting
+        from t0203adjustsettings t
+        left outer join mkbn m
+        on
+        t.settingType = m.codeCd
+        and m.codeTypeCd = '07'
+        where
+        t.delflg = '0'
+        and t.settingType = #{settingType}
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+</mapper>

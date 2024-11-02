@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.MResourceMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.MResource">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+    <result column="resourceName" jdbcType="VARCHAR" property="resourceName" />
+    <result column="parentId" jdbcType="VARCHAR" property="parentId" />
+    <result column="resourceUrl" jdbcType="VARCHAR" property="resourceUrl" />
+    <result column="imgValue" jdbcType="VARCHAR" property="imgValue" />
+    <result column="showInMenu" jdbcType="CHAR" property="showInMenu" />
+    <result column="sortOrder" jdbcType="VARCHAR" property="sortOrder" />
+    <result column="resourceCd" jdbcType="VARCHAR" property="resourceCd" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="elementId" jdbcType="VARCHAR" property="elementId" />
+    <result column="resourceNameNI" jdbcType="VARCHAR" property="resourceNameNI" />
+    <result column="resourceNameEN" jdbcType="VARCHAR" property="resourceNameEN" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, createTime, createUser, updateTime, updateUser, delFlg, resourceName, parentId, 
+    resourceUrl, imgValue, showInMenu, sortOrder, resourceCd, type, elementId, resourceNameNI, 
+    resourceNameEN
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mresource
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from mresource
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.MResource">
+    insert into mresource (id, createTime, createUser, 
+      updateTime, updateUser, delFlg, 
+      resourceName, parentId, resourceUrl, 
+      imgValue, showInMenu, sortOrder, 
+      resourceCd, type, elementId, 
+      resourceNameNI, resourceNameEN)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{delFlg,jdbcType=CHAR}, 
+      #{resourceName,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{resourceUrl,jdbcType=VARCHAR}, 
+      #{imgValue,jdbcType=VARCHAR}, #{showInMenu,jdbcType=CHAR}, #{sortOrder,jdbcType=VARCHAR}, 
+      #{resourceCd,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{elementId,jdbcType=VARCHAR}, 
+      #{resourceNameNI,jdbcType=VARCHAR}, #{resourceNameEN,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.MResource">
+    insert into mresource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+      <if test="resourceName != null">
+        resourceName,
+      </if>
+      <if test="parentId != null">
+        parentId,
+      </if>
+      <if test="resourceUrl != null">
+        resourceUrl,
+      </if>
+      <if test="imgValue != null">
+        imgValue,
+      </if>
+      <if test="showInMenu != null">
+        showInMenu,
+      </if>
+      <if test="sortOrder != null">
+        sortOrder,
+      </if>
+      <if test="resourceCd != null">
+        resourceCd,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="elementId != null">
+        elementId,
+      </if>
+      <if test="resourceNameNI != null">
+        resourceNameNI,
+      </if>
+      <if test="resourceNameEN != null">
+        resourceNameEN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="resourceName != null">
+        #{resourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceUrl != null">
+        #{resourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgValue != null">
+        #{imgValue,jdbcType=VARCHAR},
+      </if>
+      <if test="showInMenu != null">
+        #{showInMenu,jdbcType=CHAR},
+      </if>
+      <if test="sortOrder != null">
+        #{sortOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceCd != null">
+        #{resourceCd,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="elementId != null">
+        #{elementId,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceNameNI != null">
+        #{resourceNameNI,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceNameEN != null">
+        #{resourceNameEN,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.MResource">
+    update mresource
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="resourceName != null">
+        resourceName = #{resourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parentId = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceUrl != null">
+        resourceUrl = #{resourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgValue != null">
+        imgValue = #{imgValue,jdbcType=VARCHAR},
+      </if>
+      <if test="showInMenu != null">
+        showInMenu = #{showInMenu,jdbcType=CHAR},
+      </if>
+      <if test="sortOrder != null">
+        sortOrder = #{sortOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceCd != null">
+        resourceCd = #{resourceCd,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="elementId != null">
+        elementId = #{elementId,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceNameNI != null">
+        resourceNameNI = #{resourceNameNI,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceNameEN != null">
+        resourceNameEN = #{resourceNameEN,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.MResource">
+    update mresource
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR},
+      resourceName = #{resourceName,jdbcType=VARCHAR},
+      parentId = #{parentId,jdbcType=VARCHAR},
+      resourceUrl = #{resourceUrl,jdbcType=VARCHAR},
+      imgValue = #{imgValue,jdbcType=VARCHAR},
+      showInMenu = #{showInMenu,jdbcType=CHAR},
+      sortOrder = #{sortOrder,jdbcType=VARCHAR},
+      resourceCd = #{resourceCd,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      elementId = #{elementId,jdbcType=VARCHAR},
+      resourceNameNI = #{resourceNameNI,jdbcType=VARCHAR},
+      resourceNameEN = #{resourceNameEN,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+    namespace="com.fujias.business.dao.p01.P0124ProductbilityReportSettingMapper">
+    <select id="getListByPage"
+        parameterType="com.fujias.business.forms.p01.P0124ProductbilityReportSettingControllerForm"
+        resultType="com.fujias.business.forms.p01.P0124ProductbilityReportSettingControllerForm">
+        select
+        t0204systemsettings.id
+        , mdepartment.name as departmentId
+        ,
+        t0204systemsettings.itemName as itemName
+        , mkbn.codeName as
+        settingType
+        , t0204systemsettings.setting
+        ,
+        t0204systemsettings.option1
+        from
+        t0204systemsettings
+        left outer
+        join mdepartment
+        on
+        mdepartment.depId =
+        t0204systemsettings.departmentId
+        left outer join mkbn
+        on
+        mkbn.codeCd = t0204systemsettings.settingType
+        and codeTypeCd =
+        '07'
+        where
+        t0204systemsettings.delflg = '0'
+        <if test="departmentId != null and departmentId != ''">
+            AND departmentId = #{departmentId}
+        </if>
+        <if test="itemName != null and itemName != ''">
+            AND t0204systemsettings.itemName like
+            '%${itemName}%'
+        </if>
+            <if test="settingTypeList != null and settingTypeList.size > 0">
+            AND settingType in
+            <foreach collection="settingTypeList" item="id" index="index" open="(" close=")" separator=",">
+              #{id}
+            </foreach>
+    </if>
+        
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+    <select id="getSettingType" resultType="com.fujias.common.entity.SelectItem">
+        select
+        codeCd AS value,
+        codeName AS text
+        from
+        mkbn
+        where
+        delFlg = '0'
+        and codeTypeCd = '07'
+        and codeCd in ('0010','0011')
+    </select>
+        <select id="getSettingGrid" resultType="com.fujias.common.entity.SelectItem">
+        select
+        codeCd AS value,
+        codeName AS text
+        from
+        mkbn
+        where
+        delFlg = '0'
+        and codeTypeCd = '07'
+    </select>
+    <select id="getSettingList"
+        parameterType="com.fujias.business.forms.p01.P0124ProductbilityReportSettingControllerForm"
+        resultType="com.fujias.business.forms.p01.P0124ProductbilityReportSettingControllerForm">
+        select
+        t.id
+        ,itemName
+        ,m.codeName as settingType
+        ,setting
+        from t0204systemsettings t
+        left outer join mkbn m
+        on
+        t.settingType = m.codeCd
+        and m.codeTypeCd = '07'
+        where
+        t.delflg = '0'
+        and departmentId = #{departmentId}
+        and
+        t.settingType = #{settingType}
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+        <select id="getSettingExist"
+        parameterType="com.fujias.business.forms.p01.P0124ProductbilityReportSettingControllerForm"
+        resultType="com.fujias.business.forms.p01.P0124ProductbilityReportSettingControllerForm">
+        select
+        *
+        from
+        t0204systemsettings t
+        where
+        itemName = #{itemName}
+        and
+        t.settingType = #{settingType}
+
+    </select>
+</mapper>

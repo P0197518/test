@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>生产性计算设置</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner" id="form1">
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden" value="P0124" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">搜索条件</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+								<div class="search-item">
+									<label for="departmentId" class="control-label col-sm-0">部门: </label> 
+									<input id="departmentId" name="departmentId" class="mini-combobox" allowInput="false" th:value="${formdata.departmentId}" valueField="value" 
+                                           emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+								</div>
+								<div class="search-item">
+									<label for="itemName" class="control-label col-sm-0"> 品名: </label> 
+									<input id="itemName" name="itemName" class="mini-textbox" th:field="${formdata.itemName}" 
+									onenter="search()" maxlength="32" />
+								</div>
+								<div class="search-item">
+									<label for="settingType" class="control-label col-sm-0">设置类型: </label> 
+									<input id="settingType" name="settingType" class="mini-checkbox"th:field="${formdata.settingType}"  onenter="search()" trueValue="true" 
+									falseValue="false" text="冲压工序设置" />
+
+								</div>
+								<div class="search-item">
+									<label for="grindingType" class="control-label col-sm-1">研磨分类工序设置: </label> 
+									<input id="grindingType1" name="grindingType1" class="mini-checkbox"th:field="${formdata.grindingType1}"  onenter="search()" trueValue="true" 
+									falseValue="false" text="粗研磨" /> <input id="grindingType2" name="grindingType2" th:field="${formdata.grindingType2}" class="mini-checkbox" 
+									onenter="search()" trueValue="true" falseValue="false" text="中間研磨" /> 
+									<input id="grindingType3" name="grindingType3" class="mini-checkbox" th:field="${formdata.grindingType3}" onenter="search()" trueValue="true" 
+									falseValue="false" text="乾式" /> <input id="grindingType4" name="grindingType4" class="mini-checkbox" th:field="${formdata.grindingType4}" 
+									onenter="search()" trueValue="true" falseValue="false" text="精研磨" />
+
+								</div>
+								<a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()"> 
+								<i class="ace-icon fa fa-search"> </i> 搜索
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> 
+		<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div>
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;">
+				<a id="add" class="mini-button btn btn-warning btn-round autoAuth" onclick="add()" type="button"> 
+				<i class="ace-icon fa fa-plus-circle bigger-110"> </i> 添加
+				</a> <a id="removeItem" class="mini-button btn btn-danger btn-round autoAuth" onclick="removeItem()" type="button"> 
+				<i class="ace-icon fa fa-times-circle"> </i> 删除
+				</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" th:url="@{/P0124ProductbilitySetting/getList}" 
+		class="mini-datagrid" idField="departmentId" allowResize="false" 
+		allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" 
+		style="width: 100%; height: 100%;" sortField="departmentId" sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="departmentId" name="departmentId" width="60" sortField="departmentId" 
+				headerAlign="center" allowSort="true" align="center">部门</div>
+				<div field="itemName" name="itemName" width="120" sortField="itemName" 
+				headerAlign="center" align="center" allowSort="true">品名</div>
+				<div field="settingType" name="settingType" width="80" sortField="settingType" 
+				headerAlign="center" align="left" allowSort="true">设置类型</div>
+				<div field="setting" name="setting" width="120" sortField="setting" 
+				headerAlign="center" align="left" allowSort="true">设置内容</div>
+				<div field="option1" name="option1" width="120" sortField="t0204systemsettings.option1" 
+				headerAlign="center" align="left" allowSort="true">其他设置</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+        var form = new mini.Form("#form1");
+
+        // 查询操作
+        function search() {
+
+            var searchData = form.getData();
+
+
+            grid.load(getPagerInfo("grid1", searchData));
+        }
+
+        function onSaveSearchCondation() {
+            saveSearchCondation(search);
+        }
+
+        $(function() {
+            getSearchCondation(search);
+        });
+
+        // 添加操作
+        function add() {
+            var popupParam = openCommonPopupParam("/P0124ProductbilitySetting/indexEdit?mode=create",
+                    "生产性计算设置添加");
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {
+                    grid.reload();
+                }
+            };
+
+            mini.open(popupParam);
+        }
+     // 删除操作
+        function removeItem() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                businessMessage.alert("Q00001", null, okDelete);
+            } else {
+                businessMessage.alert("请选择要操作的数据。");
+            }
+        }
+
+        function okDelete() {
+            var rows = grid.getSelecteds();
+            doAjax("/P0124ProductbilitySetting/delete", rows[0], function(obj) {
+                if (obj.status == "SUCCESS") {
+                	businessMessage.alert(obj.text);
+                    grid.reload();
+                }
+            });
+        }
+        // 初始化时focus
+        function loadfocus() {
+            /* mini.get("departmentId").focus(); */
+        }
+    </script>
+</body>
+
+</html>

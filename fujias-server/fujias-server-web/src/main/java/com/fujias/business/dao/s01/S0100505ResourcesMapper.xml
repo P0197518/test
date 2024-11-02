@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.s01.S0100505ResourcesMapper">
+    <select id="selectAll"
+        resultType="com.fujias.business.forms.s01.S0100505ResourcesForm">
+        select
+        createTime, createUser, updateTime, updateUser,
+        delFlg, id,
+        resourceName, parentId, resourceUrl, imgValue, showInMenu, sortOrder,
+        resourceCd, type, elementId
+        from mresource
+        where
+        delFlg = '0' and type != '3'
+        order by sortOrder
+    </select>
+    <select id="selectById" parameterType="String"
+        resultType="com.fujias.business.forms.s01.S0100505ResourcesForm">
+        select
+        self.createTime, self.createUser,
+        self.updateTime, self.updateUser, self.delFlg, self.id,
+        self.type,
+        self.resourceName, self.parentId, self.resourceUrl,
+        self.imgValue, self.showInMenu, self.elementId,
+        self.sortOrder,
+        self.resourceCd, parent.resourceName as parentname
+        from mresource as self
+        left join
+        mresource as parent
+        on self.parentId = parent.id
+        where
+        self.delFlg = '0'
+        and self.id = #{id}
+    </select>
+    <select id="checkChildrenExist" parameterType="com.fujias.common.db.entity.MResource"
+        resultType="Integer">
+        select count(*)
+        from mresource as res
+        where
+        res.delFlg = '0'
+        <if test="id != null and id != ''">
+            AND res.parentId = #{id}
+        </if>
+    </select>
+    <select id="checkExist" parameterType="com.fujias.common.db.entity.MResource"
+        resultType="Integer">
+        select count(*)
+        from mresource as res
+        where
+        res.delFlg = '0'
+        <if test="resourceCd != null and resourceCd != ''">
+            AND res.resourceCd = #{resourceCd}
+        </if>
+        <if test="resourceName != null and resourceName != ''">
+            AND res.resourceName = #{resourceName}
+        </if>
+        <if test="id != null and id != ''">
+            AND res.id != #{id}
+        </if>
+    </select>
+    <select id="getActionByParentId"
+        resultType="com.fujias.business.forms.s01.S0100505ResourcesForm"
+        parameterType="java.lang.String">
+        select
+        createTime, createUser, updateTime,
+        updateUser, delFlg, id,
+        resourceName, parentId, resourceUrl, imgValue, showInMenu, sortOrder,
+        resourceCd, type, elementId
+        from mresource
+        where
+        delFlg = '0' and type = '3' and parentId = #{parentId}
+        order by sortOrder
+    </select>
+    <select id="getAllByParentId"
+        resultType="com.fujias.business.forms.s01.S0100505ResourcesForm"
+        parameterType="java.lang.String">
+        select
+        createTime, createUser, updateTime,
+        updateUser, delFlg, id,
+        resourceName, parentId, resourceUrl, imgValue, showInMenu, sortOrder,
+        resourceCd, type, elementId
+        from mresource
+        where
+        delFlg = '0' and parentId = #{parentId}
+        order by sortOrder
+    </select>
+</mapper>

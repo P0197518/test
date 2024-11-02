@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{::head/style})">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>[[#{login.tip}]]</title>
+<meta name="description" content="overview &amp; stats" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<style>
+.logo01 {
+	display: inline-block;
+	width: 38px;
+	height: 38px;
+	margin-bottom: 0px;
+}
+
+.navbar-nocollapse-scroll {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+</style>
+</head>
+
+<body class="no-skin">
+	<!-- #section:basics/navbar.layout -->
+	<div id="navbar" class="navbar navbar-default header ace-save-state" style="padding-bottom: 0px;" region="north">
+		<div class="navbar-container ace-save-state" id="navbar-container">
+			<!-- #section:basics/sidebar.mobile.toggle -->
+			<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+				<span class="sr-only">Toggle sidebar</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+
+			<!-- /section:basics/sidebar.mobile.toggle -->
+			<div class="navbar-header pull-left">
+				<!-- #section:basics/navbar.layout.brand -->
+				<a href="#" class="navbar-brand" style="padding-bottom: 0px; padding-top: 5px;"> <big>
+						<!-- <p style="float: left;" class="logo01">
+							<img src="../images/login/HTlogo.jpg" width="35px" height="35px" alt="">
+						</p> -->
+						<p style="padding-top: 8px; float: left; font-size: 24px;">[[#{login.tip}]]</p>
+				</big>
+				</a>
+
+				<!-- /section:basics/navbar.layout.brand -->
+
+				<!-- #section:basics/navbar.toggle -->
+
+				<!-- /section:basics/navbar.toggle -->
+			</div>
+
+			<!-- #section:basics/navbar.dropdown -->
+			<div class="navbar-buttons navbar-header pull-right" role="navigation">
+				<ul class="nav ace-nav">
+					<li class="grey dropdown-modal" style="margin-right: 25px"><span> <small th:text="*{formdata.nowdate}"
+							style="color: white"></small>
+					</span></li>
+					<!-- #section:basics/navbar.user_menu -->
+					<li class="light-blue dropdown-modal"><a data-toggle="dropdown" href="#" class="dropdown-toggle"> <span
+							class="user-info"> <small th:text="*{formdata.name}"></small>
+						</span> <i class="ace-icon fa fa-caret-down"></i>
+					</a>
+
+						<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+							<li><a href="#" onclick="changepass();" data-id="divP"> <i class="ace-icon fa fa-gear"></i>[[#{menu.changePass}]]
+							</a></li>
+							<li class="divider"></li>
+
+							<li><a href="#" onclick="doLogout();"> <i class="ace-icon fa fa-power-off"></i> [[#{menu.logout}]]
+							</a></li>
+						</ul></li>
+
+					<!-- /section:basics/navbar.user_menu -->
+				</ul>
+			</div>
+
+			<!-- /section:basics/navbar.dropdown -->
+		</div>
+		<!-- /.navbar-container -->
+	</div>
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container ace-save-state mini-fit" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.loadState('main-container')
+			} catch (e) {
+			}
+		</script>
+
+		<!-- #section:basics/sidebar -->
+		<div id="sidebar" style="height: 100%;" class="sidebar responsive ace-save-state navbar-nocollapse-scroll">
+			<script type="text/javascript">
+				try {
+					ace.settings.loadState('sidebar')
+				} catch (e) {
+				}
+			</script>
+
+
+			<!-- /.sidebar-shortcuts -->
+
+			<ul id="menu1" class="nav nav-list ace-menubar" th:url="@{/menu/getMenuList}" onitemclick="onItemClick"
+				textField="text" idField="id" parentField="pid">
+			</ul>
+			<!-- /.nav-list -->
+
+			<!-- #section:basics/sidebar.layout.minimize -->
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse" onclick="changeSilderbarOverflow()">
+				<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+					data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+
+			<!-- /section:basics/sidebar.layout.minimize -->
+		</div>
+		<div id="mainTabs" class="mini-tabs" activeIndex="0" onactivechanged="onactivechanged" ontabdestroy="destroy"
+			style="height: 100%; min-width: 50px;" contextMenu="#tabsMenu">
+			<div th:title="#{menu.homeid}" id="homeid" name="index" th:url="@{/S0900201Index/index}" refreshOnClick="true">
+				<iframe id="mainframe22" frameborder="0" name="main" style="width: 100%; height: 100%;" border="0"> </iframe>
+			</div>
+		</div>
+		<ul id="tabsMenu" class="mini-contextmenu" onbeforeopen="onBeforeOpen">
+			<li onclick="closeTab">[[#{menu.closeTab}]]</li>
+			<li onclick="closeAllBut">[[#{menu.closeAllBut}]]</li>
+			<li onclick="closeAllButFirst">[[#{menu.closeAllButFirst}]]</li>
+			<li onclick="reloadmenu">[[#{menu.reloadmenu}]]</li>
+		</ul>
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+
+	<div title="south" region="south" showSplit="false" showHeader="false" height="30">
+		<div class="bottomInfo" style="background-color: #438EB9; color: #fff; text-align: center;">
+			<span style="text-align: cneter;">Copyright ©富士工业</span>
+		</div>
+	</div>
+	<script src="../js/ace/components/bootstrap/dist/js/bootstrap.js"></script>
+
+
+	<!-- ace scripts -->
+	<script src="../js/ace/assets/js/src/ace.js"></script>
+	<script src="../js/ace/assets/js/src/ace.basics.js"></script>
+	<script src="../js/ace/assets/js/src/ace.scrolltop.js"></script>
+	<script src="../js/ace/assets/js/src/ace.ajax-content.js"></script>
+	<script src="../js/ace/assets/js/src/ace.touch-drag.js"></script>
+	<script src="../js/ace/assets/js/src/ace.sidebar.js"></script>
+	<script src="../js/ace/assets/js/src/ace.sidebar-scroll-1.js"></script>
+	<script src="../js/ace/assets/js/src/ace.submenu-hover.js"></script>
+	<script src="../js/ace/assets/js/src/ace.widget-box.js"></script>
+	<script src="../js/ace/assets/js/src/ace.settings.js"></script>
+	<script src="../js/ace/assets/js/src/ace.settings-rtl.js"></script>
+	<script src="../js/ace/assets/js/src/ace.settings-skin.js"></script>
+	<script src="../js/ace/assets/js/src/ace.widget-on-reload.js"></script>
+	<script src="../js/ace/assets/js/src/ace.searchbox-autocomplete.js"></script>
+
+	<script type="text/javascript">
+		ace.vars['base'] = '..';
+	</script>
+	<script type="text/javascript">
+		var basePath = "..";
+		jQuery(function($) {
+			try {
+				ace.parse();
+			} catch (e) {
+			}
+		});
+
+		window.onload = function() {
+			$(document).bind("contextmenu", function(e) {
+				var menu = mini.get("contextMenu");
+
+				menu.showAtPos(e.pageX, e.pageY);
+
+				return false;
+			});
+		};
+
+		mini.parse();
+
+		var tabs = mini.get("mainTabs");
+
+		function hideMenu() {
+			mini.hidePopObject();
+		}
+
+		function reload(e) {
+			tabs.reloadTab(e.tab);
+		}
+		function showTab(node) {
+			var id = "tab$" + node.id;
+			var tab = tabs.getTab(id);
+			if (!tab) {
+				tab = {};
+				tab.name = id;
+				tab.title = node.text;
+				tab.showCloseButton = true;
+
+				tab.url = node.url;
+
+				tabs.addTab(tab);
+			} else {
+				//tabs.removeTab(tab);
+				//tab = {};
+				//tab.name = id;
+				//tab.title = node.text;
+				//tab.showCloseButton = true;
+
+				//tab.url = node.url;
+				//tabs.addTab(tab);
+			}
+			tabs.activeTab(tab);
+		}
+
+		var currentTab = null;
+
+		function onBeforeOpen(e) {
+			currentTab = tabs.getTabByEvent(e.htmlEvent);
+			if (!currentTab) {
+				e.cancel = true;
+			}
+		}
+		///////////////////////////
+		function closeTab() {
+			tabs.removeTab(currentTab);
+		}
+
+		function closeAllBut() {
+			//tabs.removeAll(currentTab);
+			var but = [ currentTab ];
+			but.push(tabs.getTab("index"));
+			tabs.removeAll(but);
+		}
+
+		function closeAll() {
+			tabs.removeAll();
+		}
+
+		function closeAllButFirst() {
+			var but = [];
+			but.push(tabs.getTab("index"));
+			tabs.removeAll(but);
+		}
+
+		function reloadmenu() {
+			tabs.reloadTab(currentTab);
+		}
+
+		top["win"] = window;
+		//
+		function onItemClick(e) {
+			var item = e.item;
+			var isLeaf = e.isLeaf;
+			if (isLeaf) {
+				showTab(item);
+			}
+		}
+
+		function onactivechanged(e) {
+			if (tabs.tabs.length > 10) {
+				tabs.removeTab(tabs.tabs[1]);
+			}
+			var tab = tabs.getActiveTab();
+			if ((tab.name).indexOf("add") == -1) {
+				//tabs.reloadTab(e.tab);
+			}
+
+			var iframe = tabs.getTabIFrameEl(e.tab);
+			if (iframe && iframe.contentWindow) {
+				//var gridreload = iframe.contentWindow.gridreload;
+				//if(gridreload) {
+				//	gridreload();
+				//}
+			}
+		}
+
+		function destroy(e) {
+			for (var i = 1; i < tabs.getTabs().length; i++) {
+				var iframe = tabs.getTabIFrameEl(tabs.getTab(i));
+				if (iframe && iframe.contentWindow) {
+					//if(iframe.contentWindow.gridreload) {
+					//	iframe.contentWindow.gridreload();
+					//}
+				}
+			}
+		}
+
+		function doLogout() {
+			var param = {};
+			doAjax("/login/dologout", param, function(backData) {
+				if (backData.status == "SUCCESS") {
+					window.parent.location.href = bootPATH + "login/index";
+					deleteCookie("remember", "/");
+					deleteCookie("username", "/");
+					deleteCookie("password", "/");
+					deleteCookie("lang", "/");
+				}
+			});
+		}
+
+		function changepass() {
+			var popupParam = openCommonPopupParam("/S0900101Password/index",
+					"パスワード変更");
+			popupParam.width = 800;
+			popupParam.height = 300;
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+				}
+			};
+			mini.open(popupParam);
+		}
+
+		function changeSilderbarOverflow() {
+			//overflow-y: auto; overflow-x: hidden;
+
+			if ($("#sidebar").width() < 100) {
+				$("#sidebar").addClass("navbar-nocollapse-scroll");
+			} else {
+				$("#sidebar").removeClass("navbar-nocollapse-scroll");
+			}
+		}
+
+		/**根据cookie的键，删除cookie，其实就是设置其失效**/
+		function deleteCookie(name, path) {
+			var name = escape(name);
+			var expires = new Date(0);
+			path = path == "" ? "" : ";path=" + path;
+			document.cookie = name + "=" + ";expires=" + expires.toUTCString()
+					+ path;
+		}
+	</script>
+
+</body>
+
+</html>

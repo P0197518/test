@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>[[#{S0101101.sysparaall}]]</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<input id="resourcecd" name="resourcecd" type="hidden" value="S0101" />
+		<div class="main-content">
+			<div class="main-content-inner" id="form">
+				<!-- #section:basics/content.breadcrumbs -->
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content" style="width: 100%;">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">[[#{S0101101.selectcon}]]</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> [[#{S0101101.paracla}]]: </label>
+									<input id="codeTypeCd" name="codeTypeCd" class="mini-combobox" allowInput="true"
+										th:value="${formdata.codeTypeCd}" valueField="value" emptyText="" textField="text" showNullItem="true"
+										onenter="search()" ajaxType="post" th:url="@{/S0101101CodeList/getKbntypecd}" />
+								</div>
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0">[[#{S0100401.deledis}]]:</label>
+									<input id="delFlg" th:field="${formdata.delFlg}" class="mini-combobox" onenter="search()" textField="text"
+										valueField="value" allowInput="false" showNullItem="true" th:url="@{/common/getKbn?codeTypeCd=16}"
+										ajaxType="post" />
+								</div>
+								<div class="form-group col-sm-3">
+									<a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()"> <i
+										class="ace-icon fa fa-search"> </i>[[#{S0100501.search}]]
+									</a>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div>
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><a id="add" class="mini-button btn btn-warning btn-round autoAuth"
+					onclick="add()"> <i class="ace-icon fa fa-plus-circle bigger-110"> </i> [[#{add}]]
+				</a> <a id="edit" class="mini-button btn btn-success btn-round autoAuth" onclick="edit()"> <i
+						class="ace-icon fa fa-pencil-square-o"> </i> [[#{update}]]
+				</a> <a id="removeItem" class="mini-button btn btn-danger btn-round autoAuth" onclick="removeItem()"> <i
+						class="ace-icon fa fa-times-circle"> </i> [[#{delete}]]
+				</a> <a id="reuse" class="mini-button btn btn-pink btn-round autoAuth" onclick="reuse()"> <i class="fa fa-undo"
+						aria-hidden="true"> </i> [[#{S0100401.reback}]]
+				</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" class="mini-datagrid" th:url="@{/S0101101CodeList/getList}" idField="id" allowResize="false"
+			allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;"
+			sortField="codeTypeCd,codeCd" sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="codeTypeCd" width="80" headerAlign="center" sortField="codeTypeCd" allowSort="true" align="center">[[#{S0101101.parano}]]</div>
+				<div field="codeTypeName" width="150" headerAlign="center" sortField="codeTypeName" allowSort="true">[[#{S0101101.paraclaname}]]</div>
+				<div field="codeCd" width="80" headerAlign="center" sortField="codeCd" allowSort="true" align="center">[[#{S0101101.parano}]]</div>
+				<div field="codeName" width="150" headerAlign="center" sortField="codeName" allowSort="true">[[#{S0101101.paraname}]]</div>
+				<div field="option1" width="120" headerAlign="center" sortField="option1" allowSort="true">[[#{S0100401.biko}]]１</div>
+				<div field="option2" width="120" headerAlign="center" sortField="option2" allowSort="true">[[#{S0100401.biko}]]2</div>
+				<div field="delFlg" renderer="del" width="80" headerAlign="center" sortField="delFlg" allowSort="true"
+					align="center">[[#{S0100401.deledis}]]</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+
+		function del(e) {
+			if (e.value == true) {
+				return "[[#{S0100401.deleok}]]";
+			} else {
+				return "[[#{S0100401.useat}]]";
+			}
+		}
+
+		// 查询操作
+		function search() {
+
+			var searchcondation = getJsonObject("searchCondation");
+
+			grid.load(getPagerInfo("grid1", searchcondation));
+		}
+
+		function onSaveSearchCondation() {
+			saveSearchCondation(search);
+		}
+
+		$(function() {
+			getSearchCondation(search);
+		});
+
+		// 添加操作
+		function add() {
+			var popupParam = openCommonPopupParam(
+					"/S0101101CodeList/indexEdit", "[[#{S0101101.paraadd}]]");
+			popupParam.width = 800;
+			popupParam.height = 500;
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+
+			mini.open(popupParam);
+		}
+
+		// 编辑操作
+		function edit() {
+			var rows = grid.getSelecteds();
+			if (rows.length == 1) {
+				var row = grid.getSelected();
+
+				var popupParam = openCommonPopupParam(
+						"/S0101101CodeList/indexEdit?codeCd=" + row.codeCd
+								+ "&codeTypeCd=" + row.codeTypeCd, "[[#{S0101101.paraup}]]");
+				popupParam.width = 800;
+				popupParam.height = 500;
+				popupParam.ondestroy = function(action) {
+					if (action == "ok") {
+						grid.reload();
+					}
+				};
+				mini.open(popupParam);
+			} else {
+				mini.alert(businessMessage.get("E00002"));
+			}
+		}
+
+		// 删除操作
+		function removeItem() {
+			var rows = grid.getSelecteds();
+			if (rows.length > 0) {
+				businessMessage.alert("Q00001", null, function() {
+					doAjax("/S0101101CodeList/delete", rows[0], function(obj) {
+						businessMessage.alert("IC0002");
+						grid.reload();
+					});
+				});
+			} else {
+				businessMessage.alert("E00002")
+			}
+		}
+		// 恢复操作
+		function reuse() {
+			var rows = grid.getSelecteds();
+			if (rows.length > 0) {
+				businessMessage.alert("Q00003", null, function() {
+					doAjax("/S0101101CodeList/reuse", rows[0], function(obj) {
+						businessMessage.alert("IC0003");
+						grid.reload();
+					});
+				});
+			} else {
+				businessMessage.alert("E00002")
+			}
+		}
+		// 焦点设置
+		function loadfocus() {
+			mini.get("codeTypeCd").focus();
+		}
+	</script>
+</body>
+
+</html>

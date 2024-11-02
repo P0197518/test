@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.MUserDepartmentsMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.MUserDepartments">
+    <id column="userId" jdbcType="VARCHAR" property="userId" />
+    <id column="depId" jdbcType="VARCHAR" property="depId" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userId, depId, createTime, createUser, updateTime, updateUser, delFlg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.MUserDepartmentsKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from muserdepartments
+    where userId = #{userId,jdbcType=VARCHAR}
+      and depId = #{depId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.MUserDepartmentsKey">
+    delete from muserdepartments
+    where userId = #{userId,jdbcType=VARCHAR}
+      and depId = #{depId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.MUserDepartments">
+    insert into muserdepartments (userId, depId, createTime, 
+      createUser, updateTime, updateUser, 
+      delFlg)
+    values (#{userId,jdbcType=VARCHAR}, #{depId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.MUserDepartments">
+    insert into muserdepartments
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="depId != null">
+        depId,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="depId != null">
+        #{depId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.MUserDepartments">
+    update muserdepartments
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+    </set>
+    where userId = #{userId,jdbcType=VARCHAR}
+      and depId = #{depId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.MUserDepartments">
+    update muserdepartments
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR}
+    where userId = #{userId,jdbcType=VARCHAR}
+      and depId = #{depId,jdbcType=VARCHAR}
+  </update>
+</mapper>

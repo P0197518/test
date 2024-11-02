@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0103ProductBilityWorkersMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    <id column="yearMonth" jdbcType="CHAR" property="yearMonth" />
+    <id column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    <id column="wokerName" jdbcType="NVARCHAR" property="wokerName" />
+    <result column="workTime" jdbcType="NUMERIC" property="workTime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    yearMonth, departmentId, wokerName, workTime, createtime, createuser, updatetime, 
+    updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.T0103ProductBilityWorkersKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0103productbilityworkers
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and wokerName = #{wokerName,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.T0103ProductBilityWorkersKey">
+    delete from t0103productbilityworkers
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and wokerName = #{wokerName,jdbcType=NVARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    insert into t0103productbilityworkers (yearMonth, departmentId, wokerName, 
+      workTime, createtime, createuser, 
+      updatetime, updateuser, delflg
+      )
+    values (#{yearMonth,jdbcType=CHAR}, #{departmentId,jdbcType=VARCHAR}, #{wokerName,jdbcType=NVARCHAR}, 
+      #{workTime,jdbcType=NUMERIC}, #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    insert into t0103productbilityworkers
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        yearMonth,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="wokerName != null">
+        wokerName,
+      </if>
+      <if test="workTime != null">
+        workTime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        #{yearMonth,jdbcType=CHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="wokerName != null">
+        #{wokerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="workTime != null">
+        #{workTime,jdbcType=NUMERIC},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    update t0103productbilityworkers
+    <set>
+      <if test="workTime != null">
+        workTime = #{workTime,jdbcType=NUMERIC},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and wokerName = #{wokerName,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    update t0103productbilityworkers
+    set workTime = #{workTime,jdbcType=NUMERIC},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and wokerName = #{wokerName,jdbcType=NVARCHAR}
+  </update>
+</mapper>

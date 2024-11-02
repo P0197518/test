@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>[[#{S0100501.useredit}]]</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="form1">
+	   <input id="resourcecd" name="resourcecd" type="hidden" value="P0212"/>
+		<div id="form1" th:object="${formdata}" class="form-horizontal" style="width: 100%;">
+			<input id="id" class="mini-hidden" th:field="*{id}" />
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<input id="delFlg" class="mini-hidden" th:field="*{delFlg}" />
+                <h4 class="header blue bolder smaller">人员信息</h4>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right" for="form-field-username">所属部门:</label>
+							<div class="col-sm-3">
+								<input class="mini-combobox" width="200" id="departName"  maxlength="32" required="true" data='[{value:"0001",text:"所有部门"},{value:"1000",text:"冲压"},{value:"2000",text:"研磨"},
+                                        {value:"2500",text:"喷砂"},{value:"5000",text:"钎焊"},{value:"6000",text:"导环"},{value:"7000",text:"条形锁扣"},
+                                        {value:"7200",text:"诸品(TC)"},{value:"7600",text:"清洗"},{value:"7500",text:"DFS"},{value:"8000",text:"磨脚"},
+                                        {value:"9000",text:"铅坠"}]'/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right" for="form-field-username">人员姓名:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="peopleName"  vtype="maxLength:20" maxlength="20" required="true" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right" for="form-field-username">工作类型:</label>
+							<div class="col-sm-3">
+							    <div class="search-item " >
+                                    <label for="directPerssonnel" class="control-label"> 直接人员: </label> 
+                                    <input id="directPerssonnel" trueValue="true" falseValue="false" class="mini-checkbox"/>
+                                </div>
+                                <div class="search-item " >
+                                    <label for="indirectPerssonnel" class="control-label"> 间接人员: </label> 
+                                    <input id="indirectPerssonnel" trueValue="true" falseValue="false" class="mini-checkbox"/>
+                                </div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right" for="form-field-username">备注:</label>
+							<div class="col-sm-3">
+								<input class="mini-textarea" height="80" width="400" id="remark" vtype="maxLength:20" maxlength="20" required="false" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+			<div style="text-align: center; padding: 10px;">
+				<a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> [[#{S0100401.sure}]]
+				</a>
+				&nbsp; &nbsp;
+				<a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button">
+					<i class="ace-icon fa fa-undo bigger-110"></i> [[#{S0100401.cancel}]]
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+	    mini.parse();
+	    var form = new mini.Form("#form1");
+
+	    var form2 = new Array();
+		form2.push({
+			departName:"冲压",
+			peopleName:"李磊",
+			directPerssonnel:"true",
+			remark:"请加急处理"
+		});
+		// 页面加载完成处理
+        $(function() {
+        	mini.get("departName").setValue("冲压");
+
+            // 根据页面mode控制页面显示
+            if (mini.get("mode").getValue() == "update") {
+            	mini.get("peopleName").setValue("李磊");
+            	mini.get("directPerssonnel").setValue("true");
+                mini.get("remark").setValue("请加紧处理");
+            	form.setData(form2[0]);
+            } 
+        });
+
+		// 保存操作
+		function onOk() {
+			form.validate();
+			if (form.isValid() == false || (mini.get("directPerssonnel").getValue() =="false" && mini.get("indirectPerssonnel").getValue() =="false")) {
+				businessMessage.alert("E00006");
+				return;
+			}
+			businessMessage.alert("Q00002", null, oksave);
+		}
+
+		function oksave() {
+			var data = form.getData();
+			var accessurl = "";
+			if (mini.get("mode").value == "create") {
+				accessurl = "/S0100501Users/add";
+			} else {
+				accessurl = "/S0100501Users/update";
+			}
+			doAjax(accessurl, data, function(obj) {
+				businessMessage.alert("IC0001", null, function() {
+					CloseWindow("ok");
+				});
+			});
+		}
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("departName").focus();
+		}
+	</script>
+</body>
+
+</html>

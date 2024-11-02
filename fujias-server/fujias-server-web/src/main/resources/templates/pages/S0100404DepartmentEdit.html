@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>[[#{S0100403.departedit}]]</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body onload="loadfocus()">
+
+	<div class="edit-page-content">
+	   <input id="resourcecd" name="resourcecd" type="hidden" value="S0100404"/>
+		<div id="form1" th:object="${formdata}" class="form-horizontal" style="width: 100%;">
+			<input id="id" class="mini-hidden" th:field="*{id}" /> <input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<h4 class="header blue bolder smaller">[[#{S0100403.departinfo}]]</h4>
+						<div class="vspace-12-sm"></div>
+
+						<div class="form-group">
+							<label id="parentidlable" class="col-sm-1 control-label no-padding-right" for="form-field-name">[[#{S0100501.departe}]]:</label>
+							<div class="col-sm-3">
+								<input class="mini-combobox" width="200" id="parentId" th:field="*{parentId}" valueField="value" textField="text" th:url="@{/S0100403Departments/getDepartmentOptions}" ajaxType="post" emptyText="请选择..." allowInput="false" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-name">[[#{S0100403.departno}]]:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="depId" th:field="*{depId}" vtype="code" maxlength="20" required="true" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-name">[[#{S0100403.departname}]]:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="name" th:field="*{name}" vtype="maxLength:20" maxlength="20" required="true" />
+							</div>
+						</div>
+
+						<div class="space-4"></div>
+					</div>
+				</div>
+			</div>
+
+			<div style="text-align: center; padding: 10px;">
+				<a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i>[[#{S0100401.sure}]]
+				</a>
+				&nbsp; &nbsp;
+				<a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button">
+					<i class="ace-icon fa fa-undo bigger-110"></i>[[#{S0100401.cancel}]] 
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+        var form = new mini.Form("#form1");
+        mini.parse();
+
+        // 保存操作
+        function onOk() {
+			form.validate();
+			if (form.isValid() == false) {
+				businessMessage.alert("EC0003");
+				return;
+			}
+			businessMessage.alert("Q00002", null, oksave);
+		}
+        
+		function oksave() {
+			var data = form.getData();
+			var accessurl  = "";
+			
+			if(mini.get("parentId").getValue() == mini.get("depId").getValue()){
+				businessMessage.alert("E00024");
+                return;
+            }
+			
+			if(mini.get("mode").value == "create"){
+				accessurl = "/S0100403Departments/add";
+			} else{
+				accessurl = "/S0100403Departments/update";
+			}
+			doAjax(accessurl, data, function(obj) {
+				if (obj.status == "SUCCESS") {
+					businessMessage.alert("IC0001", null, function() {
+						CloseWindow("ok");
+					});
+				}
+			});
+		}
+
+        // 初始化时focus
+        function loadfocus() {
+            
+            if(mini.get("mode").getValue() == "3"){
+            	mini.get("depId").disable();
+            	if(mini.get("parentId").getValue() == ""){
+            		mini.get("parentId").disable();
+            		mini.get("name").focus();
+            	}else{
+            		mini.get("parentId").focus();
+            	}
+            }else{
+            	mini.get("parentId").focus();
+            }
+        }
+    </script>
+</body>
+
+</html>

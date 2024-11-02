@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.MIdMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.MId">
+    <id column="idType" jdbcType="VARCHAR" property="idType" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+    <result column="idName" jdbcType="VARCHAR" property="idName" />
+    <result column="idNo" jdbcType="VARCHAR" property="idNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    idType, createTime, createUser, updateTime, updateUser, delFlg, idName, idNo
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mid
+    where idType = #{idType,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from mid
+    where idType = #{idType,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.MId">
+    insert into mid (idType, createTime, createUser, 
+      updateTime, updateUser, delFlg, 
+      idName, idNo)
+    values (#{idType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{delFlg,jdbcType=CHAR}, 
+      #{idName,jdbcType=VARCHAR}, #{idNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.MId">
+    insert into mid
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="idType != null">
+        idType,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+      <if test="idName != null">
+        idName,
+      </if>
+      <if test="idNo != null">
+        idNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="idType != null">
+        #{idType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="idName != null">
+        #{idName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNo != null">
+        #{idNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.MId">
+    update mid
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="idName != null">
+        idName = #{idName,jdbcType=VARCHAR},
+      </if>
+      <if test="idNo != null">
+        idNo = #{idNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where idType = #{idType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.MId">
+    update mid
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR},
+      idName = #{idName,jdbcType=VARCHAR},
+      idNo = #{idNo,jdbcType=VARCHAR}
+    where idType = #{idType,jdbcType=VARCHAR}
+  </update>
+</mapper>

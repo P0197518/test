@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p07.P0713PermissionListMapper">
+
+    <select id="getRoles" parameterType="com.fujias.business.forms.p07.P0713PermissionListForm"
+        resultType="com.fujias.business.forms.p07.P0713PermissionListForm">
+        select
+        roles.*
+        from MRoles as roles
+        where
+        roles.delflg = '0'
+        <if test="rolename != null and rolename != ''">
+            AND roles.rolename like #{rolename} || '%'
+        </if>
+        <!-- and rolecd <![CDATA[ <> ]]>
+        'admin' -->
+        order by createtime
+    </select>
+    <select id="getRoleResources" parameterType="com.fujias.business.forms.p07.P0713PermissionListForm"
+        resultMap="RoleResourceResultMap">
+
+        select
+        case
+        when pageresource.parentid is null
+        or pageresource.parentid = ''
+        then '-1'
+        else pageresource.parentid
+        end as parentid
+        , pageresource.id as resourceid
+        , pageresource.resourcename as resourcename
+        , case
+        when functionresource.parentid is null
+        or functionresource.parentid = ''
+        then null
+        else functionresource.parentid
+        end as functionparentid
+        , functionresource.id as functionid
+        , functionresource.resourcename as functionname
+        , (
+        case
+        when pagerole.roleId is null
+        then '0'
+        else '1'
+        end
+        ) as pageuseflag
+        , (
+        case
+        when functionrole.roleId is null
+        then null
+        else '1'
+        end
+        ) as functionuseflag
+        from
+        mresource as pageresource
+        left join mresource as functionresource
+        on pageresource.id = functionresource.parentid
+        and functionresource.type = '3'
+        left join mroleResource pagerole
+        on pageresource.id = pagerole.resourceid
+        and pagerole.roleid = #{id}
+        left join mroleResource functionrole
+        on functionresource.id = functionrole.resourceid
+        and functionrole.roleid = #{id}
+        where
+        pageresource.type in ('1', '2')
+        and pageresource.delflg = '0'
+        order by
+        pageresource.sortorder
+
+    </select>
+
+    <resultMap type="com.fujias.business.forms.p07.P0713PermissionListItem"
+        id="RoleResourceResultMap">
+        <id column="resourceId" property="resourceId" />
+        <result column="parentId" property="parentId" />
+        <result column="resourceName" property="resourceName" />
+        <result column="pageuseFlag" property="useFlag" />
+
+        <collection property="functionList"
+            ofType="com.fujias.business.forms.p07.P0713PermissionListItem">
+            <id column="functionId" property="resourceId" />
+            <result column="functionParentId" property="parentId" />
+            <result column="functionName" property="resourceName" />
+            <result column="functionUseFlag" property="useFlag" />
+        </collection>
+
+    </resultMap>
+    <select id="checkExist" parameterType="com.fujias.common.db.entity.MRoles"
+        resultType="Integer">
+        select count(*)
+        from MRoles as roles
+        where
+        roles.rolecd =
+        #{rolecd}
+        <if test="id != null and id != ''">
+            AND roles.id != #{id}
+        </if>
+    </select>
+
+    <delete id="deleteByRoleId" parameterType="java.lang.String">
+        delete from
+        MRoleResource
+        where roleid = #{roleid,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updateDelflgByRoleId" parameterType="com.fujias.common.db.entity.MResource">
+        update
+        MRoleResource
+        set delFlg = #{delFlg,jdbcType=BIT}
+        where roleId
+        =
+        #{roleId,jdbcType=VARCHAR}
+    </update>
+    <select id="getRoleOptions" resultType="com.fujias.common.entity.SelectItem">
+        select
+        id AS value,
+        roleName AS
+        text
+        from
+        mroles
+        where
+        delFlg = '0'
+    </select>
+</mapper>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>生产计算执行</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content">
+		<input id="resourcecd" name="resourcecd" type="hidden" value="P0111" />
+		<div id="form1" th:object="${formdata}" class="form-horizontal"
+			style="width: 100%; min-width: 100%;">
+			<input id="id" class="mini-hidden" th:field="*{id}" />
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<input id="adminRole" class="mini-hidden" th:field="*{adminRole}" />
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<h4 class="header blue bolder smaller">计算条件</h4>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-username">执行人:</label>
+							<div class="col-sm-3">
+								<input id="runuser" name="runuser" width="200" class="mini-combobox" allowInput="false" th:value="${formdata.runuser}" valueField="value" 
+									       emptyText="" textField="text" showNullItem="true" ajaxType="post" th:url="@{/common/getUserList}" readOnly="true"/>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-username">执行年月:</label>
+							<div class="col-sm-3">
+								<input id="yearmonth" name="yearmonth" width="200" class="mini-monthpicker" th:value="${formdata.yearmonth}" format="yyyy-MM" allowInput="false"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-username">执行部门:</label>
+							<div class="col-sm-3">
+								<input id="depid" name="depid" width="200" class="mini-combobox" allowInput="false" th:value="${formdata.depid}" valueField="value" 
+									       emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" ajaxType="post" th:url="@{/common/getDepList}" />
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+				</div>
+			</div>
+
+			<div style="text-align: center; padding: 10px;">
+				<a class="mini-button btn btn-info btn-round " onclick="onOk()"
+					type="button">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> 执行
+				</a>
+				&nbsp; &nbsp;
+				<a class="mini-button btn btn-warning btn-round"
+					onclick="onCancel()" type="button">
+					<i class="ace-icon fa fa-undo bigger-110"></i> 取消
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+		var form = new mini.Form("#form1");
+		mini.parse();
+
+		// 页面加载完成处理
+		$(function() {
+			// 管理员以外情况下【执行部门】设置非活性，不能切换选择
+			if(!mini.get("adminRole").getValue()){
+				mini.get("depid").disable();
+			}
+		});
+		
+		// 生产性计算执行
+		function onOk() {
+			form.validate();
+			if (form.isValid() == false) {
+				businessMessage.alert("E00006");
+				return;
+			}
+			businessMessage.alert("Q00029", null, checkRun);
+		}
+		
+		// 执行前检查
+		function checkRun(){
+			var data = form.getData();
+			data.yearmonth = mini.get("yearmonth").getFormValue().replace("-","");
+			doAjax("/P0122ProductbilityReport/checkRun", data, function(obj) {
+				if(null != obj.text && '' != obj.text){
+					if(obj.text == 'Q00028'){
+						businessMessage.alert("Q00028", null, function() {
+							okSave(data);
+				        });
+					}
+				} else {
+					okSave(data);
+				}
+			});
+		}
+		
+		// 执行计算
+		function okSave(data) {
+			doAjax("/P0122ProductbilityReport/run", data, function(obj) {
+			    businessMessage.alert("IC0009", null, function() {
+			        CloseWindow("ok");
+			    });
+			});
+		}
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("yearmonth").focus();
+		}
+	</script>
+</body>
+
+</html>

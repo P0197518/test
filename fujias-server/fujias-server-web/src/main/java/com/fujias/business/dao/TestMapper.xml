@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.TestMapper">
+
+    <select id="selectAllResource" parameterType="com.fujias.common.db.entity.MResource"
+        resultType="com.fujias.common.db.entity.MResource">
+        select id, resourceid
+        from public.mresource
+        where public.mresource .delflg <![CDATA[ <> ]]>true
+    </select>
+    <delete id="deleteOldRoleResource" parameterType="com.fujias.common.db.entity.MRoleResource">
+        delete
+        from
+        public.MRoleResource
+        where roleid = #{roleid}
+    </delete>
+  
+</mapper>

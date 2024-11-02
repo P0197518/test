@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p02.P0221WorkerTimeMapper">
+    <select id="getListByPage" parameterType="com.fujias.business.forms.p02.P0221WorkTimeForm"
+        resultType="com.fujias.business.forms.p02.P0221WorkTimeForm">
+        select
+        yearMonth
+        ,workerName
+        ,workHours
+        ,mdepartment.name as
+        departmentId
+        from
+        t0201worktime
+        left join mdepartment
+        on
+        t0201worktime.departmentId = mdepartment.depId
+        where
+        t0201worktime.delflg = '0'
+        <if test="yearMonth != null and yearMonth != ''">
+            AND yearMonth = ${yearMonth}
+        </if>
+        <if test="workerName != null and workerName != ''">
+            AND workerName like '%${workerName}%'
+        </if>
+        <if test="departmentId != null and departmentId != ''">
+            AND departmentId = ${departmentId}
+        </if>
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+    <select id="departExist" parameterType="String"
+        resultType="com.fujias.business.forms.p02.P0221WorkTimeForm">
+        select
+        depId as departmentId
+        from
+        mdepartment
+        where
+        name =
+        #{departmentName}
+    </select>
+    <select id="workTimeExist"
+        parameterType="com.fujias.business.forms.p02.P0221WorkTimeImportForm"
+        resultType="Integer">
+        select
+        count(*)
+        from
+        t0201worktime
+        where
+        yearMonth =
+        #{yearMonth}
+        and workerName = #{workerName}
+        and departmentId =
+        #{departmentId}
+    </select>
+    <select id="workExist"
+        parameterType="com.fujias.business.forms.p02.P0221WorkTimeImportForm"
+        resultType="Integer">
+        select
+        count(*)
+        from
+        t0202workers
+        where
+        yearMonth =
+        #{yearMonth}
+        and workerName = #{workerName}
+
+    </select>
+
+
+</mapper>

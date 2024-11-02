@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<script th:src="@{/js/jquery-3.3.1.js}"></script>
+<link type="text/css" rel="styleSheet" th:href="@{/css/weui.css}"></link>
+</head>
+<body>
+	<form>
+		<div>
+			<h2>[[#{error.mess}]]</h2>
+			<a th:href="@{/login/index}">[[#{error.href}]]</a>
+		</div>
+	</form>
+	<script type="text/javascript">
+		
+	</script>
+</body>
+</html>

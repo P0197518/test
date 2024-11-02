@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.MRoleResourceMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.MRoleResource">
+    <id column="resourceId" jdbcType="VARCHAR" property="resourceId" />
+    <id column="roleId" jdbcType="VARCHAR" property="roleId" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resourceId, roleId, createTime, createUser, updateTime, updateUser, delFlg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.MRoleResourceKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mroleresource
+    where resourceId = #{resourceId,jdbcType=VARCHAR}
+      and roleId = #{roleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.MRoleResourceKey">
+    delete from mroleresource
+    where resourceId = #{resourceId,jdbcType=VARCHAR}
+      and roleId = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.MRoleResource">
+    insert into mroleresource (resourceId, roleId, createTime, 
+      createUser, updateTime, updateUser, 
+      delFlg)
+    values (#{resourceId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.MRoleResource">
+    insert into mroleresource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="resourceId != null">
+        resourceId,
+      </if>
+      <if test="roleId != null">
+        roleId,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="resourceId != null">
+        #{resourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.MRoleResource">
+    update mroleresource
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+    </set>
+    where resourceId = #{resourceId,jdbcType=VARCHAR}
+      and roleId = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.MRoleResource">
+    update mroleresource
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR}
+    where resourceId = #{resourceId,jdbcType=VARCHAR}
+      and roleId = #{roleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.s01.S0101101CodeListMapper">
+
+    <sql id="selectItems" >
+         select
+            codeTypeCd
+            ,codeTypeName
+            ,codeCd
+            ,codeName 
+            ,option1
+            ,option2   
+            ,delFlg
+            ,canEdit
+        from mkbn AS MKbn
+    </sql>
+    <select id="getListByPage" parameterType="com.fujias.business.forms.s01.S0101101CodeListForm"
+        resultType="com.fujias.business.forms.s01.S0101101CodeListForm">
+        <include refid="selectItems"></include>
+        where
+        canEdit = '1'
+        <if test="delFlg != null and delFlg != ''">
+            AND delFlg = #{delFlg}
+        </if>
+        <if test="codeTypeCd != null and codeTypeCd != ''">
+            AND codeTypeCd = #{codeTypeCd}
+        </if>
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+    <select id="getSingleById" parameterType="String"
+        resultType="com.fujias.business.forms.s01.S0101101CodeListForm">
+        <include refid="selectItems"></include>
+        where
+        MKbn.codeTypeCd = #{codeTypeCd}
+        AND MKbn.codeCd = #{codeCd}
+        AND MKbn.delFlg = '0'
+        
+    </select>
+    <!-- 区分code下拉列表 -->
+    <select id="getKbntypecd" resultType="com.fujias.business.forms.s01.S0101101CodeListForm">
+        select distinct
+        codeTypeCd AS value
+        , codeTypeName AS text
+        from
+        mkbn
+        where
+        delFlg = '0'
+        and canEdit = '1'
+    </select>
+    <select id="getProcessList" resultType="com.fujias.business.forms.s01.S0101101CodeListForm">
+       select 
+        codeCd AS value
+        ,concat(codeTypeName ,' ',codeName) AS text
+        , codeTypeCd as option1
+        from
+        mkbn
+        where
+        delFlg = '0'
+        and codeTypeCd in ('29','30')
+        order by codeTypeCd,sort,codeCd
+    </select>
+    <select id="getKbnByCodeTypeCd" parameterType="com.fujias.business.forms.s01.S0101101CodeListForm"
+    resultType="com.fujias.business.forms.s01.S0101101CodeListForm">
+         select distinct
+        codeCd AS value
+        , codeName AS text
+        from
+        mkbn
+        where
+        delFlg = '0'
+        and codeTypeCd = #{codeTypeCd}
+    </select>
+    <select id="checkExist" parameterType="com.fujias.business.forms.s01.S0101101CodeListForm"
+        resultType="Integer">
+        select count(*)
+        from mkbn as kbn
+        where
+        kbn.codeTypeCd = #{codeTypeCd}
+        and codeCd = #{codeCd}
+        <!-- <if test="id != null and id != ''">
+            AND kbn.id != #{id}
+        </if> -->
+    </select>
+    <select id="getMaxCodeCd" parameterType="com.fujias.business.forms.s01.S0101101CodeListForm"
+    resultType="com.fujias.business.forms.s01.S0101101CodeListForm">
+        select 
+        max(codeCd) as codeCd
+        from
+        mkbn
+        where
+        codeTypeCd = #{codeTypeCd}
+    </select>
+</mapper>

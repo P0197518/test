@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fujias.business.common.dao.CommonDaoMapper">
+
+    <!-- 获取区分信息 -->
+    <select id="getCodeList" parameterType="com.fujias.business.common.entity.CodeEntity"
+        resultType="com.fujias.common.entity.SelectItem">
+        select
+        mkbn.codeCd as value
+        ,mkbn.codeName as text
+        ,mkbn.option1
+        ,mkbn.option2
+        from
+        mkbn
+        where mkbn.codeTypeCd =
+        #{codeTypeCd}
+        <if test="delFlg != null">
+            AND delflg = #{delFlg}
+        </if>
+        <if test="option1 != null">
+            AND option1 = #{option1}
+        </if>
+        <if test="option2 != null">
+            AND option2 = #{option2}
+        </if>
+        order by sort,codeCd
+    </select>
+    
+    <!-- 根据用户获取部门 管理员之外只能选择当前用户所属部门 -->
+    <select id="getDepListByUserId" parameterType="com.fujias.business.common.entity.CodeEntity"
+        resultType="com.fujias.common.entity.SelectItem">
+select
+    dep.depId as value
+    , dep.name as text 
+from
+    mdepartment dep 
+    left join muserdepartments userDep 
+        on dep.depId = userDep.depId 
+where
+    dep.delflg = '0' 
+    <if test="userId != null and userId != ''">
+    and userDep.userId = #{userId}
+    </if>
+group by
+    dep.depId
+    , dep.name 
+order by
+    dep.depId
+    </select>
+    
+   <!--  获取所有部门 -->
+    <select id="getDepList"
+        resultType="com.fujias.common.entity.SelectItem">
+        select
+            depId as value
+            , name as text 
+        from
+            mdepartment 
+        where
+            delflg = '0'
+        order by depId
+    </select>
+
+    <select id="getTextureList" 
+        resultType="com.fujias.common.entity.SelectItem">
+        select
+        mkbn.codeCd as value
+        ,mkbn.codeName as text
+        ,mkbn.option1
+        ,mkbn.option2
+        from
+        mkbn
+        where mkbn.codeTypeCd in ('23','24')
+        and delflg = false
+        order by sort,codeName DESC 
+        
+    </select>
+    
+    <select id="selectUsers" resultType="com.fujias.common.entity.SelectItem">
+        select
+        username as value
+        ,name as
+        text
+        from musers
+        where delflg = '0'
+        order by
+        username
+    </select>
+    <select id="getCustomInfoById" parameterType="String"
+        resultType="com.fujias.business.common.form.CommonCustomForm">
+        select
+        t0704custom.customNo
+        , t0704custom.customName
+        , currencyType
+        , mkbn.option1 as currencyTypeValue
+        , isOfHeadOffice
+        , isHeadOffice
+        , contactPerson
+        , contactPhone
+        from
+        t0704custom
+        left join mkbn
+        on mkbn.codeTypeCd = '03'
+        and
+        mkbn.codeCd = t0704custom.currencyType
+        where
+        t0704custom.customNo =
+        #{customNo}
+        and t0704custom. delflg = false
+    </select>
+    <select id="getAddressById" parameterType="com.fujias.business.common.form.CommonCustomForm"
+        resultType="com.fujias.common.entity.SelectItem">
+        SELECT
+        t0704customaddress.addressDis as
+        text
+        ,
+        t0704customaddress.id as
+        value
+        FROM
+        t0704customaddress
+        left join
+        t0704custom
+        on t0704custom.customno =
+        t0704customaddress.customno
+        WHERE
+        t0704customaddress.customNo =
+        #{customNo}
+        <if test="delFlg != null">
+            AND t0704customaddress.delFlg = #{delFlg}
+        </if>
+
+        ORDER BY
+        t0704customaddress.id
+    </select>
+    <select id="getSupplierInfoById" parameterType="String"
+        resultType="com.fujias.business.common.form.CommonSupplierForm">
+        select
+        supplierId
+        , supplierName
+        , currencyType
+        , mkbn.option1 as
+        currencyTypeValue
+        from t0716supplier
+        left join mkbn
+        on mkbn.codeTypeCd =
+        '03'
+        and mkbn.codeCd = t0716supplier.currencyType
+        where
+        t0716supplier.delflg = false
+        and t0716supplier.supplierId = #{supplierId}
+    </select>
+ 
+    <select id="getAutoMaterialsByDrawingNo" parameterType="com.fujias.business.common.form.CommonForm"
+        resultType="com.fujias.common.entity.SelectItem">
+        select
+        CONCAT(t0701material.drawingNo,' ',t0701materialtexture.texture) as text
+        ,productNo as value
+        from t0701material
+        inner join t0701materialtexture
+        on t0701materialtexture.drawingNo = t0701material.drawingNo
+        where
+        t0701material.drawingNo like '%${key}%'
+        <choose>
+            <when test="materialType != null and materialType == '0001'">
+                AND (t0701material.materialType = #{materialType} or t0701material.isProductFlg = true)
+            </when>
+            <when test="materialType == null or materialType == ''">
+            </when>
+            <otherwise>
+                AND t0701material.materialType = #{materialType}
+            </otherwise>
+        </choose>
+        <if test="delFlg != null">
+            AND t0701material.delFlg = #{delFlg}
+            AND t0701materialtexture.delFlg = #{delFlg}
+        </if>
+        order by t0701material.drawingNo
+    </select>
+    <select id="getAutoMaterialsByProductNo" parameterType="com.fujias.business.common.form.CommonForm"
+        resultType="com.fujias.common.entity.SelectItem">
+        select
+        productNo as text
+        ,productNo as value
+        from t0701material
+        inner join t0701materialtexture
+        on t0701materialtexture.drawingNo = t0701material.drawingNo
+        where
+        t0701materialtexture.productNo like '%${key}%'
+        <choose>
+            <when test="materialType != null and materialType == '0001'">
+                AND (t0701material.materialType = #{materialType} or t0701material.isProductFlg = true)
+            </when>
+            <when test="materialType == null or materialType == ''">
+            </when>
+            <otherwise>
+                AND t0701material.materialType = #{materialType}
+            </otherwise>
+        </choose>
+        <if test="delFlg != null">
+            AND t0701material.delFlg = #{delFlg}
+        </if>
+        
+        order by t0701materialtexture.productNo
+    </select>
+    
+     <select id="getSupplierInfoData" 
+        resultType="com.fujias.common.entity.SelectItem">
+        select supplierId as value
+              ,supplierName  as text    
+         from t0716supplier
+        where t0716supplier.delFlg = false
+        order by t0716supplier.sort 
+    </select>
+    
+    <!-- 获取客先code最大值 -->
+     <select id="getMaxCustom" 
+        resultType="String">
+        SELECT
+          max(code)
+        FROM
+          t0704custom 
+    </select>
+    <!-- 获取図面分類code最大值 -->
+     <select id="getMaxDrawing" 
+        resultType="String">
+        SELECT
+          max(code)
+        FROM
+          m_drawing 
+    </select>
+    <!-- 获取品種分類code最大值 -->
+     <select id="getMaxVariety" 
+        resultType="String">
+        SELECT
+          max(code)
+        FROM
+          m_variety 
+    </select>
+    <!-- 获取製品分類code最大值 -->
+    <select id="getMaxProduct"   parameterType="com.fujias.business.common.form.CommonCodeForm"
+        resultType="String">
+        SELECT
+          max(code)
+        FROM
+          m_product 
+        where
+          1 = 1
+          <if test="uppercCode1 != null">
+            AND m_product.uppercCode1 = #{uppercCode1}
+          </if>
+          <if test="uppercCode2 != null">
+            AND m_product.uppercCode2 = #{uppercCode2}
+          </if>
+          <if test="uppercCode3 != null">
+            AND m_product.uppercCode3 = #{uppercCode3}
+          </if>
+          <if test="uppercCode4 != null">
+            AND m_product.uppercCode4 = #{uppercCode4}
+          </if>
+          <if test="uppercCode5 != null">
+            AND m_product.uppercCode5 = #{uppercCode5}
+          </if>
+          <if test="varietyCode != null">
+            AND m_product.varietyCode = #{varietyCode}
+          </if>
+    </select>
+    <!-- 获取追番(連番)最大值 -->
+    <select id="getMaxNumber"   parameterType="com.fujias.business.common.form.CommonCodeForm"
+        resultType="String">
+        SELECT
+          max(code)
+        FROM
+          t_number 
+        where
+          1 = 1
+          <if test="customCode != null">
+            AND customerCode = #{customCode}
+          </if>
+          <if test="drawingCode != null">
+            AND drawingCode = #{drawingCode}
+          </if>
+          <if test="productCode1 != null">
+            AND productCode1 = #{productCode1}
+          </if>
+          <if test="productCode2 != null">
+            AND productCode2 = #{productCode2}
+          </if>
+          <if test="productCode3 != null">
+            AND productCode3 = #{productCode3}
+          </if>
+          <if test="productCode4 != null">
+            AND productCode4 = #{productCode4}
+          </if>
+          <if test="productCode5 != null">
+            AND productCode5 = #{productCode5}
+          </if>
+    </select>
+    
+     <select id="selectData" resultType="com.fujias.business.entity.dms002001.SelectDataEntity">
+        select
+  m_product.code
+  , m_product.name
+  , m_productclassification.productCode
+  , case 
+    when m_variety1.code is not null 
+    then m_variety1.code 
+    when m_variety2.code is not null 
+    then m_variety2.code 
+    when m_variety3.code is not null 
+    then m_variety3.code 
+    when m_variety4.code is not null 
+    then m_variety4.code 
+    when m_variety5.code is not null 
+    then m_variety5.code 
+    end as varietyCode
+  , case 
+    when m_variety1.codeName is not null 
+    then m_variety1.codeName 
+    when m_variety2.codeName is not null 
+    then m_variety2.codeName 
+    when m_variety3.codeName is not null 
+    then m_variety3.codeName 
+    when m_variety4.codeName is not null 
+    then m_variety4.codeName 
+    when m_variety5.codeName is not null 
+    then m_variety5.codeName 
+    end as varietyCodeName
+  , case 
+    when m_variety1.code is not null 
+    then '001' 
+    when m_variety2.code is not null 
+    then '002' 
+    when m_variety3.code is not null 
+    then '003' 
+    when m_variety4.code is not null 
+    then '004' 
+    when m_variety5.code is not null 
+    then '005' 
+    end as productLevel 
+from
+  m_product 
+  left join m_productclassification 
+    on m_product.productCode = m_productclassification.productCode 
+  left join m_variety m_variety1 
+    on m_productclassification.productCode = m_variety1.productCode1 
+    and m_productclassification.productLevel = '001' 
+  left join m_variety m_variety2 
+    on m_productclassification.productCode = m_variety2.productCode2 
+    and m_productclassification.productLevel = '002' 
+  left join m_variety m_variety3 
+    on m_productclassification.productCode = m_variety3.productCode3 
+    and m_productclassification.productLevel = '003' 
+  left join m_variety m_variety4 
+    on m_productclassification.productCode = m_variety4.productCode4 
+    and m_productclassification.productLevel = '004' 
+  left join m_variety m_variety5 
+    on m_productclassification.productCode = m_variety5.productCode5 
+    and m_productclassification.productLevel = '005' 
+order by
+ productLevel, m_product.code,varietyCode
+    </select>
+</mapper>

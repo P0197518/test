@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>生产计算结果导出</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content">
+		<input id="resourcecd" name="resourcecd" type="hidden" value="P0111" />
+		<div id="form1" th:object="${formdata}" class="form-horizontal"
+			style="width: 100%; min-width: 100%;">
+			<input id="id" class="mini-hidden" th:field="*{id}" />
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<input id="adminRole" class="mini-hidden" th:field="*{adminRole}" />
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<h4 class="header blue bolder smaller">导出条件</h4>
+						<!-- <div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right" for="form-field-username">执行人:</label>
+							<div class="col-sm-3">
+								<input id="runuser" name="runuser" width="200" class="mini-combobox" allowInput="false" th:value="${formdata.runuser}" valueField="value" 
+									       emptyText="" textField="text" showNullItem="true" ajaxType="post" th:url="@{/common/getUserList}" readOnly="true"/>
+							</div>
+						</div> -->
+
+						<div class="form-group" id="yearmonthItemGroup">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">导出月份:</label>
+							<div class="col-sm-2">
+								<input id="yearmonth" name="yearmonth" width="150" class="mini-monthpicker" th:value="${formdata.yearmonth}" format="yyyy-MM" allowInput="false"/>
+							</div>
+						</div>
+						
+						<div class="form-group" id="yearItemGroup">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">导出年份:</label>
+							<div class="col-sm-2">
+								<input id="year" name="year" width="150" class="mini-monthpicker" th:value="${formdata.year}" format="yyyy" allowInput="false"/>
+							</div>
+						</div>
+						
+						<!-- <div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right"
+								for="form-field-username">执行部门:</label>
+							<div class="col-sm-3">
+								<input id="depid" name="depid" width="200" class="mini-combobox" allowInput="false" th:value="${formdata.depid}" valueField="value" 
+									       emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" ajaxType="post" th:url="@{/common/getDepList}" />
+							</div>
+						</div> -->
+						<div class="space-4"></div>
+					</div>
+				</div>
+			</div>
+
+			<div style="text-align: center; padding: 10px;">
+				<a class="mini-button btn btn-info btn-round " onclick="onOk()"
+					type="button">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> 导出
+				</a>
+				&nbsp; &nbsp;
+				<a class="mini-button btn btn-warning btn-round"
+					onclick="onCancel()" type="button">
+					<i class="ace-icon fa fa-undo bigger-110"></i> 取消
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+		var form = new mini.Form("#form1");
+		mini.parse();
+
+		// 页面加载完成处理
+		$(function() {
+			if(mini.get("mode").getValue() == "Year"){
+				document.getElementById("yearmonthItemGroup").style.display="none";
+			}else{
+				document.getElementById("yearItemGroup").style.display="none";
+			}
+		});
+		
+		// 导出
+		function onOk() {
+			var searchcondation = getJsonObject("searchCondation");
+			var mode = mini.get("mode").getValue();
+			searchcondation.mode = mode;
+			if(mode == "Year"){
+				if(null == mini.get("year").getFormValue() || "" == mini.get("year").getFormValue()){
+					businessMessage.alert("EC0106", null, null);
+					return;
+				}
+				searchcondation.year = mini.get("year").getFormValue();
+				downloadExcel("/P0122ProductbilityReport/exportYear", searchcondation);
+			}else{
+				if(null == mini.get("yearmonth").getFormValue() || "" == mini.get("yearmonth").getFormValue()){
+					businessMessage.alert("EC0107", null, null);
+					return;
+				}
+				searchcondation.yearmonth = mini.get("yearmonth").getFormValue().replace("-","");
+				downloadExcel("/P0122ProductbilityReport/exportMonth", searchcondation);
+			}
+		}
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("yearmonth").focus();
+		}
+	</script>
+</body>
+
+</html>

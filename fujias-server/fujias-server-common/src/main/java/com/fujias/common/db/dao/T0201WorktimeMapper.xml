@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0201WorktimeMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0201Worktime">
+    <id column="yearMonth" jdbcType="CHAR" property="yearMonth" />
+    <id column="workerName" jdbcType="NVARCHAR" property="workerName" />
+    <id column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    <result column="workType" jdbcType="CHAR" property="workType" />
+    <result column="workerDay" jdbcType="DECIMAL" property="workerDay" />
+    <result column="weekendOverHours" jdbcType="DECIMAL" property="weekendOverHours" />
+    <result column="weekdayOverHours" jdbcType="DECIMAL" property="weekdayOverHours" />
+    <result column="overHours" jdbcType="DECIMAL" property="overHours" />
+    <result column="personalLeaveHours" jdbcType="DECIMAL" property="personalLeaveHours" />
+    <result column="sickLeaveHours" jdbcType="NCHAR" property="sickLeaveHours" />
+    <result column="leaveHours" jdbcType="DECIMAL" property="leaveHours" />
+    <result column="workHours" jdbcType="DECIMAL" property="workHours" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    yearMonth, workerName, departmentId, workType, workerDay, weekendOverHours, weekdayOverHours, 
+    overHours, personalLeaveHours, sickLeaveHours, leaveHours, workHours, createtime, 
+    createuser, updatetime, updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.T0201WorktimeKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0201worktime
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.T0201WorktimeKey">
+    delete from t0201worktime
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0201Worktime">
+    insert into t0201worktime (yearMonth, workerName, departmentId, 
+      workType, workerDay, weekendOverHours, 
+      weekdayOverHours, overHours, personalLeaveHours, 
+      sickLeaveHours, leaveHours, workHours, 
+      createtime, createuser, updatetime, 
+      updateuser, delflg)
+    values (#{yearMonth,jdbcType=CHAR}, #{workerName,jdbcType=NVARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+      #{workType,jdbcType=CHAR}, #{workerDay,jdbcType=DECIMAL}, #{weekendOverHours,jdbcType=DECIMAL}, 
+      #{weekdayOverHours,jdbcType=DECIMAL}, #{overHours,jdbcType=DECIMAL}, #{personalLeaveHours,jdbcType=DECIMAL}, 
+      #{sickLeaveHours,jdbcType=NCHAR}, #{leaveHours,jdbcType=DECIMAL}, #{workHours,jdbcType=DECIMAL}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0201Worktime">
+    insert into t0201worktime
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        yearMonth,
+      </if>
+      <if test="workerName != null">
+        workerName,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="workType != null">
+        workType,
+      </if>
+      <if test="workerDay != null">
+        workerDay,
+      </if>
+      <if test="weekendOverHours != null">
+        weekendOverHours,
+      </if>
+      <if test="weekdayOverHours != null">
+        weekdayOverHours,
+      </if>
+      <if test="overHours != null">
+        overHours,
+      </if>
+      <if test="personalLeaveHours != null">
+        personalLeaveHours,
+      </if>
+      <if test="sickLeaveHours != null">
+        sickLeaveHours,
+      </if>
+      <if test="leaveHours != null">
+        leaveHours,
+      </if>
+      <if test="workHours != null">
+        workHours,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        #{yearMonth,jdbcType=CHAR},
+      </if>
+      <if test="workerName != null">
+        #{workerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null">
+        #{workType,jdbcType=CHAR},
+      </if>
+      <if test="workerDay != null">
+        #{workerDay,jdbcType=DECIMAL},
+      </if>
+      <if test="weekendOverHours != null">
+        #{weekendOverHours,jdbcType=DECIMAL},
+      </if>
+      <if test="weekdayOverHours != null">
+        #{weekdayOverHours,jdbcType=DECIMAL},
+      </if>
+      <if test="overHours != null">
+        #{overHours,jdbcType=DECIMAL},
+      </if>
+      <if test="personalLeaveHours != null">
+        #{personalLeaveHours,jdbcType=DECIMAL},
+      </if>
+      <if test="sickLeaveHours != null">
+        #{sickLeaveHours,jdbcType=NCHAR},
+      </if>
+      <if test="leaveHours != null">
+        #{leaveHours,jdbcType=DECIMAL},
+      </if>
+      <if test="workHours != null">
+        #{workHours,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0201Worktime">
+    update t0201worktime
+    <set>
+      <if test="workType != null">
+        workType = #{workType,jdbcType=CHAR},
+      </if>
+      <if test="workerDay != null">
+        workerDay = #{workerDay,jdbcType=DECIMAL},
+      </if>
+      <if test="weekendOverHours != null">
+        weekendOverHours = #{weekendOverHours,jdbcType=DECIMAL},
+      </if>
+      <if test="weekdayOverHours != null">
+        weekdayOverHours = #{weekdayOverHours,jdbcType=DECIMAL},
+      </if>
+      <if test="overHours != null">
+        overHours = #{overHours,jdbcType=DECIMAL},
+      </if>
+      <if test="personalLeaveHours != null">
+        personalLeaveHours = #{personalLeaveHours,jdbcType=DECIMAL},
+      </if>
+      <if test="sickLeaveHours != null">
+        sickLeaveHours = #{sickLeaveHours,jdbcType=NCHAR},
+      </if>
+      <if test="leaveHours != null">
+        leaveHours = #{leaveHours,jdbcType=DECIMAL},
+      </if>
+      <if test="workHours != null">
+        workHours = #{workHours,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0201Worktime">
+    update t0201worktime
+    set workType = #{workType,jdbcType=CHAR},
+      workerDay = #{workerDay,jdbcType=DECIMAL},
+      weekendOverHours = #{weekendOverHours,jdbcType=DECIMAL},
+      weekdayOverHours = #{weekdayOverHours,jdbcType=DECIMAL},
+      overHours = #{overHours,jdbcType=DECIMAL},
+      personalLeaveHours = #{personalLeaveHours,jdbcType=DECIMAL},
+      sickLeaveHours = #{sickLeaveHours,jdbcType=NCHAR},
+      leaveHours = #{leaveHours,jdbcType=DECIMAL},
+      workHours = #{workHours,jdbcType=DECIMAL},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </update>
+</mapper>

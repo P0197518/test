@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0104ProductBilityItemsMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0104ProductBilityItems">
+    <id column="yearMonth" jdbcType="CHAR" property="yearMonth" />
+    <id column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    <id column="itemName" jdbcType="NVARCHAR" property="itemName" />
+    <id column="technicsCD" jdbcType="NVARCHAR" property="technicsCD" />
+    <result column="prodCount" jdbcType="NUMERIC" property="prodCount" />
+    <result column="directTime" jdbcType="NUMERIC" property="directTime" />
+    <result column="directProductbilityCount" jdbcType="NUMERIC" property="directProductbilityCount" />
+    <result column="indirectTime" jdbcType="NUMERIC" property="indirectTime" />
+    <result column="allTime" jdbcType="NUMERIC" property="allTime" />
+    <result column="allProductbilityCount" jdbcType="NUMERIC" property="allProductbilityCount" />
+    <result column="wideTime" jdbcType="NUMERIC" property="wideTime" />
+    <result column="wideCount" jdbcType="NUMERIC" property="wideCount" />
+    <result column="wideProductbilityCount" jdbcType="NUMERIC" property="wideProductbilityCount" />
+    <result column="driedTime" jdbcType="NUMERIC" property="driedTime" />
+    <result column="driedCount" jdbcType="NUMERIC" property="driedCount" />
+    <result column="driedProductbilityCount" jdbcType="NUMERIC" property="driedProductbilityCount" />
+    <result column="middleTime" jdbcType="NUMERIC" property="middleTime" />
+    <result column="middleCount" jdbcType="NUMERIC" property="middleCount" />
+    <result column="middleProductbilityCount" jdbcType="NUMERIC" property="middleProductbilityCount" />
+    <result column="fineTime" jdbcType="NUMERIC" property="fineTime" />
+    <result column="fineCount" jdbcType="NUMERIC" property="fineCount" />
+    <result column="fineProductbilityCount" jdbcType="NUMERIC" property="fineProductbilityCount" />
+    <result column="bcTime" jdbcType="NUMERIC" property="bcTime" />
+    <result column="bcCount" jdbcType="NUMERIC" property="bcCount" />
+    <result column="bcProductbilityCount" jdbcType="NUMERIC" property="bcProductbilityCount" />
+    <result column="t2Time" jdbcType="NUMERIC" property="t2Time" />
+    <result column="t2Count" jdbcType="NUMERIC" property="t2Count" />
+    <result column="t2ProductbilityCount" jdbcType="NUMERIC" property="t2ProductbilityCount" />
+    <result column="gmTime" jdbcType="NUMERIC" property="gmTime" />
+    <result column="gmCount" jdbcType="NUMERIC" property="gmCount" />
+    <result column="gmProductbilityCount" jdbcType="NUMERIC" property="gmProductbilityCount" />
+    <result column="ccTime" jdbcType="NUMERIC" property="ccTime" />
+    <result column="ccCount" jdbcType="NUMERIC" property="ccCount" />
+    <result column="ccProductbilityCount" jdbcType="NUMERIC" property="ccProductbilityCount" />
+    <result column="newColorTime" jdbcType="NUMERIC" property="newColorTime" />
+    <result column="newColorCount" jdbcType="NUMERIC" property="newColorCount" />
+    <result column="newColorProductbilityCount" jdbcType="NUMERIC" property="newColorProductbilityCount" />
+    <result column="machineTime" jdbcType="NUMERIC" property="machineTime" />
+    <result column="machineCount" jdbcType="NUMERIC" property="machineCount" />
+    <result column="machineProductbilityCount" jdbcType="NUMERIC" property="machineProductbilityCount" />
+    <result column="automationTime" jdbcType="NUMERIC" property="automationTime" />
+    <result column="automationCount" jdbcType="NUMERIC" property="automationCount" />
+    <result column="automationProductbilityCount" jdbcType="NUMERIC" property="automationProductbilityCount" />
+    <result column="inRepairTime" jdbcType="NUMERIC" property="inRepairTime" />
+    <result column="outRepairTime" jdbcType="NUMERIC" property="outRepairTime" />
+    <result column="outRepairCount" jdbcType="NUMERIC" property="outRepairCount" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    yearMonth, departmentId, itemName, technicsCD, prodCount, directTime, directProductbilityCount, 
+    indirectTime, allTime, allProductbilityCount, wideTime, wideCount, wideProductbilityCount, 
+    driedTime, driedCount, driedProductbilityCount, middleTime, middleCount, middleProductbilityCount, 
+    fineTime, fineCount, fineProductbilityCount, bcTime, bcCount, bcProductbilityCount, 
+    t2Time, t2Count, t2ProductbilityCount, gmTime, gmCount, gmProductbilityCount, ccTime, 
+    ccCount, ccProductbilityCount, newColorTime, newColorCount, newColorProductbilityCount, 
+    machineTime, machineCount, machineProductbilityCount, automationTime, automationCount, 
+    automationProductbilityCount, inRepairTime, outRepairTime, outRepairCount, createtime, 
+    createuser, updatetime, updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.T0104ProductBilityItemsKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0104productbilityitems
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and itemName = #{itemName,jdbcType=NVARCHAR}
+      and technicsCD = #{technicsCD,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.T0104ProductBilityItemsKey">
+    delete from t0104productbilityitems
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and itemName = #{itemName,jdbcType=NVARCHAR}
+      and technicsCD = #{technicsCD,jdbcType=NVARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0104ProductBilityItems">
+    insert into t0104productbilityitems (yearMonth, departmentId, itemName, 
+      technicsCD, prodCount, directTime, 
+      directProductbilityCount, indirectTime, 
+      allTime, allProductbilityCount, wideTime, 
+      wideCount, wideProductbilityCount, driedTime, 
+      driedCount, driedProductbilityCount, middleTime, 
+      middleCount, middleProductbilityCount, 
+      fineTime, fineCount, fineProductbilityCount, 
+      bcTime, bcCount, bcProductbilityCount, 
+      t2Time, t2Count, t2ProductbilityCount, 
+      gmTime, gmCount, gmProductbilityCount, 
+      ccTime, ccCount, ccProductbilityCount, 
+      newColorTime, newColorCount, newColorProductbilityCount, 
+      machineTime, machineCount, machineProductbilityCount, 
+      automationTime, automationCount, automationProductbilityCount, 
+      inRepairTime, outRepairTime, outRepairCount, 
+      createtime, createuser, updatetime, 
+      updateuser, delflg)
+    values (#{yearMonth,jdbcType=CHAR}, #{departmentId,jdbcType=VARCHAR}, #{itemName,jdbcType=NVARCHAR}, 
+      #{technicsCD,jdbcType=NVARCHAR}, #{prodCount,jdbcType=NUMERIC}, #{directTime,jdbcType=NUMERIC}, 
+      #{directProductbilityCount,jdbcType=NUMERIC}, #{indirectTime,jdbcType=NUMERIC}, 
+      #{allTime,jdbcType=NUMERIC}, #{allProductbilityCount,jdbcType=NUMERIC}, #{wideTime,jdbcType=NUMERIC}, 
+      #{wideCount,jdbcType=NUMERIC}, #{wideProductbilityCount,jdbcType=NUMERIC}, #{driedTime,jdbcType=NUMERIC}, 
+      #{driedCount,jdbcType=NUMERIC}, #{driedProductbilityCount,jdbcType=NUMERIC}, #{middleTime,jdbcType=NUMERIC}, 
+      #{middleCount,jdbcType=NUMERIC}, #{middleProductbilityCount,jdbcType=NUMERIC}, 
+      #{fineTime,jdbcType=NUMERIC}, #{fineCount,jdbcType=NUMERIC}, #{fineProductbilityCount,jdbcType=NUMERIC}, 
+      #{bcTime,jdbcType=NUMERIC}, #{bcCount,jdbcType=NUMERIC}, #{bcProductbilityCount,jdbcType=NUMERIC}, 
+      #{t2Time,jdbcType=NUMERIC}, #{t2Count,jdbcType=NUMERIC}, #{t2ProductbilityCount,jdbcType=NUMERIC}, 
+      #{gmTime,jdbcType=NUMERIC}, #{gmCount,jdbcType=NUMERIC}, #{gmProductbilityCount,jdbcType=NUMERIC}, 
+      #{ccTime,jdbcType=NUMERIC}, #{ccCount,jdbcType=NUMERIC}, #{ccProductbilityCount,jdbcType=NUMERIC}, 
+      #{newColorTime,jdbcType=NUMERIC}, #{newColorCount,jdbcType=NUMERIC}, #{newColorProductbilityCount,jdbcType=NUMERIC}, 
+      #{machineTime,jdbcType=NUMERIC}, #{machineCount,jdbcType=NUMERIC}, #{machineProductbilityCount,jdbcType=NUMERIC}, 
+      #{automationTime,jdbcType=NUMERIC}, #{automationCount,jdbcType=NUMERIC}, #{automationProductbilityCount,jdbcType=NUMERIC}, 
+      #{inRepairTime,jdbcType=NUMERIC}, #{outRepairTime,jdbcType=NUMERIC}, #{outRepairCount,jdbcType=NUMERIC}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0104ProductBilityItems">
+    insert into t0104productbilityitems
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        yearMonth,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="itemName != null">
+        itemName,
+      </if>
+      <if test="technicsCD != null">
+        technicsCD,
+      </if>
+      <if test="prodCount != null">
+        prodCount,
+      </if>
+      <if test="directTime != null">
+        directTime,
+      </if>
+      <if test="directProductbilityCount != null">
+        directProductbilityCount,
+      </if>
+      <if test="indirectTime != null">
+        indirectTime,
+      </if>
+      <if test="allTime != null">
+        allTime,
+      </if>
+      <if test="allProductbilityCount != null">
+        allProductbilityCount,
+      </if>
+      <if test="wideTime != null">
+        wideTime,
+      </if>
+      <if test="wideCount != null">
+        wideCount,
+      </if>
+      <if test="wideProductbilityCount != null">
+        wideProductbilityCount,
+      </if>
+      <if test="driedTime != null">
+        driedTime,
+      </if>
+      <if test="driedCount != null">
+        driedCount,
+      </if>
+      <if test="driedProductbilityCount != null">
+        driedProductbilityCount,
+      </if>
+      <if test="middleTime != null">
+        middleTime,
+      </if>
+      <if test="middleCount != null">
+        middleCount,
+      </if>
+      <if test="middleProductbilityCount != null">
+        middleProductbilityCount,
+      </if>
+      <if test="fineTime != null">
+        fineTime,
+      </if>
+      <if test="fineCount != null">
+        fineCount,
+      </if>
+      <if test="fineProductbilityCount != null">
+        fineProductbilityCount,
+      </if>
+      <if test="bcTime != null">
+        bcTime,
+      </if>
+      <if test="bcCount != null">
+        bcCount,
+      </if>
+      <if test="bcProductbilityCount != null">
+        bcProductbilityCount,
+      </if>
+      <if test="t2Time != null">
+        t2Time,
+      </if>
+      <if test="t2Count != null">
+        t2Count,
+      </if>
+      <if test="t2ProductbilityCount != null">
+        t2ProductbilityCount,
+      </if>
+      <if test="gmTime != null">
+        gmTime,
+      </if>
+      <if test="gmCount != null">
+        gmCount,
+      </if>
+      <if test="gmProductbilityCount != null">
+        gmProductbilityCount,
+      </if>
+      <if test="ccTime != null">
+        ccTime,
+      </if>
+      <if test="ccCount != null">
+        ccCount,
+      </if>
+      <if test="ccProductbilityCount != null">
+        ccProductbilityCount,
+      </if>
+      <if test="newColorTime != null">
+        newColorTime,
+      </if>
+      <if test="newColorCount != null">
+        newColorCount,
+      </if>
+      <if test="newColorProductbilityCount != null">
+        newColorProductbilityCount,
+      </if>
+      <if test="machineTime != null">
+        machineTime,
+      </if>
+      <if test="machineCount != null">
+        machineCount,
+      </if>
+      <if test="machineProductbilityCount != null">
+        machineProductbilityCount,
+      </if>
+      <if test="automationTime != null">
+        automationTime,
+      </if>
+      <if test="automationCount != null">
+        automationCount,
+      </if>
+      <if test="automationProductbilityCount != null">
+        automationProductbilityCount,
+      </if>
+      <if test="inRepairTime != null">
+        inRepairTime,
+      </if>
+      <if test="outRepairTime != null">
+        outRepairTime,
+      </if>
+      <if test="outRepairCount != null">
+        outRepairCount,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        #{yearMonth,jdbcType=CHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="technicsCD != null">
+        #{technicsCD,jdbcType=NVARCHAR},
+      </if>
+      <if test="prodCount != null">
+        #{prodCount,jdbcType=NUMERIC},
+      </if>
+      <if test="directTime != null">
+        #{directTime,jdbcType=NUMERIC},
+      </if>
+      <if test="directProductbilityCount != null">
+        #{directProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="indirectTime != null">
+        #{indirectTime,jdbcType=NUMERIC},
+      </if>
+      <if test="allTime != null">
+        #{allTime,jdbcType=NUMERIC},
+      </if>
+      <if test="allProductbilityCount != null">
+        #{allProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="wideTime != null">
+        #{wideTime,jdbcType=NUMERIC},
+      </if>
+      <if test="wideCount != null">
+        #{wideCount,jdbcType=NUMERIC},
+      </if>
+      <if test="wideProductbilityCount != null">
+        #{wideProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="driedTime != null">
+        #{driedTime,jdbcType=NUMERIC},
+      </if>
+      <if test="driedCount != null">
+        #{driedCount,jdbcType=NUMERIC},
+      </if>
+      <if test="driedProductbilityCount != null">
+        #{driedProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="middleTime != null">
+        #{middleTime,jdbcType=NUMERIC},
+      </if>
+      <if test="middleCount != null">
+        #{middleCount,jdbcType=NUMERIC},
+      </if>
+      <if test="middleProductbilityCount != null">
+        #{middleProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="fineTime != null">
+        #{fineTime,jdbcType=NUMERIC},
+      </if>
+      <if test="fineCount != null">
+        #{fineCount,jdbcType=NUMERIC},
+      </if>
+      <if test="fineProductbilityCount != null">
+        #{fineProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="bcTime != null">
+        #{bcTime,jdbcType=NUMERIC},
+      </if>
+      <if test="bcCount != null">
+        #{bcCount,jdbcType=NUMERIC},
+      </if>
+      <if test="bcProductbilityCount != null">
+        #{bcProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="t2Time != null">
+        #{t2Time,jdbcType=NUMERIC},
+      </if>
+      <if test="t2Count != null">
+        #{t2Count,jdbcType=NUMERIC},
+      </if>
+      <if test="t2ProductbilityCount != null">
+        #{t2ProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="gmTime != null">
+        #{gmTime,jdbcType=NUMERIC},
+      </if>
+      <if test="gmCount != null">
+        #{gmCount,jdbcType=NUMERIC},
+      </if>
+      <if test="gmProductbilityCount != null">
+        #{gmProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="ccTime != null">
+        #{ccTime,jdbcType=NUMERIC},
+      </if>
+      <if test="ccCount != null">
+        #{ccCount,jdbcType=NUMERIC},
+      </if>
+      <if test="ccProductbilityCount != null">
+        #{ccProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="newColorTime != null">
+        #{newColorTime,jdbcType=NUMERIC},
+      </if>
+      <if test="newColorCount != null">
+        #{newColorCount,jdbcType=NUMERIC},
+      </if>
+      <if test="newColorProductbilityCount != null">
+        #{newColorProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="machineTime != null">
+        #{machineTime,jdbcType=NUMERIC},
+      </if>
+      <if test="machineCount != null">
+        #{machineCount,jdbcType=NUMERIC},
+      </if>
+      <if test="machineProductbilityCount != null">
+        #{machineProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="automationTime != null">
+        #{automationTime,jdbcType=NUMERIC},
+      </if>
+      <if test="automationCount != null">
+        #{automationCount,jdbcType=NUMERIC},
+      </if>
+      <if test="automationProductbilityCount != null">
+        #{automationProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="inRepairTime != null">
+        #{inRepairTime,jdbcType=NUMERIC},
+      </if>
+      <if test="outRepairTime != null">
+        #{outRepairTime,jdbcType=NUMERIC},
+      </if>
+      <if test="outRepairCount != null">
+        #{outRepairCount,jdbcType=NUMERIC},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0104ProductBilityItems">
+    update t0104productbilityitems
+    <set>
+      <if test="prodCount != null">
+        prodCount = #{prodCount,jdbcType=NUMERIC},
+      </if>
+      <if test="directTime != null">
+        directTime = #{directTime,jdbcType=NUMERIC},
+      </if>
+      <if test="directProductbilityCount != null">
+        directProductbilityCount = #{directProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="indirectTime != null">
+        indirectTime = #{indirectTime,jdbcType=NUMERIC},
+      </if>
+      <if test="allTime != null">
+        allTime = #{allTime,jdbcType=NUMERIC},
+      </if>
+      <if test="allProductbilityCount != null">
+        allProductbilityCount = #{allProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="wideTime != null">
+        wideTime = #{wideTime,jdbcType=NUMERIC},
+      </if>
+      <if test="wideCount != null">
+        wideCount = #{wideCount,jdbcType=NUMERIC},
+      </if>
+      <if test="wideProductbilityCount != null">
+        wideProductbilityCount = #{wideProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="driedTime != null">
+        driedTime = #{driedTime,jdbcType=NUMERIC},
+      </if>
+      <if test="driedCount != null">
+        driedCount = #{driedCount,jdbcType=NUMERIC},
+      </if>
+      <if test="driedProductbilityCount != null">
+        driedProductbilityCount = #{driedProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="middleTime != null">
+        middleTime = #{middleTime,jdbcType=NUMERIC},
+      </if>
+      <if test="middleCount != null">
+        middleCount = #{middleCount,jdbcType=NUMERIC},
+      </if>
+      <if test="middleProductbilityCount != null">
+        middleProductbilityCount = #{middleProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="fineTime != null">
+        fineTime = #{fineTime,jdbcType=NUMERIC},
+      </if>
+      <if test="fineCount != null">
+        fineCount = #{fineCount,jdbcType=NUMERIC},
+      </if>
+      <if test="fineProductbilityCount != null">
+        fineProductbilityCount = #{fineProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="bcTime != null">
+        bcTime = #{bcTime,jdbcType=NUMERIC},
+      </if>
+      <if test="bcCount != null">
+        bcCount = #{bcCount,jdbcType=NUMERIC},
+      </if>
+      <if test="bcProductbilityCount != null">
+        bcProductbilityCount = #{bcProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="t2Time != null">
+        t2Time = #{t2Time,jdbcType=NUMERIC},
+      </if>
+      <if test="t2Count != null">
+        t2Count = #{t2Count,jdbcType=NUMERIC},
+      </if>
+      <if test="t2ProductbilityCount != null">
+        t2ProductbilityCount = #{t2ProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="gmTime != null">
+        gmTime = #{gmTime,jdbcType=NUMERIC},
+      </if>
+      <if test="gmCount != null">
+        gmCount = #{gmCount,jdbcType=NUMERIC},
+      </if>
+      <if test="gmProductbilityCount != null">
+        gmProductbilityCount = #{gmProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="ccTime != null">
+        ccTime = #{ccTime,jdbcType=NUMERIC},
+      </if>
+      <if test="ccCount != null">
+        ccCount = #{ccCount,jdbcType=NUMERIC},
+      </if>
+      <if test="ccProductbilityCount != null">
+        ccProductbilityCount = #{ccProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="newColorTime != null">
+        newColorTime = #{newColorTime,jdbcType=NUMERIC},
+      </if>
+      <if test="newColorCount != null">
+        newColorCount = #{newColorCount,jdbcType=NUMERIC},
+      </if>
+      <if test="newColorProductbilityCount != null">
+        newColorProductbilityCount = #{newColorProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="machineTime != null">
+        machineTime = #{machineTime,jdbcType=NUMERIC},
+      </if>
+      <if test="machineCount != null">
+        machineCount = #{machineCount,jdbcType=NUMERIC},
+      </if>
+      <if test="machineProductbilityCount != null">
+        machineProductbilityCount = #{machineProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="automationTime != null">
+        automationTime = #{automationTime,jdbcType=NUMERIC},
+      </if>
+      <if test="automationCount != null">
+        automationCount = #{automationCount,jdbcType=NUMERIC},
+      </if>
+      <if test="automationProductbilityCount != null">
+        automationProductbilityCount = #{automationProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="inRepairTime != null">
+        inRepairTime = #{inRepairTime,jdbcType=NUMERIC},
+      </if>
+      <if test="outRepairTime != null">
+        outRepairTime = #{outRepairTime,jdbcType=NUMERIC},
+      </if>
+      <if test="outRepairCount != null">
+        outRepairCount = #{outRepairCount,jdbcType=NUMERIC},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and itemName = #{itemName,jdbcType=NVARCHAR}
+      and technicsCD = #{technicsCD,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0104ProductBilityItems">
+    update t0104productbilityitems
+    set prodCount = #{prodCount,jdbcType=NUMERIC},
+      directTime = #{directTime,jdbcType=NUMERIC},
+      directProductbilityCount = #{directProductbilityCount,jdbcType=NUMERIC},
+      indirectTime = #{indirectTime,jdbcType=NUMERIC},
+      allTime = #{allTime,jdbcType=NUMERIC},
+      allProductbilityCount = #{allProductbilityCount,jdbcType=NUMERIC},
+      wideTime = #{wideTime,jdbcType=NUMERIC},
+      wideCount = #{wideCount,jdbcType=NUMERIC},
+      wideProductbilityCount = #{wideProductbilityCount,jdbcType=NUMERIC},
+      driedTime = #{driedTime,jdbcType=NUMERIC},
+      driedCount = #{driedCount,jdbcType=NUMERIC},
+      driedProductbilityCount = #{driedProductbilityCount,jdbcType=NUMERIC},
+      middleTime = #{middleTime,jdbcType=NUMERIC},
+      middleCount = #{middleCount,jdbcType=NUMERIC},
+      middleProductbilityCount = #{middleProductbilityCount,jdbcType=NUMERIC},
+      fineTime = #{fineTime,jdbcType=NUMERIC},
+      fineCount = #{fineCount,jdbcType=NUMERIC},
+      fineProductbilityCount = #{fineProductbilityCount,jdbcType=NUMERIC},
+      bcTime = #{bcTime,jdbcType=NUMERIC},
+      bcCount = #{bcCount,jdbcType=NUMERIC},
+      bcProductbilityCount = #{bcProductbilityCount,jdbcType=NUMERIC},
+      t2Time = #{t2Time,jdbcType=NUMERIC},
+      t2Count = #{t2Count,jdbcType=NUMERIC},
+      t2ProductbilityCount = #{t2ProductbilityCount,jdbcType=NUMERIC},
+      gmTime = #{gmTime,jdbcType=NUMERIC},
+      gmCount = #{gmCount,jdbcType=NUMERIC},
+      gmProductbilityCount = #{gmProductbilityCount,jdbcType=NUMERIC},
+      ccTime = #{ccTime,jdbcType=NUMERIC},
+      ccCount = #{ccCount,jdbcType=NUMERIC},
+      ccProductbilityCount = #{ccProductbilityCount,jdbcType=NUMERIC},
+      newColorTime = #{newColorTime,jdbcType=NUMERIC},
+      newColorCount = #{newColorCount,jdbcType=NUMERIC},
+      newColorProductbilityCount = #{newColorProductbilityCount,jdbcType=NUMERIC},
+      machineTime = #{machineTime,jdbcType=NUMERIC},
+      machineCount = #{machineCount,jdbcType=NUMERIC},
+      machineProductbilityCount = #{machineProductbilityCount,jdbcType=NUMERIC},
+      automationTime = #{automationTime,jdbcType=NUMERIC},
+      automationCount = #{automationCount,jdbcType=NUMERIC},
+      automationProductbilityCount = #{automationProductbilityCount,jdbcType=NUMERIC},
+      inRepairTime = #{inRepairTime,jdbcType=NUMERIC},
+      outRepairTime = #{outRepairTime,jdbcType=NUMERIC},
+      outRepairCount = #{outRepairCount,jdbcType=NUMERIC},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+      and itemName = #{itemName,jdbcType=NVARCHAR}
+      and technicsCD = #{technicsCD,jdbcType=NVARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p01.P0123DailyReportMapper">
+    <select id="getListByPage"
+        parameterType="com.fujias.business.forms.p01.P0123DailyReportForm"
+        resultType="com.fujias.business.forms.p01.P0123DailyReportForm">
+        select
+        prodInstrNo
+        ,m.name AS departmentId
+        ,itemName
+        ,prodInstrNum
+        ,machineNo
+        ,workDay
+        ,technicsCD
+        ,count
+        ,badCount
+        ,startTime
+        ,endTime
+        ,workMinutes
+        ,badMinutes
+        ,badContent
+        ,remark
+        ,workerName
+        ,t.createtime
+        ,t.createuser
+        ,importDate
+        from
+        t0101dailyreport t
+        left
+        outer join
+        mdepartment m
+        on
+        m.depId = t.departmentId
+        where
+        t.delFlg
+        ='0'
+        <if test="departmentId != null and departmentId != ''">
+            AND departmentId = #{departmentId}
+        </if>
+        <if test="prodInstrNo != null and prodInstrNo != ''">
+            AND prodInstrNo like '%${prodInstrNo}%'
+        </if>
+        <if test="itemName != null and itemName != ''">
+            AND itemName like '%${itemName}%'
+        </if>
+        <if test="technicsCD != null and technicsCD != ''">
+            AND technicsCD like '%${technicsCD}%'
+        </if>
+        <if test="badContent != null and badContent != ''">
+            AND badContent like '%${badContent}%'
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND importDate <![CDATA[ > ]]>
+            #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND importDate <![CDATA[ < ]]>
+            #{endTime}
+        </if>
+        <if test="workerName != null and workerName != ''">
+            AND t.workerName like '%${workerName}%'
+        </if>
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+
+    <select id="getReportData"
+        parameterType="com.fujias.business.forms.p01.P0123DailyReportForm"
+        resultType="com.fujias.business.forms.p01.P0123DailyReportExcelForm">
+        SELECT top (50 * ${page}) * FROM ( select row_number()
+        over(order by itemName asc) as rownumber,
+        prodInstrNo
+        ,m.name AS
+        departmentId
+        ,itemName
+        ,prodInstrNum
+        ,machineNo
+        ,workDay
+        ,technicsCD
+        ,count
+        ,badCount
+        ,startTime
+        ,endTime
+        ,workMinutes
+        ,badMinutes
+        ,badContent
+        ,remark
+        ,workerName
+        ,t.createtime
+        ,t.createuser
+        from
+        t0101dailyreport t
+        left outer join
+        mdepartment m
+        on
+        m.depId =
+        t.departmentId
+        where
+        t.delFlg ='0'
+        <if test="condation.departmentId != null and condation.departmentId != ''">
+            AND departmentId = #{condation.departmentId}
+        </if>
+        <if
+            test="condation.prodInstrNo != null and condation.prodInstrNo 
+            != ''"> AND prodInstrNo like '%${condation.prodInstrNo}%' </if>
+        <if
+            test="condation.itemName 
+            != null and condation.itemName != ''"> AND t0101dailyreport.itemName like
+            '%${condation.itemName}%' </if>
+
+        <if
+            test="condation.technicsCD != null and condation.technicsCD != 
+            ''"> AND technicsCD like '%${condation.technicsCD}%' </if>
+
+        <if test="condation.startTime != null and condation.startTime != ''">
+            AND importDate <![CDATA[ > ]]>
+            #{condation.startTime}
+        </if>
+        <if test="condation.endTime != null and condation.endTime != ''">
+            AND importDate <![CDATA[ < ]]>
+            #{condation.endTime}
+        </if>
+
+        <if
+            test="condation.badContent 
+            != null and condation.badContent != ''"> AND badContent like '%${condation.badContent}%'
+        </if>
+
+        <if
+            test="condation.createuser != 
+            null and condation.createuser != ''"> AND t0101dailyreport.createuser like
+            '%${condation.createuser}%' </if>
+
+        ) t WHERE
+        t.rownumber <![CDATA[>]]>
+        50 * (${page}-1)
+        AND t.rownumber <![CDATA[<=]]>
+        50 * ${page}
+        order by t.rownumber ASC
+
+
+    </select>
+    <!-- 工序下拉列表 -->
+    <select id="getTechnicsCD" resultType="com.fujias.common.entity.SelectItem">
+        select
+        codeCd as value
+        ,codeName as text
+        from
+        mkbn
+        where
+        codeTypeCd = '10'
+    </select>
+
+    <select id="getDepartList" resultType="com.fujias.common.entity.SelectItem">
+        select
+        depId as value
+        ,name as text
+        from
+        mdepartment
+        where
+        depId not in
+        ('2000','8000','5000','7600')
+    </select>
+
+    <select id="dpsComparision" parameterType="String"
+        resultType="com.fujias.business.forms.p01.P0123DailyReportForm">
+        select
+        setting
+        from
+        t0203adjustsettings
+        where
+        t0203adjustsettings.delflg = '0'
+        AND settingType = '02'
+        AND
+        itemName = #{itemCD}
+
+
+    </select>
+        <select id="badExist" parameterType="String"
+        resultType="com.fujias.business.forms.p01.P0123DailyReportForm">
+        select
+        top 1 id
+        from
+        t0101dailyreport t
+        where
+        t.delflg = '0'
+        
+        AND
+        itemName = #{itemName}
+        order by id desc
+
+    </select>
+    <!-- 获取品目别总生产数量 -->
+    <select id="getDailyCount"
+        parameterType="com.fujias.business.forms.p01.P0123CompareDiffForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+        select
+        report.itemName
+        ,report.prodInstrNo
+        ,
+        isnull(max(report.prodInstrNum), 0) as prodCount
+        , case
+        when (
+        sys.setting is not null
+        and sys.setting != ''
+        )
+        then sys.setting
+        when (
+        settings.setting is not null
+        and settings.setting != ''
+        )
+        then settings.setting
+        when (report.remark = '社内' or report.remark
+        = '社外')
+        then 'repair'
+        else 'normal'
+        end as technicsCD
+        , case
+        when
+        (sys.setting is not null and sys.setting != '')
+        then 1
+        else 0
+        end
+        as isItemSys
+        , (
+        select
+        isnull(max(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = sys.setting
+        ) as
+        tenchnicsItemCountSys
+        <include refid="getProdCount_Column_List" />
+        from
+        t0101dailyreport report
+
+        left join t0203adjustsettings
+        settings
+        on report.itemName = settings.itemName
+        and
+        report.technicsCD = settings.setting
+
+        left join
+        t0204systemsettings sys
+        on report.itemName = sys.itemName
+        and
+        report.technicsCD = sys.setting
+        where
+        report.delflg = '0'
+        AND
+        report.importDate  <![CDATA[>=]]>
+        #{txtStartDate}
+        AND report.importDate <![CDATA[<=]]>
+        #{txtEndDate}
+        and report.departmentId = #{formPartment}
+        group by
+        report.itemName
+        , report.prodInstrNo
+        , report.departmentId
+        ,
+        settings.itemName
+        , settings.setting
+        , report.remark
+        , sys.setting
+        order by
+        report.itemName
+        , report.prodInstrNo
+    </select>
+    <sql id="getProdCount_Column_List">
+        , case
+        when report.departmentId = '2000'
+        then isnull(max(report.prodInstrNum), 0)
+        when report.departmentId = '5000'
+        then isnull(max(report.prodInstrNum), 0)
+        when report.departmentId = '8000'
+        then isnull(max(report.prodInstrNum), 0)
+        when report.departmentId = '6000'
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '621'
+        )
+        when report.departmentId = '9000'
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '706'
+        )
+        when report.departmentId = '7000'
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '714'
+        )
+        when report.departmentId = '7500'
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '7510'
+        )
+        when report.departmentId = '7200'
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '包装'
+        )
+        when report.departmentId = '7600'
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '760301'
+        )
+        when (
+        report.departmentId = '2500'
+        and charindex('+238', report.itemName) = 0
+        )
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '703'
+        )
+        end as depItemCount
+        , case
+        when (
+        report.departmentId = '2500'
+        and charindex('+238', report.itemName) > 0
+        )
+        then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = '238'
+        )
+        end as dep2ItemCount
+        , (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and technicsCD = settings.setting
+        ) as tenchnicsItemCount
+        , case
+        when (
+        settings.setting is not null
+        and settings.setting != ''
+        )
+        then 1
+        else 0
+        end as isItemSetting
+        , case report.departmentId
+        when '1000' then (
+        select
+        isnull(sum(count), 0)
+        from
+        t0101dailyreport
+        where
+        itemName = report.itemName
+        and remark = '社外'
+        )
+        else 0
+        end as repairItemCount
+    </sql>
+</mapper>

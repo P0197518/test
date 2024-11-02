@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head th:fragment="commonHeader(metas,title,links,scripts,style)">
+<th:block th:replace="${metas}" />
+
+<title th:replace="${title}">Title</title>
+
+<script th:src="@{/boot.js}" type="text/javascript"></script>
+<link th:href="@{/css/assets/css/bootstrap.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/components/font-awesome/css/font-awesome.css}"
+	rel="stylesheet" type="text/css" />
+<link th:href="@{/css/assets/css/ace-fonts.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/assets/css/ace.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/assets/css/ace-skins.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/assets/css/ace-rtl.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
+<script th:src="@{/js/jquery-1.11.2.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/aceui/aceui.js}" type="text/javascript"></script>
+<script th:src="@{/js/aceui/locale/zh_CN.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/jsoncommon.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/webcommon.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/common.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/CalculateUtil.js}" type="text/javascript"></script>
+<script th:src="@{/js/common/popwindow.js}" type="text/javascript"></script>
+<script th:src="@{/js/business/commonCheck.js}" type="text/javascript"></script>
+<script th:src="@{/js/business/message_cn.js}" type="text/javascript"></script>
+<!--  <script type="text/javascript">
+				var lang = getCookie("lang");
+				if (lang == null || lang == "") {
+					var d = new Date();
+					d.setTime(d.getTime() + (30 * 24 * 60 * 60 * 1000));
+					var expires = "expires=" + d.toGMTString();
+					document.cookie = "lang=cn;" + expires + ";path=/";
+					location.href = "?lang=zh_CN";
+				}
+
+				var scriptNode = document.createElement("script");
+				scriptNode.setAttribute("type", "text/javascript");
+				if (lang == "cn") {
+					scriptNode.setAttribute("src",
+							"../js/business/message_cn.js");
+				} else if (lang == "en") {
+					scriptNode.setAttribute("src",
+							"../js/business/message_en.js");
+				} else if (lang == "jp") {
+					scriptNode.setAttribute("src",
+							"../js/business/message_jp.js");
+				} else {
+					scriptNode.setAttribute("src",
+							"../js/business/message_cn.js");
+				}
+				document.head.appendChild(scriptNode);
+			</script> -->
+
+<script th:src="@{/js/common/formatter.js}" type="text/javascript"></script>
+<link th:href="@{/css/aceui/themes/default/aceui.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/aceui/themes/icons.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/css/aceui/themes/metro/skin.css}" rel="stylesheet"
+	type="text/css" />
+
+<th:block th:replace="${links}" />
+<th:block th:replace="${scripts}" />
+<th:block th:replace="${style}" />
+</head>
+<body>
+
+</body>
+</html>

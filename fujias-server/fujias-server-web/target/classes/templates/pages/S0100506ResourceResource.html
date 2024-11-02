@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>[[#{S0100505.pareselect}]]</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body class="no-skin">
+
+	<div class="mini-fit">
+		<ul id="tree1" class="mini-tree" th:url="@{/S0100505Resources/getList}" style="width: 100%; height: 100%;" showTreeIcon="true" textField="resourceName" idField="id" parentField="parentId" resultAsTree="false" expandOnLoad="true" onnodedblclick="onOk" expandOnDblClick="false">
+		</ul>
+	</div>
+
+	<div class="mini-toolbar" style="text-align: center; padding-top: 8px; padding-bottom: 8px;" borderStyle="border-left:0;border-bottom:0;border-right:0;">
+		<a class="mini-button" style="width: 60px;" onclick="onOk()">[[#{S0100401.sure}]]</a> <span style="display: inline-block; width: 25px;"></span> 
+		<a class="mini-button" style="width: 60px;" onclick="onClear()">[[#{S0100505.clear}]]</a> <span style="display: inline-block; width: 25px;"></span> 
+		<a class="mini-button" style="width: 60px;" onclick="onCancel()">[[#{S0100401.cancel}]]</a>
+	</div>
+
+	<script type="text/javascript">
+        mini.parse();
+
+        var tree = mini.get("tree1");
+        tree.load();
+
+        function CloseWindow(action) {
+            if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+            else window.close();
+        }
+
+        function onOk() {
+            var node = tree.getSelectedNode();
+            /* if (node && tree.isLeaf(node) == false) {
+            	alert("不能选中父节点");
+            	return;
+            } */
+
+            CloseWindow("ok");
+        }
+
+        function onClear() {
+            tree.uncheckAllNodes();
+            CloseWindow("clear");
+        }
+
+        function onCancel() {
+            CloseWindow("cancel");
+        }
+
+        function GetData() {
+            var node = tree.getSelectedNode();
+            return node;
+        }
+    </script>
+
+
+</body>
+
+</html>

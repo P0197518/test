@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.dao.CommonRoleResourceMapper">
+
+    <select id="getResourceRoles" parameterType="java.lang.String"
+        resultMap="RoleResourceResultMap">
+select
+    roles.id
+    , resource.id as resourceid
+    , resource.resourceurl as path 
+from
+    mroleresource as roleresource 
+    inner join mresource as resource 
+        on resource.id = roleresource.resourceid 
+        and resource.delflg = '0' 
+    inner join mroles as roles 
+        on roles.id = roleresource.roleid 
+where
+    1 = 1 
+    and resource.resourceurl = '--' 
+order by
+    resourceid
+    , roleid
+    </select>
+
+    <resultMap type="com.fujias.common.form.CommonResourceRoles"
+        id="RoleResourceResultMap">
+        <id column="path" property="path" />
+        <collection property="roles" ofType="string"
+            javaType="list">
+            <result column="id" />
+        </collection>
+    </resultMap>
+
+</mapper>

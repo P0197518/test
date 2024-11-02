@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>[[#{P0704.title}]]</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner" id="form">
+            <!-- #section:basics/content.breadcrumbs -->
+                <input id="resourcecd" name="resourcecd" type="hidden" value="P0704" />
+                <div class="page-content">
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">[[#{P0704.code}]]:</label>
+                                    <input id="code" name="code" class="mini-textbox" th:field="${formdata.code}" onenter="search()" vtype="maxLength:4" maxlength="4"/>
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">[[#{P0704.codeName}]]:</label>
+                                    <input id="codeName" name="codeName" class="mini-textbox" th:field="${formdata.codeName}" onenter="search()" vtype="maxLength:50" maxlength="50" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">[[#{P0704.customerCode}]]:</label>
+                                    <input id="customerCode" name="customerCode" class="mini-textbox" th:field="${formdata.customerCode}" onenter="search()" vtype="maxLength:20" maxlength="20" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">[[#{P0704.abbName}]]:</label>
+                                    <input id="abbName" name="abbName" class="mini-textbox" th:field="${formdata.abbName}" onenter="search()" vtype="maxLength:20" maxlength="20" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">[[#{P0704.belonging}]]</label>
+                                    <div class="col-sm-3">
+                                        <input name="belonging" id="belonging"
+                                            class="mini-combobox" th:field="${formdata.belonging}" valueField="value" textField="text" allowInput="false"
+                                            ajaxType="post" th:url="@{/P0704CustomList/getBelonging}" showNullItem="true" nullItemText="" onenter="search()"/>
+                                    </div>
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()">
+                                    <i class="ace-icon fa fa-search"> </i>[[#{select}]]
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+        </a>
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%; height: 30px;">
+                    <a id="add" class="mini-button btn btn-warning btn-round autoAuth" onclick="add()" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110"> </i> [[#{add}]]
+                    </a>
+                    <a id="edit" class="mini-button btn btn-success btn-round autoAuth" onclick="edit()" type="button">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> [[#{update}]]
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- 画面一览 -->
+    <div class="mini-fit">
+        <div id="grid1" th:url="@{/P0704CustomList/getList}" class="mini-datagrid" idField="username" allowResize="false"  allowCellSelect="true" multiSelect="false"  editNextOnEnterKey="true" 
+            style="width: 100%; height: 100%;" sortField="code" sortOrder="asc">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="code" name="code"width="80" headerAlign="center" sortField="code" align="center" allowSort="true">[[#{P0704.code}]]</div>
+                <div field="codeName" name="codeName"width="70" headerAlign="center" sortField="codeName" align="center" allowSort="true">[[#{P0704.codeName}]]</div>
+                <div field="customerCode" name="customerCode"width="100" headerAlign="center" sortField="customerCode" align="center">[[#{P0704.customerCode}]]</div>
+                <div field="abbName" name="abbName"width="100" headerAlign="center" sortField="abbName" align="center" allowSort="true">[[#{P0704.abbName}]]</div>
+                <div field="belonging" name="region"width="60" headerAlign="center" sortField="region" align="center">[[#{P0704.belonging}]]</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        // 查询操作
+        function search() {
+            var searchcondation = getJsonObject("searchCondation");
+            grid.load(getPagerInfo("grid1", searchcondation));
+        }
+        var lang="";
+        var mess="";
+        $(function() {
+            search();
+            lang = getCookie("lang");
+        });
+
+        // 添加操作
+        function add() {
+            if (lang == "cn") {
+                mess="客户添加";
+            } else if (lang == "en") {
+                mess="Add Customer";
+            } else if (lang == "jp") {
+                mess="取引先追加";
+            } else {
+                mess="客户添加";
+            }
+            var popupParam = openCommonPopupParam("/P0704CustomList/indexEdit",
+                    mess);
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {
+                    grid.reload();
+                }
+            };
+            mini.open(popupParam);
+        }
+
+        // 编辑操作
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                if (lang == "cn") {
+                    mess="客户编辑";
+                } else if (lang == "en") {
+                    mess="Update Customer";
+                } else if (lang == "jp") {
+                    mess="取引先編集";
+                } else {
+                    mess="客户编辑";
+                }
+                var row = grid.getSelected();
+                var popupParam = openCommonPopupParam(
+                        "/P0704CustomList/indexEdit?code=" + row.code, mess);
+                popupParam.ondestroy = function(action) {
+                    if (action == "ok") {
+                        grid.reload();
+                    }
+                };
+                mini.open(popupParam);
+            } else {
+                businessMessage.alert("E00002");
+            }
+        }
+
+        // 初始化时focus
+        function loadfocus() {
+            mini.get("code").focus();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>[[#{S0100501.userlist}]]</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner" id="form" th:object="${formdata}">
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden" value="P0211" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box" th:object="${formdata}">
+						<div class="widget-header">
+							<h5 class="smaller">[[#{S0100501.searchco}]]</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+								<div class="search-item">
+									<label for="workerName" class="control-label col-sm-0">
+										人员名: </label> <input id="workerName" name="workerName"
+										class="mini-textbox" onenter="search()" vtype="maxLength:30"
+										maxlength="30" th:field="*{workerName}"/>
+								</div>
+								<div class="search-item">
+									<label for="departmentId" class="control-label col-sm-0">
+										部门: </label> <input id="departmentId" name="departmentId" class="mini-combobox" allowInput="false" th:value="${formdata.departmentId}" valueField="value" 
+                                           emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+                                </div>
+								<div class="search-item">
+									<label for="yearMonth" class="control-label col-sm-0">
+										年月: </label> <input id="yearMonth" name="yearMonth"
+										class="mini-datepicker" format="yyyyMM" onenter="search()"
+										vtype="maxLength:30" maxlength="30" th:field="*{yearMonth}"/>
+								</div>
+								<a class="mini-button btn btn-info btn-round btn-search"
+									type="button" onclick="search()"> <i
+									class="ace-icon fa fa-search"> </i> [[#{S0100501.search}]]
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div>
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><a id="import"
+					class="mini-button btn btn-info btn-round autoAuth" type="button"
+					onclick="importWorkData()"> <i
+						class="ace-icon fa fa-cloud-download"></i> 导入
+				</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" th:url="@{/P0221WorkTime/getList}"
+			class="mini-datagrid" idField="id" allowResize="false"
+			allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true"
+			style="width: 100%; height: 100%;" sortField="yearMonth"
+			sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="yearMonth" name="yearMonth" width="100"
+					sortField="yearMonth" headerAlign="center" allowSort="true"
+					align="center">年月</div>
+				<div field="workerName" name="workerName" width="100"
+					headerAlign="center" align="left" allowSort="true">工作人员</div>
+				<div field="workHours" name="workHours" width="100"
+					headerAlign="center" align="center" allowSort="true">工作时间</div>
+				<div field="departmentId" name="departmentId" width="100"
+					headerAlign="center" align="left" allowSort="true">所属部门</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+		var myDate = new Date();
+		var nowDate = myDate.toLocaleDateString();
+		mini.get("yearMonth").setValue(nowDate);
+		/*var gridData = new Array();
+		for (var i = 1; i < 20; i++) {
+		    gridData.push({
+		    	yearAndMonth: "202103",
+		    	workPeople: "李磊",
+		    	departName:"冲压",
+		    	yesOrNo:"是",
+		    	workDate:"21",
+		    	weekendOvertime:"8",
+		    	weekdayOvertime:"8",
+		    	vacationTime:"0",
+		    	workTime:"168",
+		    });
+		}
+		grid.setData(gridData);
+		 */
+		 
+	     $(function() {
+	            getSearchCondation(search);
+
+	        }); 
+
+		// 查询操作
+		function search() {
+
+			var searchcondation = getJsonObject("searchCondation");
+
+			grid.load(getPagerInfo("grid1", searchcondation)); 
+		}
+
+		function onSaveSearchCondation() {
+			saveSearchCondation(search);
+		}
+		//导入考勤数据
+		function importWorkData() {
+			/*
+			document.getElementById("btnfile").click();
+			 */
+			var popupParam = openCommonPopupParam(
+					"/P0221WorkTime/indexEdit?mode=import", "考勤数据导入");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("workerName").focus();
+		}
+	</script>
+</body>
+
+</html>

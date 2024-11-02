@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{::head/style})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>资源管理添加</title>
+<style>
+.function-item {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.function-item input {
+	vertical-align: bottom;
+}
+</style>
+</head>
+
+<body onload="loadfocus()">
+
+	<div class="edit-page-content">
+		<input id="resourcecd" name="resourcecd" type="hidden" value="P0713" />
+		<div id="form" th:object="${formdata}" class="form-horizontal" style="width: 100%; min-width: 800px;">
+			<input th:field="*{id}" id="id" class="mini-hidden" value="" /> 
+			<input name="version" id="version" class="mini-hidden" value="" /> 
+			<input th:field="*{mode}" id="mode" class="mini-hidden" value="" />
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<h4 class="header blue bolder smaller">角色信息</h4>
+
+
+						<div class="form-group">
+							<label class=" col-sm-1 control-label no-padding-right" for="form-field-username">角色名称:</label>
+							<div class="col-sm-3">
+								<input id="roleName" th:field="*{roleName}" class="col-sm-3 mini-textbox" 
+								vtype="maxLength:20" value="" required="true" requiredErrorText="[[#{S0100503.notnull}]]" />
+							</div>
+
+							<label class=" col-sm-1 control-label no-padding-right" for="form-field-username">角色描述:</label>
+							<div class="col-sm-3">
+								<input id="introduction" th:field="*{introduction}" class="col-sm-3 mini-textbox" 
+								vtype="maxLength:150" value="" />
+							</div>
+						</div>
+
+
+						<h4 class="header blue bolder smaller"></h4>
+
+						<div class="vspace-12-sm"></div>
+						<div class="mini-toolbar">
+							<table style="width: 100%;">
+								<tr>
+									<td style="width: 100%;">
+									<a id="selectAll" class="mini-button btn btn-success btn-round" onclick="selectAll()"> 
+									<i class="ace-icon glyphicon glyphicon-ok"> </i> 全部选择
+									</a> <a id="undoSelect" class="mini-button btn btn-danger btn-round" onclick="undoSelect()"> 
+									<i class="ace-icon glyphicon glyphicon-remove"> </i> 取消选择
+									</a></td>
+								</tr>
+							</table>
+						</div>
+						<div class="">
+
+							<div id="treegrid1" class="mini-treegrid" style="width: 100%; height: 400px;" 
+							treeColumn="resourceName" idField="resourceId" parentField="parentId" 
+							resultAsTree="false" allowResize="false" expandOnLoad="true" showTreeIcon="true" 
+							allowSelect="false" allowCellSelect="false" enableHotTrack="false" ondrawcell="ondrawcell">
+
+								<div property="columns">
+									<div type="indexcolumn"></div>
+									<div name="resourceName" field="resourceName" width="200">资源名称</div>
+									<div name="functionList" field="functionList" width="100%">权限</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div style="text-align: center; padding: 10px;">
+				<button class="btn btn-info btn-round " onclick="onOk()" type="button">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> 确定
+				</button>
+				&nbsp; &nbsp;
+				<button class="btn btn-warning btn-round" onclick="onCancel()" type="button">
+					<i class="ace-icon fa fa-undo bigger-110"></i> 取消
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+		mini.parse();
+		var tree = mini.get("treegrid1");
+		var showAllSelect = true;
+
+		$(function() {
+			var param = {};
+			param.id = mini.get("id").getValue();
+			doAjax("/P0713Permission/getRoleResource", param, function(data) {
+				tree.loadList(data.data, "resourceId", "parentid");
+			});
+		});
+
+		//tree.loadList(treeData, "UID", "ParentTaskUID")
+
+		function ondrawcell(e) {
+			var tree = e.sender, record = e.record, field = e.field, id = record[tree
+					.getIdField()], funs = record.functionList;
+
+			function createCheckboxs(funs) {
+				if (!funs || funs.length == 0)
+					return "";
+				var html = "";
+				if (showAllSelect) {
+					var value = record.checkAll !== false ? "全选"
+							: "取 消";
+					var clickFn = 'checkAllFunc(\'' + id + '\', this)';
+					html += '<input onclick="' + clickFn + '" type="button" value="' + value + '" style="border:solid 1px #aaa;"/>';
+				}
+				for (var i = 0, l = funs.length; i < l; i++) {
+					var fn = funs[i];
+					var clickFn = 'checkFunc(\'' + id + '\',\'' + fn.resourceId
+							+ '\', this.checked)';
+					var checked = fn.useFlag ? 'checked' : '';
+					html += '<label class="function-item"><input onclick="' + clickFn + '" ' + checked + ' type="checkbox" name="' + fn.resourceId + '" hideFocus/>'
+							+ fn.resourceName + '</label>';
+				}
+				return html;
+			}
+
+			function createNameCheckboxs() {
+
+				var clickFn = 'checkPage(\'' + id + '\',\'' + record.resourceId
+						+ '\', this.checked)';
+				var checked = record.useFlag ? 'checked' : '';
+				return record.resourceName
+						+ '<label class="function-item"><input onclick="'+clickFn+'" ' + checked + ' type="checkbox" name="' + record.id + '"/></label>';
+
+			}
+
+			if (field == 'functionList') {
+				e.cellHtml = createCheckboxs(funs);
+			} else if (field == 'resourceName') {
+				e.cellHtml = createNameCheckboxs();
+			}
+		}
+
+		function checkPage(id, actionId, checked) {
+			var record = tree.getRecord(id);
+			if (!record)
+				return;
+
+			record.useFlag = checked;
+		}
+
+		function checkFunc(id, actionId, checked) {
+			var record = tree.getRecord(id);
+			if (!record)
+				return;
+			var funs = record.functionList;
+			if (!funs)
+				return;
+
+			function getAction(actionId) {
+				for (var i = 0, l = funs.length; i < l; i++) {
+					var o = funs[i];
+					if (o.resourceId == actionId)
+						return o;
+				}
+			}
+			var obj = getAction(actionId);
+			if (!obj)
+				return;
+			obj.useFlag = checked;
+		}
+
+		function checkAllFunc(id, btn) {
+			var record = tree.getRecord(id);
+			if (!record)
+				return;
+			var funs = record.functionList;
+			if (!funs)
+				return;
+			var checked = record.checkAll !== false;
+			for (var i = 0, l = funs.length; i < l; i++) {
+				var o = funs[i];
+				o.useFlag = checked;
+			}
+
+			record.checkAll = !checked;
+			tree.updateRow(record);
+
+		}
+		//////////////////////////////////////////////////////////////////////////////////////
+		function onOk() {
+
+			var form = new mini.Form("form");
+			form.validate();
+			if (form.isValid() == false) {
+				businessMessage.alert("E00006");
+				return;
+			}
+			var data = tree.getData(false, false);
+
+			var submitResourceData = [];
+			for (var i = 0; i < data.length; i++) {
+				submitResourceData.push(data[i]);
+				//if (data[i].parentId == '-1') {
+				for (var j = 0; j < data[i].functionList.length; j++) {
+					submitResourceData.push(data[i].functionList[j]);
+				}
+				//}
+			}
+
+			var submitData = form.getData();
+			submitData.resources = submitResourceData;
+			businessMessage.alert("Q00002", null, function(action) {
+				doAjax("/P0713Permission/updateRoleResource", submitData,
+						function(text) {
+							var result = mini.decode(text);
+							var obj = eval(result);
+							if (obj.status == "SUCCESS") {
+								businessMessage.alert("IC0001", null,
+										function() {
+											CloseWindow("ok");
+										});
+							}
+						});
+			});
+
+		}
+		//////////////////////////////////////////////////////////////////////////////////////
+		function CloseWindow(action) {
+			if (window.CloseOwnerWindow)
+				return window.CloseOwnerWindow(action);
+			else
+				window.close();
+		}
+
+		function onCancel() {
+			CloseWindow("cancel");
+		}
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("roleName").focus();
+		}
+
+		function selectAll() {
+			$("input:checkbox").each(function() {
+				if ($(this).prop('checked') != true) {
+					$(this).click();
+				}
+			});
+		}
+
+		function undoSelect() {
+			$("input:checkbox").each(function() {
+				if ($(this).prop('checked') == true) {
+					$(this).click();
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>

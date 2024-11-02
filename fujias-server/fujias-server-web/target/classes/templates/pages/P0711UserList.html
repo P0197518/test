@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>用户管理</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner" id="form">
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden" value="P0711" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">搜索条件</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> 员工姓名: </label> 
+									<input id="name" name="name" class="mini-textbox" 
+									th:field="${formdata.name}" onenter="search()" 
+									vtype="maxLength:30" maxlength="30" />
+								</div>
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> 员工编号: </label> 
+									<input id="employeeId" name="employeeId" class="mini-textbox" 
+									th:field="${formdata.employeeId}" onenter="search()" 
+									vtype="maxLength:30" maxlength="30" />
+								</div>
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> 删除区分: </label> 
+									<input id="delFlg" class="mini-combobox" 
+									th:field="${formdata.delFlg}" onenter="search()" 
+									textField="text" valueField="value" allowInput="false" 
+									th:url="@{/common/getKbn?codeTypeCd=16}" ajaxType="post" />
+								</div>
+
+								<a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()"> 
+								<i class="ace-icon fa fa-search"> </i> 搜索
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> 
+		<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div class="mini-toolbar">
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><a id="add" class="mini-button btn btn-warning btn-round autoAuth" 
+				onclick="add()" type="button"> <i class="ace-icon fa fa-plus-circle bigger-110"> </i> 添 加
+				</a> <a id="edit" class="mini-button btn btn-success btn-round autoAuth" 
+				onclick="edit()" type="button"> <i class="ace-icon fa fa-pencil-square-o"> </i> 编 辑
+				</a> <a id="removeItem" class="mini-button btn btn-danger btn-round autoAuth" 
+				onclick="removeItem()" type="button"> <i class="ace-icon fa fa-times-circle"> </i> 删 除
+				</a> <a id="reuse" class="mini-button btn btn-pink btn-round autoAuth" 
+				onclick="reuse()" type="button"> <i class="fa fa-undo" aria-hidden="true"></i> 还原
+				</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" th:url="@{/P0711User/getList}" class="mini-datagrid" idField="username" 
+		allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" 
+		style="width: 100%; height: 100%;" sortField="employeeId" sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="employeeId" name="employeeId" width="100" sortField="employeeId" 
+				headerAlign="center" allowSort="true" align="center"> 员工编号 </div>
+				<div field="name" name="name" width="100" sortField="name" 
+				headerAlign="center" allowSort="true"> 员工姓名 </div>
+				<div field="department" name="department" width="120" sortField="department" 
+				headerAlign="center" allowSort="true">所属部门</div>
+				<div field="delFlgText" width="70" sortField="delFlgText" 
+				headerAlign="center" align="center">删除状态</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+
+		// 查询操作
+		function search() {
+
+			var searchcondation = getJsonObject("searchCondation");
+
+			grid.load(getPagerInfo("grid1", searchcondation));
+		}
+
+		function onSaveSearchCondation() {
+			saveSearchCondation(search);
+		}
+
+		$(function() {
+			getSearchCondation(search);
+		});
+
+		// 添加操作
+		function add() {
+			var popupParam = openCommonPopupParam("/P0711User/indexEdit",
+					"添加用户");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+			popupParam.width = 900;
+			popupParam.height = 400;
+			mini.open(popupParam);
+		}
+
+		// 编辑操作
+		function edit() {
+			var rows = grid.getSelecteds();
+			if (rows.length == 1) {
+				var row = grid.getSelected();
+
+				var popupParam = openCommonPopupParam(
+						"/P0711User/indexEdit?username=" + row.username,
+						"编辑用户");
+				popupParam.ondestroy = function(action) {
+					if (action == "ok") {
+						grid.reload();
+					}
+				};
+				popupParam.width = 900;
+				popupParam.height = 400;
+				mini.open(popupParam);
+			} else {
+				businessMessage.alert("E00002");
+			}
+		}
+
+		// 删除操作
+		function removeItem() {
+			var rows = grid.getSelecteds();
+			if (rows.length > 0) {
+				businessMessage.alert("Q00001", null, function() {
+					doAjax("/P0711User/delete", rows[0], function(obj) {
+						if (obj.status == "SUCCESS") {
+							businessMessage.alert(obj.text);
+							grid.reload();
+						}
+					});
+				});
+			} else {
+				businessMessage.alert("E00002");
+			}
+		}
+
+		function reuse() {
+			var rows = grid.getSelecteds();
+			if (rows.length > 0) {
+				businessMessage.alert("Q00003", null, function() {
+					doAjax("/P0711User/recover", rows[0], function(obj) {
+						if (obj.status == "SUCCESS") {
+							businessMessage.alert(obj.text);
+							grid.reload();
+						}
+					});
+				});
+			} else {
+				businessMessage.alert("E00002");
+			}
+		}
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("name").focus();
+		}
+	</script>
+</body>
+
+</html>

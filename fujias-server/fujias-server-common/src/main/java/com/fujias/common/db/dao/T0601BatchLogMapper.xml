@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0601BatchLogMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0601BatchLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="runuser" jdbcType="VARCHAR" property="runuser" />
+    <result column="runparam" jdbcType="NVARCHAR" property="runparam" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="errormessage" jdbcType="VARCHAR" property="errormessage" />
+    <result column="yearmonth" jdbcType="VARCHAR" property="yearmonth" />
+    <result column="starttime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+    <result column="depid" jdbcType="VARCHAR" property="depid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, runuser, runparam, status, errormessage, yearmonth, starttime, endtime, createtime, 
+    createuser, updatetime, updateuser, delflg, depid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0601batchlog
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t0601batchlog
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0601BatchLog">
+    insert into t0601batchlog (id, runuser, runparam, 
+      status, errormessage, yearmonth, 
+      starttime, endtime, createtime, 
+      createuser, updatetime, updateuser, 
+      delflg, depid)
+    values (#{id,jdbcType=VARCHAR}, #{runuser,jdbcType=VARCHAR}, #{runparam,jdbcType=NVARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{errormessage,jdbcType=VARCHAR}, #{yearmonth,jdbcType=VARCHAR}, 
+      #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, 
+      #{delflg,jdbcType=BIT}, #{depid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0601BatchLog">
+    insert into t0601batchlog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="runuser != null">
+        runuser,
+      </if>
+      <if test="runparam != null">
+        runparam,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="errormessage != null">
+        errormessage,
+      </if>
+      <if test="yearmonth != null">
+        yearmonth,
+      </if>
+      <if test="starttime != null">
+        starttime,
+      </if>
+      <if test="endtime != null">
+        endtime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+      <if test="depid != null">
+        depid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="runuser != null">
+        #{runuser,jdbcType=VARCHAR},
+      </if>
+      <if test="runparam != null">
+        #{runparam,jdbcType=NVARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="errormessage != null">
+        #{errormessage,jdbcType=VARCHAR},
+      </if>
+      <if test="yearmonth != null">
+        #{yearmonth,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+      <if test="depid != null">
+        #{depid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0601BatchLog">
+    update t0601batchlog
+    <set>
+      <if test="runuser != null">
+        runuser = #{runuser,jdbcType=VARCHAR},
+      </if>
+      <if test="runparam != null">
+        runparam = #{runparam,jdbcType=NVARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="errormessage != null">
+        errormessage = #{errormessage,jdbcType=VARCHAR},
+      </if>
+      <if test="yearmonth != null">
+        yearmonth = #{yearmonth,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+      <if test="depid != null">
+        depid = #{depid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0601BatchLog">
+    update t0601batchlog
+    set runuser = #{runuser,jdbcType=VARCHAR},
+      runparam = #{runparam,jdbcType=NVARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      errormessage = #{errormessage,jdbcType=VARCHAR},
+      yearmonth = #{yearmonth,jdbcType=VARCHAR},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT},
+      depid = #{depid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

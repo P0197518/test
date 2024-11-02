@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>品目管理</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner" id="form">
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden"
+					value="P0709" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">搜索条件</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+                                <!-- <div class="search-item">
+                                    <label for="departmentId" class="control-label col-sm-0">部门: </label> 
+                                    <input id="departmentId" name="departmentId" class="mini-combobox" allowInput="false" th:value="${formdata.departmentId}" valueField="value" 
+                                           emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+                                </div> -->
+
+								<div class="search-item">
+                                    <label for="itemName" class="control-label col-sm-0"> 品名: </label> 
+                                    <input id="itemName" name="itemName" class="mini-textbox" 
+                                    th:field="${formdata.itemName}" onenter="search()" vtype="maxLength:30" maxlength="32" />
+                                </div><!-- 
+								<div class="search-item">
+									<label for="classification" class="control-label col-sm-0"> 分类: </label>
+									<input id="classification" name="classification" class="mini-combobox"
+									th:url="@{/P0709Item/getClassification}" ajaxType="post"
+										th:field="${formdata.classification}" onenter="search()" />
+								</div> -->
+
+								<a class="mini-button btn btn-info btn-round btn-search"
+									type="button" onclick="search()">
+									<i class="ace-icon fa fa-search"> </i> 搜索
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div class="mini-toolbar">
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><input type="file"
+						id="btnfile" style="display: none"> 
+						<a id="export"
+						class="mini-button btn btn-default btn-round autoAuth"
+						type="button" onclick="exportExcel()">
+						<i class="ace-icon fa fa-cloud-upload"></i> 导出Excel
+						</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" th:url="@{/P0709Item/getList}" class="mini-datagrid"
+			idField="username" allowResize="false" allowCellSelect="true"
+			multiSelect="false" editNextOnEnterKey="true"
+			style="width: 100%; height: 100%;" sortField="itemName"
+			sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="itemName" name="itemName" width="150" sortField="itemName"
+					headerAlign="center" allowSort="true" align="center">品名</div>
+				<!-- <div field="classification" name="classification" width="100"
+					sortField="classification" headerAlign="center" allowSort="true"
+					align="left">分类</div>
+				<div field="department" name="department" width="100"
+					sortField="department" headerAlign="center" allowSort="true"
+					align="left">部门</div> -->
+				<div field="frameName" name="frameName" width="100"
+					sortField="frameName" headerAlign="center" allowSort="true">框架</div>
+				<div field="gc" name="gc" width="100" sortField="gc"
+					headerAlign="center" allowSort="true">GC</div>
+				<div field="dpsKubun" name="dpsKubun" width="100"
+					sortField="dpsKubun" headerAlign="center" allowSort="true">DPS区分</div>
+				<div field="itaSheetKubun" name="itaSheetKubun" width="100"
+					sortField="itaSheetKubun" headerAlign="center" allowSort="true">Ita-Sheet区分</div>
+				<div field="ringSize" name="ringSize" width="100"
+					sortField="ringSize" headerAlign="center" allowSort="true">RING尺寸</div>
+				<div field="guideKubun" name="guideKubun" width="100"
+					sortField="guideKubun" headerAlign="center" allowSort="true">Guide区分</div>
+				<div field="dpsSize" name="dpsSize" width="100" sortField="dpsSize"
+					headerAlign="center" allowSort="true">DPS尺寸</div>
+				<div field="foot" name="foot" width="100" sortField="foot"
+					headerAlign="center" allowSort="true">Foot</div>
+
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+
+		// 查询操作
+		function search() {
+
+			var searchcondation = getJsonObject("searchCondation");
+
+			grid.load(getPagerInfo("grid1", searchcondation));
+		}
+		
+		function onSaveSearchCondation() {
+            saveSearchCondation(search);
+        }
+
+        $(function() {
+            getSearchCondation(search);
+        });
+
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("department").focus();
+		}
+		
+		function exportExcel(){
+			var searchcondation = getJsonObject("searchCondation");
+			downloadExcel("/P0709Item/export", searchcondation);
+			}
+	</script>
+</body>
+
+</html>

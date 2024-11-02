@@ -1,0 +1,1421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p01.P0122ProductbilityReportMapper">
+
+<!-- 获取生产性计算列表 -->
+    <select id="getBatchlogListByPage" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    batch.id
+    , batch.depid
+    , dep.name as depName
+    , musers.name as runuser
+    , batch.runparam
+    , batch.status
+    , status.codeName as statusName
+    , batch.errormessage
+    , batch.yearmonth
+    , CONVERT(varchar(100), batch.starttime, 23) as strStartTime
+    , CONVERT(varchar(100), batch.endtime, 23) as strEndTime
+    , batch.createtime
+    , batch.createuser
+    , batch.updatetime
+    , batch.updateuser 
+from
+    t0601batchlog batch 
+    left join musers 
+        on musers.username = batch.runuser 
+    left join mdepartment dep 
+        on dep.depId = batch.depId 
+    left join mkbn status 
+        on batch.status = status.codeCd 
+        and status.codeTypeCd = '05' 
+where
+    batch.delflg = '0'
+    <if test="depid != null and depid != ''">
+            AND batch.depid = #{depid}
+    </if>
+    <if test="yearmonth != null and yearmonth != ''">
+            AND batch.yearmonth = #{yearmonth}
+    </if>
+    <if test="strStartTime != null and strStartTime != ''">
+            AND CONVERT(varchar(100), batch.starttime, 23) <![CDATA[ >= ]]> #{strStartTime}
+    </if>
+    <if test="strEndTime != null and strEndTime != ''">
+            AND CONVERT(varchar(100), batch.endtime, 23) <![CDATA[ <= ]]> #{strEndTime}
+    </if>
+    <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+    </if>
+    </select>
+    
+    <!-- 判断日报数据有没有导入 -->
+    <select id="checkWorkReport" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="Integer">
+        select
+            count(*) 
+        from
+            t0101dailyreport 
+        where
+            delflg = '0'
+            and importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+            and importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+            and departmentId = #{depid}
+    </select>
+    
+    <!-- 判断考勤有没有导入 -->
+    <select id="checkWorkTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="Integer">
+        select
+            count(*) 
+        from
+            t0201worktime 
+        where
+            yearMonth = #{yearmonth}
+    </select>
+    
+    <!-- 检查工作人员设置是否存在 -->
+    <select id="checkWorkUser" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="Integer">
+        select
+            count(*) 
+        from
+            t0202workers
+        where
+            yearMonth = #{yearmonth}
+    </select>
+    
+    <!-- 检查执行部门的默认取数规则是否存在 -->
+    <select id="checkGetCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="Integer">
+        select
+            count(*) 
+        from
+            t0203adjustsettings
+    </select>
+    
+    <!-- 检查是否已经执行过生产性 -->
+    <select id="checkRepeat" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="Integer">
+        select
+            count(*) 
+        from
+            t0601batchlog 
+        where
+            yearmonth = #{yearmonth} 
+            and depid = #{depid}
+            and status = '2'
+    </select>
+    
+    <!-- 检查该部门 月份是否有执行中状态的处理 -->
+    <select id="checkRunStatus" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="Integer">
+        select
+            count(*) 
+        from
+            t0601batchlog 
+        where
+            yearmonth = #{yearmonth} 
+            and depid = #{depid}
+            and status = '1'
+    </select>
+    
+    <!-- 检查该部门日报中的人员是否存在于考勤记录中 -->
+    <select id="checkDailyReportUser" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+        select
+            report.prodInstrNo
+            , report.technicsCD
+            , report.workerName
+            , case 
+                when ( 
+                    select
+                        count(*) 
+                    from
+                        t0201worktime 
+                    where
+                        workerName = report.workerName
+                ) > 0 
+                    then 1 
+                else 0 
+                end as flag 
+        from
+            t0101dailyreport report 
+        where
+            departmentId = #{depid}
+        group by
+            report.workerName
+            , report.prodInstrNo
+            , report.technicsCD
+    </select>
+    
+    <!-- 更新执行记录表删除区分为已删除-->
+    <update id="updBatchLogDelFlg" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    update t0601batchlog set delflg = '1' where yearmonth = #{yearmonth} and depid = #{depid};
+    </update>
+    
+    <!-- 删除上次执行结果 -->
+    <delete id="deleteCaclResulfByYearMonthAndDepId" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    delete from t0102productbilityInfo where yearMonth = #{yearmonth} and departmentId = #{depid};
+    delete from t0103productbilityworkers where yearMonth = #{yearmonth} and departmentId = #{depid};
+    delete from t0104productbilityitems where yearMonth = #{yearmonth} and departmentId = #{depid};
+    </delete>
+    
+    <!-- 创建数据暂存临时表 -->
+    <update id="createTableByTemp_caclresulf" statementType="CALLABLE" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    {call SP_00_CreateTableByTemp_caclresulf(#{userId})}
+    </update>
+    <delete id="deleteTempTable">
+    drop table ##temp_caclresulf;
+    </delete>
+    
+    <!-- 获取品目别的总工作时间 并插入临时表-->
+    <select id="getProdTimeByItemName" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+insert 
+into ##temp_caclresulf(id, itemName, technicsCD, directTime) 
+select
+    #{id}
+    , report.itemName
+    , 'normal'
+    , sum(report.workMinutes) workMinutes
+from
+    t0101dailyreport report
+where
+    report.delflg = '0' 
+    <!-- and replace ( 
+        convert(varchar (7), report.importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth} -->
+    and report.importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and report.importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+    and report.departmentId = #{depid} 
+group by
+    report.itemName
+order by
+    report.itemName
+    </select>
+    
+    <!-- 冲压部门时 获取品目和工序别的总工作时间 并插入临时表-->
+    <select id="getProdTimeByItemNameByPress" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+insert 
+into ##temp_caclresulf(id, itemName, technicsCD, directTime, inRepairTime, outRepairTime) 
+select
+    #{id}
+    , report.itemName
+    , case 
+        when ( 
+            settings.setting is not null 
+            and settings.setting != ''
+        ) 
+            then settings.setting 
+        when dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+            then 'repair' 
+        else 'normal' 
+        end as technicsCD
+    , sum( 
+        case 
+            when dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+                then report.workMinutes 
+            else report.workMinutes 
+            end
+    ) as workMinutes
+    , sum( 
+        case 
+            when ( 
+                dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+                and report.remark = '社内'
+            ) 
+                then report.workMinutes 
+            else 0 
+            end
+    ) as workMinutesIn
+    , sum( 
+        case 
+            when ( 
+                dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+                and report.remark = '社外'
+            ) 
+                then report.workMinutes 
+            else 0 
+            end
+    ) as workMinutesOut 
+from
+    t0101dailyreport report 
+    left join t0204systemsettings settings 
+        on report.itemName = settings.itemName 
+        and report.technicsCD = settings.setting 
+        and settings.settingType = '0010' 
+where
+    report.delflg = '0' 
+    <!-- and replace ( 
+        convert(varchar (7), report.importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth} -->
+    and report.importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and report.importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+    and report.departmentId = #{depid} 
+group by
+    report.itemName
+    , case 
+        when ( 
+            settings.setting is not null 
+            and settings.setting != ''
+        ) 
+            then settings.setting 
+        when dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+            then 'repair' 
+        else 'normal' 
+        end 
+order by
+    report.itemName
+    </select>
+    
+    <!-- 获取品目别总生产数量 -->
+    <select id="getProdCountByItemName" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    aa.itemName
+    , sum(aa.depItemCount) as depItemCount
+    , sum(aa.dep2ItemCount) as dep2ItemCount
+    , sum(aa.tenchnicsItemCount) as tenchnicsItemCount
+    , aa.isItemSetting
+    , sum(aa.prodCount) as prodCount 
+from
+    ( 
+    <include refid="getProdCount_Column_List" /> ) aa
+group by
+    aa.itemName
+    , aa.isItemSetting
+order by
+    aa.itemName
+    </select>
+    
+    <!-- 冲压部门时 获取品目和工序别总生产数量 -->
+    <select id="getProdCountByItemNameByPress" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    report.itemName
+    , case 
+        when (sys.setting is not null and sys.setting != '') 
+            then sys.setting 
+        when ( 
+            settings.setting is not null 
+            and settings.setting != ''
+        ) 
+            then settings.setting 
+        when dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+            then 'repair' 
+        else 'normal' 
+        end as technicsCD
+    , case 
+        when (sys.setting is not null and sys.setting != '') 
+            then 1 
+        else 0 
+        end as isItemSys
+    , case 
+        when ( 
+            settings.setting is not null 
+            and settings.setting != ''
+        ) 
+            then 1 
+        else 0 
+        end as isItemSetting
+    , sum( 
+        case 
+            when sys.setting is not null 
+            and sys.setting != '' 
+                then report.count 
+            else 0 
+            end
+    ) as tenchnicsItemCountSys
+    , sum( 
+        case 
+            when settings.setting is not null 
+            and settings.setting != '' 
+                then report.count 
+            else 0 
+            end
+    ) as tenchnicsItemCount
+    , isnull( 
+        sum( 
+            case 
+                when report.technicsCD = '111' 
+                    then report.count 
+                else 0 
+                end
+        ) 
+        , 0
+    ) as depItemCount
+    , isnull( 
+        sum( 
+            case 
+                when ( 
+                    dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+                    and report.remark = '社外'
+                ) 
+                    then report.count 
+                else 0 
+                end
+        ) 
+        , 0
+    ) as repairItemCount 
+from
+    t0101dailyreport report 
+    left join t0203adjustsettings settings 
+        on report.itemName = settings.itemName 
+        and report.technicsCD = settings.setting 
+    left join t0204systemsettings sys 
+        on report.itemName = sys.itemName 
+        and report.technicsCD = sys.setting 
+        and sys.settingType = '0010' 
+where
+    report.delflg = '0' 
+    <!-- and replace ( 
+        convert(varchar (7), report.importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth} -->
+    and report.importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and report.importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+    and report.departmentId = #{depid} 
+group by
+    report.itemName
+    , report.departmentId
+    , settings.itemName
+    , settings.setting
+    , sys.setting
+    , case 
+        when (sys.setting is not null and sys.setting != '') 
+            then sys.setting 
+        when ( 
+            settings.setting is not null 
+            and settings.setting != ''
+        ) 
+            then settings.setting 
+        when dbo.FUN_00_IsRepair(report.technicsCD) = '1' 
+            then 'repair' 
+        else 'normal' 
+        end 
+order by
+    report.itemName
+    </select>
+    
+    <!-- 获取品目别总生产数量共通的sql -->
+    <sql id="getProdCount_Column_List">
+         select
+            report.itemName
+            , report.prodInstrNo
+            , isnull(report.prodInstrNum, 0) as prodCount
+            , case 
+                when report.departmentId = '2000' 
+                    then isnull(report.prodInstrNum, 0) 
+                when report.departmentId = '5000' 
+                    then isnull(report.prodInstrNum, 0) 
+                when report.departmentId = '8000' 
+                    then isnull(report.prodInstrNum, 0) 
+                when report.departmentId = '6000' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '621' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when report.departmentId = '9000' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '706' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when report.departmentId = '7000' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '714' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when report.departmentId = '7500' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '7510' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when report.departmentId = '7200' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '包装' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when report.departmentId = '7600' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '760301' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when ( 
+                    report.departmentId = '2500' 
+                    and charindex('+238', report.itemName) = 0
+                ) 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '703' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                when report.departmentId = '1000' 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '111' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                else 0 
+                end as depItemCount
+            , case 
+                when ( 
+                    report.departmentId = '2500' 
+                    and charindex('+238', report.itemName) > 0
+                ) 
+                    then ( 
+                    isnull( 
+                        sum( 
+                            case 
+                                when report.technicsCD = '238' 
+                                    then report.count 
+                                else 0 
+                                end
+                        ) 
+                        , 0
+                    )
+                ) 
+                else 0 
+                end as dep2ItemCount
+            , sum( 
+                case 
+                    when settings.setting is not null 
+                    and settings.setting != '' 
+                        then report.count 
+                    else 0 
+                    end
+            ) as tenchnicsItemCount
+            , case 
+                when ( 
+                    settings.setting is not null 
+                    and settings.setting != ''
+                ) 
+                    then 1 
+                else 0 
+                end as isItemSetting
+       from
+            t0101dailyreport report 
+            left join t0203adjustsettings settings 
+                on report.itemName = settings.itemName 
+                and report.technicsCD = settings.setting 
+        where
+            report.delflg = '0' 
+            and report.importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+            and report.importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+            and report.departmentId = #{depid} 
+        group by
+            report.itemName
+            , report.departmentId
+            , settings.setting
+            , report.prodInstrNo
+            , report.prodInstrNum
+    </sql>
+    
+     <!-- 更新临时表字段 生产数量 冲压部门时通用-->
+    <update id="updTemp_caclresulf_prodCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    update ##temp_caclresulf
+     <choose>
+      <when test="tenchnicsItemCount != null and tenchnicsItemCount != ''">
+      set prodCount = #{tenchnicsItemCount}
+      </when>
+      <when test="depItemCount != null and depItemCount != ''">
+      set prodCount = #{depItemCount}
+      </when>
+      <when test="dep2ItemCount != null and dep2ItemCount != ''">
+      set prodCount = #{dep2ItemCount}
+      </when>
+      <when test="tenchnicsItemCountSys != null and tenchnicsItemCountSys != ''">
+      set prodCount = #{tenchnicsItemCountSys}
+      </when>
+      <otherwise>
+      set prodCount = #{prodCount}
+      </otherwise>
+     </choose>
+    where id = #{id}
+    and itemName = #{itemName}
+    <if test="technicsCD != null and technicsCD != ''">
+            AND technicsCD = #{technicsCD}
+    </if>
+    </update>
+    
+    <!-- 更新临时表字段 社外修理数量-->
+    <update id="updTemp_caclresulf_outRepairCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    update ##temp_caclresulf
+     set outRepairCount = #{repairItemCount}
+    where id = #{id}
+    and itemName = #{itemName}
+    and technicsCD = #{technicsCD}
+    </update>
+    
+    <!-- 获取钎焊的自动化设备工作时间和完成数量 -->
+    <select id="getBrazingTimeAndCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    itemName
+    , isnull(sum(workMinutes),0) automationTime
+    , isnull(sum(count),0) automationCount 
+from
+    t0101dailyreport
+where
+    <!-- 钎焊部门编号 -->
+    departmentId = '5000' 
+    and technicsCD = '506' 
+    <!-- and replace ( 
+        convert(varchar (7), importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth}  -->
+    <!-- and ( 
+        machineNo = '机器1' 
+        or machineNo = '机器2' 
+        or machineNo = '机器3'
+    )  -->
+    and importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+    and ( 
+        remark = '机器1' 
+        or remark = '机器2' 
+        or remark = '机器3'
+    )
+group by
+    itemName
+    </select>
+    
+    <!-- 获取导环的自动化设备工作时间和完成数量 -->
+    <select id="getGuideRingTimeAndCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    itemName
+    , isnull(sum(workMinutes),0) automationTime
+    , isnull(sum(count),0) automationCount 
+from
+    t0101dailyreport 
+where
+<!-- 导环部门编号 -->
+    departmentId = '6000' 
+    <!-- and technicsCD = '506' -->
+    <!-- and replace ( 
+        convert(varchar (7), importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth}  --> 
+    and importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+    and remark = '全自动'
+group by
+    itemName
+    </select>
+    
+    <!-- 更新临时表自动化时间和数量 -->
+    <update id="updTemp_caclresulf_automachine" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    update ##temp_caclresulf
+    set automationTime = isnull(automationTime,0) + ${automationTime}
+       ,automationCount = isnull(automationCount,0) + ${automationCount}
+    where id = #{id}
+    and itemName = #{itemName}
+    </update>
+    
+   <!--  获取各类研磨时间和数量 -->
+    <select id="getGrindTimeAndCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    report.itemName
+    , sum( 
+        case 
+            when technicsCD in ('202', '203') 
+                then workMinutes 
+            else 0 
+            end
+    ) as wideTime
+    , sum( 
+        case 
+            when technicsCD in ('202', '203') 
+                then count 
+            else 0 
+            end
+    ) as wideCount
+    , sum( 
+        case 
+            when technicsCD in ('204', '205')
+                then workMinutes 
+            else 0 
+            end
+    ) as middleTime
+    , sum( 
+        case 
+            when technicsCD in ('204', '205')
+                then count 
+            else 0 
+            end
+    ) as middleCount
+    , sum( 
+        case 
+            when technicsCD in ('206', '208')
+                then workMinutes 
+            else 0 
+            end
+    ) as driedTime
+    , sum( 
+        case 
+            when technicsCD in ('206', '208')
+                then count 
+            else 0 
+            end
+    ) as driedCount
+    , sum( 
+        case 
+            when technicsCD in ('219', '220')
+                then workMinutes 
+            else 0 
+            end
+    ) as fineTime
+    , sum( 
+        case 
+            when technicsCD in ('219', '220')
+                then count 
+            else 0 
+            end
+    ) as fineCount
+    , sum( 
+        case 
+            when technicsCD in ('221', '222')
+                then workMinutes 
+            else 0 
+            end
+    ) as bcTime
+    , sum( 
+        case 
+            when technicsCD in ('221', '222') 
+                then count 
+            else 0 
+            end
+    ) as bcCount
+    , sum( 
+        case 
+            when technicsCD in ('223', '224', '225', '226') 
+                then workMinutes 
+            else 0 
+            end
+    ) as t2Time
+    , sum( 
+        case 
+            when technicsCD in ('223', '224', '225', '226') 
+                then count 
+            else 0 
+            end
+    ) as t2Count
+    , sum( 
+        case 
+            when technicsCD in ('227', '228') 
+                then workMinutes 
+            else 0 
+            end
+    ) as gmTime
+    , sum( 
+        case 
+            when technicsCD in ('227', '228') 
+                then count 
+            else 0 
+            end
+    ) as gmCount
+    , sum( 
+        case 
+            when technicsCD = '236' 
+                then workMinutes 
+            else 0 
+            end
+    ) as ccTime
+    , sum( 
+        case 
+            when technicsCD = '236' 
+                then count 
+            else 0 
+            end
+    ) as ccCount
+    , sum( 
+        case 
+            when technicsCD in ('229', '230') 
+                then workMinutes 
+            else 0 
+            end
+    ) as newColorTime
+    , sum( 
+        case 
+            when technicsCD in ('229', '230') 
+                then count 
+            else 0 
+            end
+    ) as newColorCount 
+from
+    t0101dailyreport report 
+where
+    report.delflg = '0'
+  <!--   研磨部门 -->
+    and report.departmentId = '2000'
+    <!-- and replace ( 
+        convert(varchar (7), report.importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth} -->
+    and report.importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and report.importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+group by
+    report.itemName 
+order by
+    report.itemName
+    </select>
+    
+    <!-- 更新各类研磨时间和数量到临时表 -->
+    <update id="updTemp_caclresulf_grind" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    update ##temp_caclresulf
+    set wideTime = ${wideTime}
+       ,wideCount = ${wideCount}
+       ,middleTime = ${middleTime}
+       ,middleCount = ${middleCount}
+       ,driedTime = ${driedTime}
+       ,driedCount = ${driedCount}
+       ,fineTime = ${fineTime}
+       ,fineCount = ${fineCount}
+       ,bcTime = ${bcTime}
+       ,bcCount = ${bcCount}
+       ,t2Time = ${t2Time}
+       ,t2Count = ${t2Count}
+       ,gmTime = ${gmTime}
+       ,gmCount = ${gmCount}
+       ,ccTime = ${ccTime}
+       ,ccCount = ${ccCount}
+       ,newColorTime = ${newColorTime}
+       ,newColorCount = ${newColorCount}
+    where id = #{id}
+    and itemName = #{itemName}
+    </update>
+    
+    <!-- 获取研磨的机器时间和数量 -->
+    <select id="getGrindMachineTimeAndCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    itemName
+    , sum(isnull(machineTime, 0)) machineTime
+    , sum( 
+        case 
+            when machineTime is not null 
+                then count 
+            else 0 
+            end
+    ) as machineCount 
+from
+    t0101dailyreport 
+where
+    delflg = '0' 
+    and departmentId = '2000'
+    and machineTime <![CDATA[ > ]]> 0
+    <!-- and replace ( 
+        convert(varchar (7), importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth}  -->
+    and importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+group by
+    itemName
+    </select>
+    
+     <!-- 更新临时表研磨机器时间和数量 -->
+    <update id="updTemp_caclresulf_machine" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+    update ##temp_caclresulf
+    set machineTime = isnull(machineTime,0) + ${machineTime}
+       ,machineCount = isnull(machineCount,0) + ${machineCount}
+    where id = #{id}
+    and itemName = #{itemName}
+    </update>
+    
+    <!-- 获取他部门投入人员直接时间 -->
+    <select id="getOtherDepUserTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(report.workMinutes),0) as otherDepUserTime 
+from
+    t0101dailyreport report 
+where
+    report.departmentId = #{depid} 
+    <!-- and replace ( 
+        convert(varchar (7), report.importDate, 120)
+        , '-'
+        , ''
+    ) = #{yearmonth}  -->
+    and report.importDate <![CDATA[ >= ]]> #{yearmonth} + '01'
+    and report.importDate <![CDATA[ <= ]]> dateadd(day,-1,dateadd(month,1,#{yearmonth} + '01'))
+    and report.workerName not in ( 
+        select
+            workerName 
+        from
+            t0202workers 
+        where
+            departmentId = #{depid}
+            and yearMonth = #{yearmonth}
+    )
+    </select>
+    
+    <!-- 获取协助他部门人员直接时间 -->
+    <select id="getHelpOtherDepUserTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(report.workMinutes), 0) as helpOtherDepUserTime 
+from
+    t0101dailyreport report 
+    left join ( 
+        select
+            workerName 
+        from
+            t0202workers 
+        where
+            departmentId != #{depid} 
+            and yearMonth = #{yearmonth}
+    ) aa 
+        on report.workerName = aa.workerName 
+where
+    report.departmentId = #{depid}
+    and aa.workerName = report.workerName
+
+    </select>
+    
+    <!-- 组立2部门投入人员间接时间 -->
+    <select id="getCombinationDepUserTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(worktime.workHours), 0) as combinationDepUserTime 
+from
+    t0201worktime worktime 
+where
+    worktime.workerName in ( 
+        select
+            workerName 
+        from
+            t0202workers 
+        where
+            departmentId = '7500' 
+            and shareFlag = '1' 
+            and yearMonth = #{yearmonth}
+    )
+    </select>
+    
+    <!-- 获取考勤总时间 -->
+    <select id="getAllWorkTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(workHours),0) as allWorkHours 
+from
+    t0201worktime 
+where
+    departmentId = #{depid}
+    and yearMonth = #{yearmonth}
+    </select>
+    
+    <!-- 获取部门月份总直接时间 -->
+    <select id="getDepMonthAllWorkTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(directTime),0) as allDirectTime 
+from
+    ##temp_caclresulf 
+    </select>
+    
+    <!-- 获取考勤间接工作时间 -->
+    <select id="getIndirectAllWorkTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(workHours),0) as allIndirect
+from
+    t0201worktime 
+where
+    departmentId = #{depid} 
+    and workType = '0002'
+    and yearMonth = #{yearmonth}
+    </select>
+    
+    <!-- 获取执行部门的所有间接人员时间 -->
+    <select id="getDepIndirectWorkTime" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    isnull(sum(times.workHours),0) as allWorkHours
+    , workers.workerName
+    , workers.shareFlag 
+from
+    t0201worktime times 
+    left join t0202workers workers 
+        on times.workerName = workers.workerName 
+where
+    times.departmentId = #{depid} 
+    and workers.workType = '0002'
+    and times.yearMonth = #{yearmonth}
+group by
+    workers.workerName
+    , workers.shareFlag
+    </select>
+    
+    <!-- 获取部门总生产数量 -->
+    <select id="getDepMonthProdCount" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="java.math.BigDecimal">
+select
+    isnull(sum(prodCount),0) as allProdCount 
+from
+    ##temp_caclresulf 
+    </select>
+    
+    <!-- 获取临时表所有数据 -->
+    <select id="getAllTempTableData" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    id
+, itemName
+, technicsCD
+, isnull(prodCount,0) as prodCount
+, isnull(directTime,0) as directTime
+, isnull(indirectTime,0) as indirectTime
+, isnull(machineTime,0) as machineTime
+, isnull(machineCount,0) as machineCount
+, isnull(automationTime,0) as automationTime
+, isnull(automationCount,0) as automationCount
+, isnull(wideTime,0) as wideTime
+, isnull(wideCount,0) as wideCount
+, isnull(middleTime,0) as middleTime
+, isnull(middleCount,0) as middleCount
+, isnull(driedTime,0) as driedTime
+, isnull(driedCount,0) as driedCount
+, isnull(fineTime,0) as fineTime
+, isnull(fineCount,0) as fineCount 
+, isnull(bcTime,0) as bcTime
+, isnull(bcCount,0) as bcCount
+, isnull(t2Time,0) as t2Time
+, isnull(t2Count,0) as t2Count
+, isnull(gmTime,0) as gmTime
+, isnull(gmCount,0) as gmCount
+, isnull(ccTime,0) as ccTime
+, isnull(ccCount,0) as ccCount
+, isnull(newColorTime,0) as newColorTime
+, isnull(newColorCount,0) as newColorCount
+, isnull(inRepairTime,0) as inRepairTime
+, isnull(outRepairTime,0) as outRepairTime
+, isnull(outRepairCount,0) as outRepairCount
+from
+    ##temp_caclresulf 
+    </select>
+    
+    <!-- 获取当前用户的部门 -->
+    <select id="getDepidByUser" parameterType="String"
+        resultType="String">
+select
+    top 1
+    depId 
+from
+    muserdepartments 
+where
+    delflg = '0' 
+    and userId = #{userId}
+    </select>
+    
+    <!-- 获取间接人员信息列表 分页-->
+    <select id="getProductWorkersListByPage" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    <include refid="ProductWorkers_Column_List" /> 
+    <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+    </if>
+    </select>
+    <!-- 获取间接人员信息列表 不分页-->
+    <select id="getProductWorkersList" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.common.db.entity.T0103ProductBilityWorkers">
+    <include refid="ProductWorkers_Column_List" /> 
+    </select>
+    
+    <!-- 间接人员信息共通查询sql -->
+    <sql id="ProductWorkers_Column_List">
+        select
+            wokerName
+            , workTime 
+        from
+            t0103productbilityworkers 
+        where delflg = '0'
+           and yearMonth = #{yearmonth}
+           and departmentId = #{depid}
+    </sql>
+    
+    <!-- 获取品目别生产性列表 分页-->
+    <select id="getProductItemsListByPage" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.common.db.entity.T0104ProductBilityItems">
+        select
+            <include refid="ProductItems_Column_List" /> 
+        from
+            t0104productbilityitems 
+        where delflg = '0'
+           and yearMonth = #{yearmonth}
+           and departmentId = #{depid}
+    <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+    </if>
+    </select>
+    <!-- 获取品目别生产性列表 不分页 导出用-->
+    <select id="getProductItemsList" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.common.db.entity.T0104ProductBilityItems">
+        select
+            <include refid="ProductItems_Column_List" /> 
+        from
+            t0104productbilityitems 
+        where delflg = '0'
+           and yearMonth = #{yearmonth}
+           and departmentId = #{depid}
+    </select>
+    
+    <sql id="ProductItems_Column_List">
+    yearMonth as yearmonth, departmentId, itemName, 
+    case when technicsCD = 'normal' then '' when technicsCD = 'repair' then '修理' else technicsCD end as technicsCD,
+    prodCount, directTime, directProductbilityCount, 
+    indirectTime, allTime, allProductbilityCount, wideTime, wideCount, wideProductbilityCount, 
+    driedTime, driedCount, driedProductbilityCount, middleTime, middleCount, middleProductbilityCount, 
+    fineTime, fineCount, fineProductbilityCount, bcTime, bcCount, bcProductbilityCount, 
+    t2Time, t2Count, t2ProductbilityCount, gmTime, gmCount, gmProductbilityCount, ccTime, 
+    ccCount, ccProductbilityCount, newColorTime, newColorCount, newColorProductbilityCount, 
+    machineTime, machineCount, machineProductbilityCount, createtime, createuser, updatetime, 
+    updateuser, delflg, automationTime, automationCount, automationProductbilityCount,inRepairTime,outRepairTime,outRepairCount
+  </sql>
+  
+    <!-- 获取总的生产性信息 -->
+    <select id="getAllProductBility" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    info.yearMonth
+    , dep.name as depName
+    , isnull(info.allCount, 0) as allCount
+    , isnull(info.allTime, 0) as allTime
+    , isnull(info.directTime, 0) as directTime
+    , cast( 
+        round(info.allCount / info.allTime * 60, 0) as numeric
+    ) as productbilityCount
+    , cast( 
+        round(info.allCount / info.directTime * 60, 0) as numeric
+    ) as directProductbilityCount 
+from
+    t0102productbilityInfo info 
+    <!-- left join muserdepartments userdep 
+        on info.departmentId = userdep.depId  -->
+    left join mdepartment dep 
+        on info.departmentId = dep.depId  
+        where
+            info.delflg = '0' 
+            and info.yearMonth = #{yearmonth}
+            and info.departmentId = #{depid} 
+group by
+    yearMonth
+    , dep.name
+    , info.allCount
+    , info.allTime
+    , info.directTime 
+    </select>
+    
+    <!-- 获取执行错误列表 -->
+    <select id="getRunErrorListByPage" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.common.db.entity.T0602BatchErrorReport">
+select
+id
+,errorTarget
+,errorContent
+from
+    t0602batcherrorreport 
+where delflg = '0'
+   and lotId = #{id}
+   <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+    </if>
+    </select>
+    
+    <!-- 获取执行记录 -->
+    <select id="getBatchlog" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityReportForm">
+select
+    batch.id
+    , dep.name as depName
+    , batch.runuser
+    , batch.runparam
+    , batch.status
+    , status.codeName as statusName
+    , batch.errormessage
+    , batch.yearmonth
+    , batch.starttime
+    , batch.endtime
+from
+    t0601batchlog batch 
+    left join musers 
+        on musers.username = batch.runuser 
+    left join mdepartment dep 
+        on dep.depId = batch.depId 
+    left join mkbn status 
+        on batch.status = status.codeCd 
+        and status.codeTypeCd = '05' 
+where
+    batch.delflg = '0'
+    and batch.id = #{id}
+    </select>
+    
+      <!--  导出年度生产性 -->
+    <select id="exportYearProductBility" parameterType="com.fujias.business.forms.p01.P0122ProductbilityReportForm"
+        resultType="com.fujias.business.forms.p01.P0122ProductbilityExportForm">
+select
+    items.itemName
+    <!-- 1~12月生产数量 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.prodCount else 0 end) as month1prodCount
+    , sum(case when items.yearMonth = #{year} + '02' then items.prodCount else 0 end) as month2prodCount
+    , sum(case when items.yearMonth = #{year} + '03' then items.prodCount else 0 end) as month3prodCount
+    , sum(case when items.yearMonth = #{year} + '04' then items.prodCount else 0 end) as month4prodCount
+    , sum(case when items.yearMonth = #{year} + '05' then items.prodCount else 0 end) as month5prodCount
+    , sum(case when items.yearMonth = #{year} + '06' then items.prodCount else 0 end) as month6prodCount
+    , sum(case when items.yearMonth = #{year} + '07' then items.prodCount else 0 end) as month7prodCount
+    , sum(case when items.yearMonth = #{year} + '08' then items.prodCount else 0 end) as month8prodCount
+    , sum(case when items.yearMonth = #{year} + '09' then items.prodCount else 0 end) as month9prodCount
+    , sum(case when items.yearMonth = #{year} + '10' then items.prodCount else 0 end) as month10prodCount
+    , sum(case when items.yearMonth = #{year} + '11' then items.prodCount else 0 end) as month11prodCount
+    , sum(case when items.yearMonth = #{year} + '12' then items.prodCount else 0 end) as month12prodCount
+    <!-- 1~12月直接时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.directTime else 0 end) as month1directTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.directTime else 0 end) as month2directTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.directTime else 0 end) as month3directTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.directTime else 0 end) as month4directTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.directTime else 0 end) as month5directTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.directTime else 0 end) as month6directTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.directTime else 0 end) as month7directTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.directTime else 0 end) as month8directTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.directTime else 0 end) as month9directTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.directTime else 0 end) as month10directTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.directTime else 0 end) as month11directTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.directTime else 0 end) as month12directTime
+    <!-- 1~12月间接时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.indirectTime else 0 end) as month1indirectTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.indirectTime else 0 end) as month2indirectTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.indirectTime else 0 end) as month3indirectTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.indirectTime else 0 end) as month4indirectTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.indirectTime else 0 end) as month5indirectTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.indirectTime else 0 end) as month6indirectTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.indirectTime else 0 end) as month7indirectTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.indirectTime else 0 end) as month8indirectTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.indirectTime else 0 end) as month9indirectTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.indirectTime else 0 end) as month10indirectTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.indirectTime else 0 end) as month11indirectTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.indirectTime else 0 end) as month12indirectTime
+    <!-- 1~12月各类研磨生产数合计 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month1grindCount
+    , sum(case when items.yearMonth = #{year} + '02' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month2grindCount
+    , sum(case when items.yearMonth = #{year} + '03' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month3grindCount
+    , sum(case when items.yearMonth = #{year} + '04' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month4grindCount
+    , sum(case when items.yearMonth = #{year} + '05' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month5grindCount
+    , sum(case when items.yearMonth = #{year} + '06' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month6grindCount
+    , sum(case when items.yearMonth = #{year} + '07' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month7grindCount
+    , sum(case when items.yearMonth = #{year} + '08' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month8grindCount
+    , sum(case when items.yearMonth = #{year} + '09' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month9grindCount
+    , sum(case when items.yearMonth = #{year} + '10' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month10grindCount
+    , sum(case when items.yearMonth = #{year} + '11' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month11grindCount
+    , sum(case when items.yearMonth = #{year} + '12' then items.wideCount+items.driedCount+items.middleCount+items.fineCount+
+        items.bcCount+items.t2Count+items.gmCount+items.ccCount+items.newColorCount else 0 end) as month12grindCount
+    <!-- 1~12月粗研磨时间 -->    
+    , sum(case when items.yearMonth = #{year} + '01' then items.wideTime else 0 end) as month1wideTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.wideTime else 0 end) as month2wideTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.wideTime else 0 end) as month3wideTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.wideTime else 0 end) as month4wideTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.wideTime else 0 end) as month5wideTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.wideTime else 0 end) as month6wideTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.wideTime else 0 end) as month7wideTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.wideTime else 0 end) as month8wideTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.wideTime else 0 end) as month9wideTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.wideTime else 0 end) as month10wideTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.wideTime else 0 end) as month11wideTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.wideTime else 0 end) as month12wideTime
+    <!-- 1~12月中间研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.middleTime else 0 end) as month1middleTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.middleTime else 0 end) as month2middleTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.middleTime else 0 end) as month3middleTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.middleTime else 0 end) as month4middleTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.middleTime else 0 end) as month5middleTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.middleTime else 0 end) as month6middleTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.middleTime else 0 end) as month7middleTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.middleTime else 0 end) as month8middleTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.middleTime else 0 end) as month9middleTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.middleTime else 0 end) as month10middleTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.middleTime else 0 end) as month11middleTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.middleTime else 0 end) as month12middleTime
+    <!-- 1~12月干式研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.driedTime else 0 end) as month1driedTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.driedTime else 0 end) as month2driedTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.driedTime else 0 end) as month3driedTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.driedTime else 0 end) as month4driedTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.driedTime else 0 end) as month5driedTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.driedTime else 0 end) as month6driedTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.driedTime else 0 end) as month7driedTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.driedTime else 0 end) as month8driedTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.driedTime else 0 end) as month9driedTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.driedTime else 0 end) as month10driedTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.driedTime else 0 end) as month11driedTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.driedTime else 0 end) as month12driedTime
+    <!-- 1~12月精研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.fineTime else 0 end) as month1fineTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.fineTime else 0 end) as month2fineTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.fineTime else 0 end) as month3fineTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.fineTime else 0 end) as month4fineTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.fineTime else 0 end) as month5fineTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.fineTime else 0 end) as month6fineTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.fineTime else 0 end) as month7fineTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.fineTime else 0 end) as month8fineTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.fineTime else 0 end) as month9fineTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.fineTime else 0 end) as month10fineTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.fineTime else 0 end) as month11fineTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.fineTime else 0 end) as month12fineTime
+    <!-- 1~12月T2研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.t2Time else 0 end) as month1t2Time
+    , sum(case when items.yearMonth = #{year} + '02' then items.t2Time else 0 end) as month2t2Time
+    , sum(case when items.yearMonth = #{year} + '03' then items.t2Time else 0 end) as month3t2Time
+    , sum(case when items.yearMonth = #{year} + '04' then items.t2Time else 0 end) as month4t2Time
+    , sum(case when items.yearMonth = #{year} + '05' then items.t2Time else 0 end) as month5t2Time
+    , sum(case when items.yearMonth = #{year} + '06' then items.t2Time else 0 end) as month6t2Time
+    , sum(case when items.yearMonth = #{year} + '07' then items.t2Time else 0 end) as month7t2Time
+    , sum(case when items.yearMonth = #{year} + '08' then items.t2Time else 0 end) as month8t2Time
+    , sum(case when items.yearMonth = #{year} + '09' then items.t2Time else 0 end) as month9t2Time
+    , sum(case when items.yearMonth = #{year} + '10' then items.t2Time else 0 end) as month10t2Time
+    , sum(case when items.yearMonth = #{year} + '11' then items.t2Time else 0 end) as month11t2Time
+    , sum(case when items.yearMonth = #{year} + '12' then items.t2Time else 0 end) as month12t2Time
+    <!-- 1~12月BC研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.bcTime else 0 end) as month1bcTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.bcTime else 0 end) as month2bcTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.bcTime else 0 end) as month3bcTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.bcTime else 0 end) as month4bcTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.bcTime else 0 end) as month5bcTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.bcTime else 0 end) as month6bcTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.bcTime else 0 end) as month7bcTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.bcTime else 0 end) as month8bcTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.bcTime else 0 end) as month9bcTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.bcTime else 0 end) as month10bcTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.bcTime else 0 end) as month11bcTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.bcTime else 0 end) as month12bcTime
+    <!-- 1~12月GM研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.gmTime else 0 end) as month1gmTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.gmTime else 0 end) as month2gmTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.gmTime else 0 end) as month3gmTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.gmTime else 0 end) as month4gmTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.gmTime else 0 end) as month5gmTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.gmTime else 0 end) as month6gmTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.gmTime else 0 end) as month7gmTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.gmTime else 0 end) as month8gmTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.gmTime else 0 end) as month9gmTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.gmTime else 0 end) as month10gmTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.gmTime else 0 end) as month11gmTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.gmTime else 0 end) as month12gmTime
+    <!-- 1~12月CC研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.ccTime else 0 end) as month1ccTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.ccTime else 0 end) as month2ccTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.ccTime else 0 end) as month3ccTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.ccTime else 0 end) as month4ccTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.ccTime else 0 end) as month5ccTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.ccTime else 0 end) as month6ccTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.ccTime else 0 end) as month7ccTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.ccTime else 0 end) as month8ccTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.ccTime else 0 end) as month9ccTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.ccTime else 0 end) as month10ccTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.ccTime else 0 end) as month11ccTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.ccTime else 0 end) as month12ccTime
+    <!-- 1~12月新色研磨时间 -->
+    , sum(case when items.yearMonth = #{year} + '01' then items.newColorTime else 0 end) as month1newColorTime
+    , sum(case when items.yearMonth = #{year} + '02' then items.newColorTime else 0 end) as month2newColorTime
+    , sum(case when items.yearMonth = #{year} + '03' then items.newColorTime else 0 end) as month3newColorTime
+    , sum(case when items.yearMonth = #{year} + '04' then items.newColorTime else 0 end) as month4newColorTime
+    , sum(case when items.yearMonth = #{year} + '05' then items.newColorTime else 0 end) as month5newColorTime
+    , sum(case when items.yearMonth = #{year} + '06' then items.newColorTime else 0 end) as month6newColorTime
+    , sum(case when items.yearMonth = #{year} + '07' then items.newColorTime else 0 end) as month7newColorTime
+    , sum(case when items.yearMonth = #{year} + '08' then items.newColorTime else 0 end) as month8newColorTime
+    , sum(case when items.yearMonth = #{year} + '09' then items.newColorTime else 0 end) as month9newColorTime
+    , sum(case when items.yearMonth = #{year} + '10' then items.newColorTime else 0 end) as month10newColorTime
+    , sum(case when items.yearMonth = #{year} + '11' then items.newColorTime else 0 end) as month11newColorTime
+    , sum(case when items.yearMonth = #{year} + '12' then items.newColorTime else 0 end) as month12newColorTime
+from
+    t0104productbilityitems items 
+where
+    items.delflg = '0' 
+    and items.departmentId = #{depid}
+    and items.yearMonth <![CDATA[ >= ]]> #{year} + '01'
+    and items.yearMonth <![CDATA[ <= ]]> #{year} + '12'
+group by
+    items.itemName
+    </select>
+</mapper>

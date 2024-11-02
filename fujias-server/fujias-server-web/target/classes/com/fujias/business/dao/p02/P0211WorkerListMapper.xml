@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p02.P0211WorkerListMapper">
+    <select id="getListByPage"
+        parameterType="com.fujias.business.forms.p02.P0211WorkerListForm"
+        resultType="com.fujias.business.forms.p02.P0211WorkerListForm">
+        select
+        yearMonth
+        ,workerName
+        ,m.name as departmentId
+        , mkbn.codeName as workType
+        ,shareFlag 
+        from
+        t0202workers t
+        left outer join mdepartment m
+        on
+        m.depId = t.departMentId
+        left outer join mkbn 
+        on
+        mkbn.codeCd = t.workType
+        and codeTypeCd = '06'
+        where
+        t.delflg = '0'
+
+        <if test="yearMonth != null and yearMonth != ''">
+            AND yearMonth = ${yearMonth}
+        </if>
+        <if test="workerName != null and workerName != ''">
+            AND workerName like '%${workerName}%'
+        </if>
+        <if test="departmentId != null and departmentId != ''">
+            AND t.departMentId = ${departmentId}
+        </if>
+        <if test="workType != null and workType != ''">
+            AND t.workType = ${workType}
+        </if>
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+
+    <select id="departList" parameterType="String"
+        resultType="com.fujias.business.forms.p02.P0211WorkerListForm">
+        select
+        codeCd as value
+        ,codeName as text
+        from mkbn
+        where
+        mkbn.codeTypeCd = '02'
+        order by sort asc
+
+    </select>
+    <select id="userDepart" parameterType="String" resultType="String">
+        select
+        name
+        from muserdepartments
+        inner join mdepartment
+        on
+        muserdepartments.depId = mdepartment.depId
+        where
+        muserdepartments.depId = #{depId}
+
+
+    </select>
+
+    <select id="exportList"
+        parameterType="com.fujias.business.forms.p02.P0211WorkerListForm"
+        resultType="com.fujias.business.forms.p02.P0211WorkerListForm">
+        select
+        yearMonth
+        ,workerName
+        ,m.name as departmentId
+        , mkbn.codeName as workType
+        ,shareFlag 
+        from
+        t0202workers t
+        left outer join mdepartment m
+        on
+        m.depId = t.departMentId
+        left outer join mkbn 
+        on
+        mkbn.codeCd = t.workType
+        and codeTypeCd = '06'
+        where
+        t.delflg = '0'
+        <if test="workerName != null and workerName != ''">
+            AND workerName like '%${workerName}%'
+        </if>
+        <if test="departmentId != null and departmentId != ''">
+            AND t.departMentId = ${departmentId}
+        </if>
+        <if test="workType != null and workType != ''">
+            AND t.workType = ${workType}
+        </if>
+
+    </select>
+
+</mapper>

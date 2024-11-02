@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>[[#{S0101101.paracreup}]]</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body onload="loadfocus()">
+
+	<div class="edit-page-content">
+		<input id="resourcecd" name="resourcecd" type="hidden" value="S0101102" />
+		<div id="form1" th:object="${formdata}" class="form-horizontal" style="width: 100%; min-width: 800px;">
+			<input id="id" class="mini-hidden" th:field="*{id}" />
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<input id="codeTypeName" class="mini-hidden" th:field="*{codeTypeName}" />
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">[[#{S0101101.paracla}]]:</label>
+				<div class="col-sm-3">
+					<input id="codeTypeCd" name="codeTypeCd" class="mini-combobox" vtype="half:20" required="true"
+						th:value="${formdata.codeTypeCd}" allowInput="false" valueField="value" textField="text" showNullItem="false"
+						onvaluechanged="kbntypecdChanged" ajaxType="post" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">[[#{S0101101.parano}]]:</label>
+				<div class="col-sm-3">
+					<input id="codeCd" class="mini-textbox" maxlength=4 enabled="false" required="true" th:field="*{codeCd}" />
+				</div>
+				<label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">[[#{S0101101.paraname}]]：</label>
+				<div class="col-sm-3">
+					<input id="codeName" class="mini-textbox" vtype="maxLength:32" required="true" maxlength=32 th:field="*{codeName}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label id="option1title" class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">[[#{S0100401.biko}]]1:</label>
+				<div class="col-sm-3">
+					<input id="option1" th:field="*{option1}" class="mini-textbox" vtype="maxLength:100" maxlength=100 />
+					<input id="codeTypeCdForOption1" name="codeTypeCdForOption1" class="mini-combobox" vtype="half:20" required="true"
+						th:value="${formdata.option1}" allowInput="false" valueField="value" textField="text" showNullItem="false"
+						ajaxType="post" onvaluechanged="codeTypeCdForOption1Changed" />
+				</div>
+				<label id="option2title" class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">[[#{S0100401.biko}]]2：</label>
+				<div class="col-sm-3">
+					<input id="option2" th:field="*{option2}" class="mini-textbox" vtype="maxLength:100" maxlength=100 />
+					<input id="codeTypeCdForOption2" name="codeTypeCdForOption2" class="mini-combobox" vtype="half:20" required="true"
+						th:value="${formdata.option2}" allowInput="false" valueField="value" textField="text" showNullItem="false"
+						ajaxType="post" onvaluechanged="codeTypeCdForOption2Changed" />
+				</div>
+			</div>
+			<div style="text-align: center; padding: 10px;">
+				<a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button"> <i
+					class="ace-icon fa fa-floppy-o bigger-110"></i> [[#{S0100401.sure}]]
+				</a> &nbsp; &nbsp; <a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button"> <i
+					class="ace-icon fa fa-undo bigger-110"></i> [[#{cancel}]]
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+		var form = new mini.Form("#form1");
+		mini.parse();
+		var data = form.getData();
+
+		function kbntypecdChanged(e) {
+			codechanged();
+			mini.get("codeTypeName").setValue(mini.get("codeTypeCd").text);
+		}
+		function codeTypeCdForOption1Changed() {
+			mini.get("option1").setValue(
+					mini.get("codeTypeCdForOption1").getValue());
+		}
+		function codeTypeCdForOption2Changed() {
+			mini.get("option2").setValue(
+					mini.get("codeTypeCdForOption2").getValue());
+		}
+		$(function() {
+			if (mini.get("mode").value == "3") {
+				mini.get("codeCd").disable();
+			}
+		});
+		function codechanged() {
+			if (mini.get("codeTypeCd").getValue() == "14") {
+				$("#option1title").text("重量:");
+				$("#option2title").text("单位高度体积:");
+				mini.get("option1").show();
+				mini.get("codeTypeCdForOption1").hide();
+			} else if (mini.get("codeTypeCd").getValue() == "16") {
+				$("#option1title").text("地址:");
+				$("#option2title").text("备注2:");
+				mini.get("option1").show();
+				mini.get("codeTypeCdForOption1").hide();
+			} else if (mini.get("codeTypeCd").getValue() == "17") {
+				$("#option1title").text("物料区分:");
+				$("#option2title").text("备注2:");
+				mini.get("option1").hide();
+				mini.get("codeTypeCdForOption1").show();
+				materialTypeChange();
+			} else if (mini.get("codeTypeCd").getValue() == "18") {
+				$("#option1title").text("物料大分类:");
+				$("#option2title").text("备注2:");
+				mini.get("option1").hide();
+				mini.get("codeTypeCdForOption1").show();
+				materialTypeChange();
+			} else if (mini.get("codeTypeCd").getValue() == "24") {
+				$("#option1title").text("备注１:");
+				$("#option2title").text("税率値:");
+				mini.get("option1").show();
+				mini.get("codeTypeCdForOption1").hide();
+			} else if (mini.get("codeTypeCd").getValue() == "35") {
+				$("#option1title").text("物流种类:");
+				$("#option2title").text("备注2:");
+				mini.get("option1").show();
+				mini.get("codeTypeCdForOption1").hide();
+			} else if (mini.get("codeTypeCd").getValue() == "42") {
+				$("#option1title").text("物料中分类:");
+				$("#option2title").text("物料大分类:");
+				mini.get("option1").hide();
+				mini.get("codeTypeCdForOption1").show();
+				mini.get("option2").hide();
+				mini.get("codeTypeCdForOption2").show();
+				materialTypeChange();
+			} else if (mini.get("codeTypeCd").getValue() == "46") {
+				$("#option1title").text("工序分类:");
+				$("#option2title").text("所属工序:");
+				mini.get("option1").hide();
+				mini.get("codeTypeCdForOption1").show();
+				mini.get("option2").hide();
+				mini.get("codeTypeCdForOption2").show();
+				materialTypeChange();
+			} else {
+				$("#option1title").text("备注１:");
+				$("#option2title").text("备注2:");
+			}
+		}
+		function materialTypeChange() {
+			if (mini.get("codeTypeCd").getValue() == "17") {
+				var param = {
+					codeTypeCd : "22"
+				};
+				doAjax("/S0101101CodeList/getKbnByCodeTypeCd", param, function(
+						obj1) {
+					mini.get("codeTypeCdForOption1").setData(obj1.data);
+				})
+			} else if (mini.get("codeTypeCd").getValue() == "18") {
+				var param = {
+					codeTypeCd : "17"
+				};
+				doAjax("/S0101101CodeList/getKbnByCodeTypeCd", param, function(
+						obj1) {
+					mini.get("codeTypeCdForOption1").setData(obj1.data);
+				})
+			} else if (mini.get("codeTypeCd").getValue() == "42") {
+				var param1 = {
+					codeTypeCd : "18"
+				};
+				doAjax(
+						"/S0101101CodeList/getKbnByCodeTypeCd",
+						param1,
+						function(obj1) {
+							mini.get("codeTypeCdForOption1").setData(obj1.data);
+						})
+				var param2 = {
+					codeTypeCd : "17"
+				};
+				doAjax(
+						"/S0101101CodeList/getKbnByCodeTypeCd",
+						param2,
+						function(obj1) {
+							mini.get("codeTypeCdForOption2").setData(obj1.data);
+						})
+			} else if (mini.get("codeTypeCd").getValue() == "46") {
+
+				var data = [ {
+					value : '29',
+					text : "钢柄工序"
+				}, {
+					value : '30',
+					text : "合金工序"
+				} ];
+				mini.get("codeTypeCdForOption1").setData(data);
+				
+				if(mini.get("codeTypeCdForOption1").getValue() == '29'){
+					var data2 = [ {
+	                    value : '1',
+	                    text : "钢柄出库"
+	                }, {
+	                    value : '2',
+	                    text : "保护焊"
+	                }, {
+                        value : '3',
+                        text : "银焊前处理"
+                    }, {
+                        value : '4',
+                        text : "银焊、徐冷"
+                    }, {
+                        value : '5',
+                        text : "银焊后处理"
+                    }, {
+                        value : '6',
+                        text : "检查、包装"
+                    } ];
+					mini.get("codeTypeCdForOption2").setData(data2);
+				}else{
+					var data2 = [ {
+                        value : '1',
+                        text : "合金出库"
+                    }, {
+                        value : '2',
+                        text : "银片"
+                    }, {
+                        value : '3',
+                        text : "准备工序"
+                    }];
+					mini.get("codeTypeCdForOption2").setData(data2);
+				}
+				
+				mini.get("codeTypeCdForOption1").on(
+						"valuechanged",
+						function() {
+							var param2 = {
+								codeTypeCd : mini.get("codeTypeCdForOption1")
+										.getValue()
+							};
+							doAjax("/S0101101CodeList/getKbnByCodeTypeCd",
+									param2, function(obj1) {
+										mini.get("codeTypeCdForOption2")
+												.setData(obj1.data);
+									})
+						})
+				
+
+			}
+
+		}
+		$(function() {
+			mini.get("codeTypeCdForOption1").hide();
+			mini.get("codeTypeCdForOption2").hide();
+			codechanged();
+			doAjax("/S0101101CodeList/getKbntypecd", null, function(obj) {
+				mini.get("codeTypeCd").setData(obj.data);
+			})
+			if (mini.get("mode").getValue() == "update") {
+				mini.get("codeCd").disable();
+				mini.get("codeTypeCd").disable();
+			} else if (mini.get("mode").getValue() == "create") {
+				mini.get("codeCd").setValue('自动设定');
+			}
+			materialTypeChange();
+		});
+
+		// 保存操作
+		function onOk() {
+			form.validate();
+			if (form.isValid() == false) {
+				businessMessage.alert("E00006");
+				return;
+			}
+			businessMessage.alert("Q00002", null, oksave);
+		}
+		function oksave() {
+			var data = form.getData();
+
+			var accessurl = "";
+			if (mini.get("mode").value == "create") {
+				accessurl = "/S0101101CodeList/add";
+			} else {
+				accessurl = "/S0101101CodeList/update";
+			}
+			doAjax(accessurl, data, function(obj) {
+				if (obj.status == "SUCCESS") {
+					businessMessage.alert("IC0001", null, function() {
+						CloseWindow("ok");
+					});
+				}
+			});
+		}
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("codeTypeCd").focus();
+		}
+	</script>
+</body>
+</html>

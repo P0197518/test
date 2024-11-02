@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.MKbnMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.MKbn">
+    <id column="codeTypeCd" jdbcType="VARCHAR" property="codeTypeCd" />
+    <id column="codeCd" jdbcType="VARCHAR" property="codeCd" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+    <result column="codeTypeName" jdbcType="VARCHAR" property="codeTypeName" />
+    <result column="codeName" jdbcType="VARCHAR" property="codeName" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
+    <result column="option1" jdbcType="VARCHAR" property="option1" />
+    <result column="option2" jdbcType="VARCHAR" property="option2" />
+    <result column="canEdit" jdbcType="CHAR" property="canEdit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    codeTypeCd, codeCd, createTime, createUser, updateTime, updateUser, delFlg, codeTypeName, 
+    codeName, sort, option1, option2, canEdit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.MKbnKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mkbn
+    where codeTypeCd = #{codeTypeCd,jdbcType=VARCHAR}
+      and codeCd = #{codeCd,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.MKbnKey">
+    delete from mkbn
+    where codeTypeCd = #{codeTypeCd,jdbcType=VARCHAR}
+      and codeCd = #{codeCd,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.MKbn">
+    insert into mkbn (codeTypeCd, codeCd, createTime, 
+      createUser, updateTime, updateUser, 
+      delFlg, codeTypeName, codeName, 
+      sort, option1, option2, 
+      canEdit)
+    values (#{codeTypeCd,jdbcType=VARCHAR}, #{codeCd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=CHAR}, #{codeTypeName,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=VARCHAR}, #{option1,jdbcType=VARCHAR}, #{option2,jdbcType=VARCHAR}, 
+      #{canEdit,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.MKbn">
+    insert into mkbn
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="codeTypeCd != null">
+        codeTypeCd,
+      </if>
+      <if test="codeCd != null">
+        codeCd,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+      <if test="codeTypeName != null">
+        codeTypeName,
+      </if>
+      <if test="codeName != null">
+        codeName,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="option1 != null">
+        option1,
+      </if>
+      <if test="option2 != null">
+        option2,
+      </if>
+      <if test="canEdit != null">
+        canEdit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="codeTypeCd != null">
+        #{codeTypeCd,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCd != null">
+        #{codeCd,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="codeTypeName != null">
+        #{codeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="codeName != null">
+        #{codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="option1 != null">
+        #{option1,jdbcType=VARCHAR},
+      </if>
+      <if test="option2 != null">
+        #{option2,jdbcType=VARCHAR},
+      </if>
+      <if test="canEdit != null">
+        #{canEdit,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.MKbn">
+    update mkbn
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="codeTypeName != null">
+        codeTypeName = #{codeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="codeName != null">
+        codeName = #{codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="option1 != null">
+        option1 = #{option1,jdbcType=VARCHAR},
+      </if>
+      <if test="option2 != null">
+        option2 = #{option2,jdbcType=VARCHAR},
+      </if>
+      <if test="canEdit != null">
+        canEdit = #{canEdit,jdbcType=CHAR},
+      </if>
+    </set>
+    where codeTypeCd = #{codeTypeCd,jdbcType=VARCHAR}
+      and codeCd = #{codeCd,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.MKbn">
+    update mkbn
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR},
+      codeTypeName = #{codeTypeName,jdbcType=VARCHAR},
+      codeName = #{codeName,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      option1 = #{option1,jdbcType=VARCHAR},
+      option2 = #{option2,jdbcType=VARCHAR},
+      canEdit = #{canEdit,jdbcType=CHAR}
+    where codeTypeCd = #{codeTypeCd,jdbcType=VARCHAR}
+      and codeCd = #{codeCd,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>生产性统计</title>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner" id="form">
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden"
+					value="P0122" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">[[#{S0100501.searchco}]]</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+							    <!-- 部门 -->
+							    <div class="search-item">
+									<label for="name" class="control-label col-sm-0">  部门: </label>
+									<input id="depid" name="depid" class="mini-combobox" allowInput="false" th:value="${formdata.depid}" valueField="value" 
+									       emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+								</div>
+								<!-- 月份 -->
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> 执行年月: </label>
+								    <input id="yearmonth" name="yearmonth" class="mini-monthpicker" th:value="${formdata.yearmonth}" format="yyyy-MM" onenter="search()" allowInput="false"/>
+								</div>
+								<!-- 执行期间 -->
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> 执行期间:</label>
+									<input id="strStartTime" name="strStartTime" class="mini-datepicker" format="yyyy-MM-dd" onenter="search()" allowInput="false" showOkButton="false" showClearButton="true"/> ~ 
+									<input id="strEndTime" name="strEndTime" class="mini-datepicker"  format="yyyy-MM-dd" onenter="search()" allowInput="false" showOkButton="false" showClearButton="true"/>
+								</div>
+								<!-- 查询 -->
+								<a class="mini-button btn btn-info btn-round btn-search"
+									type="button" onclick="search()">
+									<i class="ace-icon fa fa-search"> </i> [[#{S0100501.search}]]
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div class="mini-toolbar">
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><input type="file"
+						id="btnfile" style="display: none"> <a id="calculation"
+						class="mini-button btn btn-yellow btn-round autoAuth"
+						type="button" onclick="calculation()">
+						<i class="ace-icon fa fas fa-calculator"></i> 生产性计算
+					</a> <a id="exportMonth"
+						class="mini-button btn btn-default btn-round autoAuth"
+						type="button" onclick="exportMonth()">
+						<i class="ace-icon fa fa-cloud-upload"></i> 导出月度生产性
+					</a> <a id="exportYear"
+						class="mini-button btn btn-default btn-round autoAuth"
+						type="button" onclick="exportYear()">
+						<i class="ace-icon fa fa-cloud-upload"></i> 导出年度生产性
+					</a> 
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" class="mini-datagrid" th:url="@{/P0122ProductbilityReport/getList}" idField="id" allowResize="false" allowCellSelect="true" 
+			 multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="yearmonth" sortOrder="desc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="id" sortField="batch.id" name="id" width="150" headerAlign="center" allowSort="true" align="center">执行批次号</div>
+				<div field="yearmonth" sortField="batch.yearmonth" name="yearmonth" width="120" headerAlign="center" allowSort="true" align="center">执行年月</div>
+				<div field="runuser" name="runuser" sortField="musers.name" width="120" headerAlign="center" allowSort="true">执行人</div>
+				<!-- <div field="depid" sortField="depid" name="depid" width="120" headerAlign="center" allowSort="true">部门</div> -->
+				<div field="depName" sortField="dep.name" name="depName" width="120" headerAlign="center" allowSort="true">执行部门</div>
+				<div field="statusName" sortField="status.codeName" name="statusName" width="120" headerAlign="center" allowSort="true">状态</div>
+				<!-- <div field="result" sortField=" " name="result" width="120" headerAlign="center" allowSort="true">结果</div> -->
+				<div field="strStartTime" sortField="batch.starttime" name="strStartTime" width="120" headerAlign="center" allowSort="true" align="center">执行时间</div>
+				<div field="viewResults" name="viewResults" width="120" headerAlign="center" allowSort="true">查看结果</div>
+				<div field="viewErrors" name="viewErrors" width="120" headerAlign="center" allowSort="true">查看错误</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+
+		// 查询操作
+		function search() {
+			var searchcondation = getJsonObject("searchCondation");
+			searchcondation.yearmonth = mini.get("yearmonth").getFormValue().replace("-","");
+			searchcondation.strStartTime = mini.get("strStartTime").getFormValue();
+			searchcondation.strEndTime = mini.get("strEndTime").getFormValue();
+			grid.load(getPagerInfo("grid1", searchcondation));
+		}
+
+		function onSaveSearchCondation() {
+			saveSearchCondation(search);
+		}
+
+		$(function() {
+			getSearchCondation(search);
+		});
+
+		// 生产性计算执行
+		function calculation() {
+			var popupParam = openCommonPopupParam(
+					"/P0122ProductbilityReport/runCaclEdit", "生产计算执行");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+			popupParam.width = 700;
+			popupParam.height = 400;
+			mini.open(popupParam);
+		}
+
+		grid.on("drawcell", function(e) {
+			if (e.column.field == "viewResults") {
+				e.cellStyle = "text-align:center";
+				e.cellHtml = '<a href="javascript:viewResults();">' + '计算结果查看'
+						+ '</a>';
+			} else if(e.column.field == "viewErrors"){
+				e.cellStyle = "text-align:center";
+				e.cellHtml = '<a href="javascript:viewErrors();">' + '计算错误查看'
+						+ '</a>';
+			}
+		});
+
+		// 生产计算执行结果查看
+		function viewResults() {
+			var rows = grid.getSelecteds();
+			if (rows.length == 1) {
+				var row = grid.getSelected();
+				if(row.status == '1'){
+					mini.alert(businessMessage.get("E00049"));
+					return;
+				}else if(row.status == '3'){
+					mini.alert(businessMessage.get("E00050"));
+					return;
+				}else{
+					var popupParam = openCommonPopupParam(
+							"/P0122ProductbilityReport/indexResult?yearmonth=" + row.yearmonth
+							+ "&depid=" + row.depid, "生产计算执行结果");
+					popupParam.width = 1200;
+					popupParam.height = 800;
+					mini.open(popupParam);
+				}
+			} else {
+				mini.alert(businessMessage.get("E00002"));
+			}
+		}
+
+		// 执行错误报告查看
+		function viewErrors() {
+			var rows = grid.getSelecteds();
+			if (rows.length == 1) {
+				var row = grid.getSelected();
+				var popupParam = openCommonPopupParam(
+						"/P0122ProductbilityReport/indexError?id=" + row.id, "执行错误报告");
+				popupParam.width = 1200;
+				popupParam.height = 800;
+				mini.open(popupParam);
+			} else {
+				mini.alert(businessMessage.get("E00002"));
+			}
+		}
+		
+		// 导出年度生产性
+		function exportYear(){
+			var popupParam = openCommonPopupParam(
+					"/P0122ProductbilityReport/indexExportYear", "导出生产性");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+			popupParam.width = 500;
+			popupParam.height = 350;
+			mini.open(popupParam);
+		}
+		
+		// 导出月份生产性
+		function exportMonth(){
+			var popupParam = openCommonPopupParam(
+					"/P0122ProductbilityReport/indexExportMonth", "导出生产性");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+			popupParam.width = 500;
+			popupParam.height = 350;
+			mini.open(popupParam);
+		}
+		
+		// 焦点设置
+		function loadfocus() {
+			mini.get("depid").focus();
+		}
+	</script>
+</body>
+
+</html>

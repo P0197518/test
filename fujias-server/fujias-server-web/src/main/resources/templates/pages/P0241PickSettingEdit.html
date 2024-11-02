@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>计算调整规则设置</title>
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="main-container">
+		<div id="form1" th:object="${formdata}" style="width: 100%;">
+			<input id="resourcecd" name="resourcecd" type="hidden" value="P0231" /> 
+			<input id="id" class="mini-hidden" th:field="*{id}" /> 
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<div class="page-content">
+				<div class="widget-box">
+					<h4 class="header blue bolder smaller">调整基本信息</h4>
+					<div class="col-sm-12">
+						<!--<div class="search-item">
+                                    <label for="department" class="control-label col-sm-5">
+                                                                                             部门: </label> <input id="department" name="department" class="mini-combobox" allowInput="false" th:value="${formdata.department}" valueField="value" 
+                                           emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" required = "true"ajaxType="post" th:url="@{/common/getDepList}" />
+                                </div>  -->
+					</div>
+					<div class="col-sm-12">
+						<div class="search-item ">
+							<label for="settingType" class="control-label col-sm-5">设置类型: </label> 
+							<input class="mini-combobox" id="settingType" th:field="*{settingType}" 
+							required="true" valueField="value" textField="text" 
+							th:url="@{/P0241PickSetting/getSettingType}" ajaxType="post" showNullItem="true" 
+							onenter="search()" onvaluechanged="backTypeChange" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mini-toolbar">
+				<h4 class="header blue bolder smaller">调整规则列表</h4>
+				<table style="width: 100%;">
+					<tr>
+						<td style="width: 100%;">
+						<a class="mini-button" iconCls="icon-add" onclick="addRow()" plain="true">新增</a> 
+						<span class="separator"></span> 
+						<a class="mini-button" iconCls="icon-remove" onclick="removeRow()" plain="true">删除</a></td>
+					</tr>
+				</table>
+			</div>
+			<div id="grid1"th:url="@{/P0241PickSetting/getSettingList}" class="mini-datagrid" 
+			allowCellEdit="true" idField="id" skipReadOnlyCell="true" allowResize="false" 
+			allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true"sortField="itemName" sortOrder="asc" 
+			>
+				<div property="columns">
+					<div type="checkcolumn"></div>
+					<!-- <div field="codeName" name="codeName" width="60"
+                    headerAlign="center" align="left">
+                        部门 <input id="codeName" name="codeName" property="editor" class="mini-combobox" style="width: 100%;" valueField="text" textField="text" th:url="@{/common/getDepList}" ajaxType="post" allowInput="false" />
+                        </div> -->
+					<div field="itemName" name="itemName" width="150"
+					headerAlign="center" align="center" sortField="itemName" allowSort="true">
+						品名 <input id="itemName" name="itemName" property="editor" 
+						class="mini-textbox" style="height: 25px" required="true"/>
+					</div>
+					<div field="setting" name="setting" width="100"
+					headerAlign="center" align="left" sortField="setting" allowSort="true">
+						设置内容 <input property="editor" class="mini-textbox" style="height: 25px" required="true"/>
+					</div>
+					<div field="option1" name="option1" width="100" sortField="option1"allowSort="true" headerAlign="center">
+						其他设置 <input property="editor" class="mini-textbox" style="height: 25px" />
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="text-align: center">
+
+		<a class="mini-button btn btn-info btn-round" onclick="onOk()" type="button"> 
+		<i class="ace-icon fa fa-floppy-o bigger-110"></i> 保存
+		</a> &nbsp; &nbsp; <a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button"> 
+		<i class="ace-icon fa fa-undo bigger-110"></i> 取消
+		</a>
+	</div>
+	<script type="text/javascript">
+    mini.parse();
+    var grid = mini.get("grid1");
+    var form = new mini.Form("#form1");
+    // 页面加载完成处理
+    $(function() {
+        // 根据页面mode控制页面显示
+    	backTypeChange();
+    	addRow();
+    });
+ // 查询操作
+    function search() {
+        var searchData=form.getData();
+        grid.load(getPagerInfo("grid1", searchData));
+    }
+
+    function onSaveSearchCondation() {
+        saveSearchCondation(search);
+    }
+
+    function backTypeChange() {
+
+        if (mini.get("settingType").value == "0001") {
+            grid.updateColumn("setting", {header: "取数工序"});
+            grid.updateColumn("option1", {header: "取工序时间"});
+            grid.showColumn(4);
+        } else if (mini.get("settingType").value == "0002") {
+        	grid.updateColumn("setting", {header: "所属品类"});
+            grid.hideColumn(4);
+        }else {
+        	grid.showColumn(4);
+        }
+    }
+    
+        // 添加一行
+        function addRow() {
+            var newRow = {
+                id : ""
+            };
+            grid.addRow(newRow, grid.getData().length);
+        }
+
+     // 删除操作
+        function removeRow() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                // 如果为新添加的一行,则直接删除该行
+                if (rows[0].id == "") {
+                    grid.removeRow (rows[0], true);
+                    return
+                }
+                businessMessage.alert("Q00001", null, okDelete);
+            } else {
+                businessMessage.alert("请选择要操作的数据。");
+            }
+        }
+        
+        function okDelete() {
+        	var rows = grid.getSelecteds();
+            doAjax("/P0241PickSetting/delete", rows[0], function(obj) {
+                if (obj.status == "SUCCESS") {
+                    businessMessage.alert(obj.text);
+                    grid.reload();
+                }
+            });
+        }
+
+     // 保存操作
+        function onOk() {
+            form.validate();
+            /**if (mini.get("department").getValue() == "") {
+                businessMessage.alert("请选择部门。");
+                return;
+            } else **/if (mini.get("settingType").getValue() == "") {
+                businessMessage.alert("请选择调整类型。");
+                return;
+            /* } else if (grid.getData().length <= 1) {
+                businessMessage.alert("调整规则列表无设置内容，请确认。");
+                return; */
+            } /* else if (mini.get("itemName").getValue() != "") {
+                businessMessage.alert("设置内容输入的品名不存在，请确认。");
+                return;
+            } */
+
+            if (form.isValid() == false) {
+                businessMessage.alert("E00006");
+                return;
+            }
+            businessMessage.alert("Q00002", null, oksave);
+        }
+
+        function oksave() {
+        	var data = form.getData();
+        	var settingTypeForm = form.getData().settingType;
+        	var gridList = grid.getData();
+            var param = {
+            		settingType : settingTypeForm,
+            		settingList : gridList
+                };
+
+            var accessurl = "";
+            if (mini.get("mode").value == "create") {
+                accessurl = "/P0241PickSetting/add";
+            }
+            doAjax(accessurl, param, function(obj) {
+                if (obj.status == "SUCCESS") {
+                    businessMessage.alert("IC0001", null, function() {
+                        CloseWindow("ok");
+                    });
+                }
+            });
+        }
+
+        // 初始化时focus
+        function loadfocus() {
+            mini.get("department").focus();
+        }
+    </script>
+</body>
+
+</html>

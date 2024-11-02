@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>生产性结果查看</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="main-container">
+		<input id="resourcecd" name="resourcecd" type="hidden"
+			value="S0100502" />
+		<div id="form1" th:object="${formdata}" class="form-horizontal"
+			style="width: 100%; min-width: 800px;">
+			<input id="id" class="mini-hidden" th:field="*{id}" />
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<input id="depid" class="mini-hidden" th:field="*{depid}" />
+			<!-- <input id="delFlg" class="mini-hidden" th:field="*{delFlg}" /> -->
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<h4 class="header blue bolder smaller">计算条件</h4>
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">计算年月:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="yearmonth" name="yearmonth" allowInput="false" th:value="${formdata.yearmonth}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">计算部门:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="depName" name="depName" allowInput="false" th:value="${formdata.depName}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">生产总数量:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="allCount" name="allCount" allowInput="false" th:value="${formdata.allCount}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">总共时间:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="allTime" name="allTime" allowInput="false" th:value="${formdata.allTime}" /> 分钟
+							</div>
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">汇总生产性:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="productbilityCount" name="productbilityCount" allowInput="false" th:value="${formdata.productbilityCount}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">直接时间:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="directTime" name="directTime" allowInput="false" th:value="${formdata.directTime}" /> 分钟
+							</div>
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">直接生产性:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="directProductbilityCount" name="directProductbilityCount" allowInput="false" th:value="${formdata.directProductbilityCount}" />
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="mini-toolbar">
+				<h4 class="header blue bolder smaller">间接时间列表</h4>
+				<div id="grid1" th:url="@{/P0122ProductbilityReport/getIndirectList}" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false"
+					 editNextOnEnterKey="true" style="width: 100%; height: 150px;" sortField="wokerName" sortOrder="asc">
+					<div property="columns">
+						<div type="checkcolumn"></div>
+						<div field="wokerName" name="wokerName" width="80" headerAlign="center" sortField="wokerName" align="left" allowSort="true">间接人员名称</div>
+						<div field="workTime" name="workTime" width="80" headerAlign="center" sortField="workTime" align="right" allowSort="true">间接时间</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="mini-toolbar">
+				<h4 class="header blue bolder smaller">品名别生产性列表</h4>
+				<div id="grid2" th:url="@{/P0122ProductbilityReport/getItemsList}" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false"
+					 editNextOnEnterKey="true" style="width: 100%; height: 200px;" sortField="itemName" sortOrder="asc">
+					<div property="columns">
+						<div type="checkcolumn"></div>
+						<div field="itemName" name="itemName" width="180" headerAlign="center" sortField="itemName" align="center" allowSort="true">品名</div>
+						<div field="technicsCD" name="technicsCD" width="120" headerAlign="center" sortField="technicsCD" align="center" allowSort="true">工序</div>
+						<div field="prodCount" name="prodCount" width="80" headerAlign="center" sortField="prodCount" align="center" allowSort="true">生産数</div>
+						<div field="directTime" name="directTime" width="80" headerAlign="center" sortField="directTime" align="center" allowSort="true">日报直接时间</div>
+						<div field="directProductbilityCount" name="directProductbilityCount" width="80" headerAlign="center" sortField="directProductbilityCount" align="center" allowSort="true">直接生产性</div>
+						<div field="indirectTime" name="indirectTime" width="80" headerAlign="center" sortField="indirectTime" align="center" allowSort="true">间接时间</div>
+						<div field="allTime" name="allTime" width="80" headerAlign="center" sortField="allTime" align="center" allowSort="true">总时间</div>
+						<div field="allProductbilityCount" name="allProductbilityCount" width="80" headerAlign="center" sortField="allProductbilityCount" align="center" allowSort="true">汇总生产性</div>
+						<div field="wideCount" name="wideCount" width="80" headerAlign="center" sortField="wideCount" align="center" allowSort="true">粗研磨数量</div>
+						<div field="wideTime" name="wideTime" width="80" headerAlign="center" sortField="wideTime" align="center" allowSort="true">粗研磨时间</div>
+						<div field="wideProductbilityCount" name="wideProductbilityCount" width="80" headerAlign="center" sortField="wideProductbilityCount" align="center" allowSort="true">粗研磨生产性</div>
+						<div field="driedCount" name="driedCount" width="80" headerAlign="center" sortField="driedCount" align="center" allowSort="true">干研磨数量</div>
+						<div field="driedTime" name="driedTime" width="80" headerAlign="center" sortField="driedTime" align="center" allowSort="true">干研磨时间</div>
+						<div field="driedProductbilityCount" name="driedProductbilityCount" width="80" headerAlign="center" sortField="driedProductbilityCount" align="center" allowSort="true">干研磨生产性</div>
+						<div field="middleCount" name="middleCount" width="80" headerAlign="center" sortField="middleCount" align="center" allowSort="true">中间研磨数量</div>
+						<div field="middleTime" name="middleTime" width="80" headerAlign="center" sortField="middleTime" align="center" allowSort="true">中间研磨时间</div>
+						<div field="middleProductbilityCount" name="middleProductbilityCount" width="80" headerAlign="center" sortField="middleProductbilityCount" align="center" allowSort="true">中间研磨生产性</div>
+						<div field="fineCount" name="fineCount" width="80" headerAlign="center" sortField="fineCount" align="center" allowSort="true">精研磨数量</div>
+						<div field="fineTime" name="fineTime" width="80" headerAlign="center" sortField="fineTime" align="center" allowSort="true">精研磨时间</div>
+						<div field="fineProductbilityCount" name="fineProductbilityCount" width="80" headerAlign="center" sortField="fineProductbilityCount" align="center" allowSort="true">精研磨生产性</div>
+						<div field="bcCount" name="bcCount" width="80" headerAlign="center" sortField="bcCount" align="center" allowSort="true">BC色研磨数量</div>
+						<div field="bcTime" name="bcTime" width="80" headerAlign="center" sortField="bcTime" align="center" allowSort="true">BC色研磨时间</div>
+						<div field="bcProductbilityCount" name="bcProductbilityCount" width="80" headerAlign="center" sortField="bcProductbilityCount" align="center" allowSort="true">BC色研磨生产性</div>
+						<div field="t2Count" name="t2Count" width="80" headerAlign="center" sortField="t2Count" align="center" allowSort="true">T2研磨数量</div>
+						<div field="t2Time" name="t2Time" width="80" headerAlign="center" sortField="t2Time" align="center" allowSort="true">T2研磨时间</div>
+						<div field="t2ProductbilityCount" name="t2ProductbilityCount" width="80" headerAlign="center" sortField="t2ProductbilityCount" align="center" allowSort="true">T2研磨生产性</div>
+						<div field="gmCount" name="gmCount" width="80" headerAlign="center" sortField="gmCount" align="center" allowSort="true">GM色研磨数量</div>
+						<div field="gmTime" name="gmTime" width="80" headerAlign="center" sortField="gmTime" align="center" allowSort="true">GM色研磨时间</div>
+						<div field="gmProductbilityCount" name="gmProductbilityCount" width="80" headerAlign="center" sortField="gmProductbilityCount" align="center" allowSort="true">GM色研磨生产性</div>
+						<div field="ccCount" name="ccCount" width="80" headerAlign="center" sortField="ccCount" align="center" allowSort="true">CC色研磨数量</div>
+						<div field="ccTime" name="ccTime" width="80" headerAlign="center" sortField="ccTime" align="center" allowSort="true">CC色研磨时间</div>
+						<div field="ccProductbilityCount" name="ccProductbilityCount" width="80" headerAlign="center" sortField="ccProductbilityCount" align="center" allowSort="true">CC色研磨生产性</div>
+						<div field="newColorCount" name="newColorCount" width="80" headerAlign="center" sortField="newColorCount" align="center" allowSort="true">新色精研磨数量</div>
+						<div field="newColorTime" name="newColorTime" width="80" headerAlign="center" sortField="newColorTime" align="center" allowSort="true">新色精研磨时间</div>
+						<div field="newColorProductbilityCount" name="newColorProductbilityCount" width="80" headerAlign="center" sortField="newColorProductbilityCount" align="center" allowSort="true">新色精研磨生产性</div>
+						<div field="machineCount" name="machineCount" width="80" headerAlign="center" sortField="machineCount" align="center" allowSort="true">机器数量</div>
+						<div field="machineTime" name="machineTime" width="80" headerAlign="center" sortField="machineTime" align="center" allowSort="true">机器时间</div>
+						<div field="machineProductbilityCount" name="machineProductbilityCount" width="80" headerAlign="center" sortField="machineProductbilityCount" align="center" allowSort="true">机器生产性</div>
+						<div field="automationCount" name="automationCount" width="80" headerAlign="center" sortField="automationCount" align="center" allowSort="true">自动化数量</div>
+						<div field="automationTime" name="automationTime" width="80" headerAlign="center" sortField="automationTime" align="center" allowSort="true">自动化时间</div>
+						<div field="automationProductbilityCount" name="automationProductbilityCount" width="80" headerAlign="center" sortField="automationProductbilityCount" align="center" allowSort="true">自动化生产性</div>
+						<div field="inRepairTime" name="inRepairTime" width="80" headerAlign="center" sortField="inRepairTime" align="center" allowSort="true">社内修理时间</div>
+						<div field="outRepairTime" name="outRepairTime" width="80" headerAlign="center" sortField="outRepairTime" align="center" allowSort="true">社外修理时间</div>
+						<div field="outRepairCount" name="outRepairCount" width="80" headerAlign="center" sortField="outRepairCount" align="center" allowSort="true">社外修理数量</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- <div style="text-align: center; padding: 10px;">
+		<a class="mini-button btn btn-info btn-round " onclick="onOk()"
+			type="button">
+			<i class="ace-icon fa fa-floppy-o bigger-110"></i> 导出生产性结果
+		</a>
+	</div> -->
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+		mini.parse();
+		var grid1 = mini.get("grid1");
+		var grid2 = mini.get("grid2");
+		var searchcondation = new Object();
+		searchcondation.yearmonth = mini.get("yearmonth").getValue();
+		searchcondation.depid = mini.get("depid").getValue();
+		grid1.load(getPagerInfo("grid1", searchcondation),function(e){
+			grid2.load(getPagerInfo("grid2", searchcondation));
+		});
+		
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("yearmonth").focus();
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0602BatchErrorReportMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0602BatchErrorReport">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="lotId" jdbcType="VARCHAR" property="lotId" />
+    <result column="errorTarget" jdbcType="VARCHAR" property="errorTarget" />
+    <result column="errorContent" jdbcType="VARCHAR" property="errorContent" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, lotId, errorTarget, errorContent, createtime, createuser, updatetime, updateuser, 
+    delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0602batcherrorreport
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t0602batcherrorreport
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0602BatchErrorReport">
+    insert into t0602batcherrorreport (id, lotId, errorTarget, 
+      errorContent, createtime, createuser, 
+      updatetime, updateuser, delflg
+      )
+    values (#{id,jdbcType=VARCHAR}, #{lotId,jdbcType=VARCHAR}, #{errorTarget,jdbcType=VARCHAR}, 
+      #{errorContent,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0602BatchErrorReport">
+    insert into t0602batcherrorreport
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="lotId != null">
+        lotId,
+      </if>
+      <if test="errorTarget != null">
+        errorTarget,
+      </if>
+      <if test="errorContent != null">
+        errorContent,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="lotId != null">
+        #{lotId,jdbcType=VARCHAR},
+      </if>
+      <if test="errorTarget != null">
+        #{errorTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="errorContent != null">
+        #{errorContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0602BatchErrorReport">
+    update t0602batcherrorreport
+    <set>
+      <if test="lotId != null">
+        lotId = #{lotId,jdbcType=VARCHAR},
+      </if>
+      <if test="errorTarget != null">
+        errorTarget = #{errorTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="errorContent != null">
+        errorContent = #{errorContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0602BatchErrorReport">
+    update t0602batcherrorreport
+    set lotId = #{lotId,jdbcType=VARCHAR},
+      errorTarget = #{errorTarget,jdbcType=VARCHAR},
+      errorContent = #{errorContent,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

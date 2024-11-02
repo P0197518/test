@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0203AdjustSettingsMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0203AdjustSettings">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="itemName" jdbcType="NVARCHAR" property="itemName" />
+    <result column="settingType" jdbcType="CHAR" property="settingType" />
+    <result column="setting" jdbcType="NVARCHAR" property="setting" />
+    <result column="option1" jdbcType="VARCHAR" property="option1" />
+    <result column="option2" jdbcType="VARCHAR" property="option2" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, itemName, settingType, setting, option1, option2, createtime, createuser, updatetime, 
+    updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0203adjustsettings
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t0203adjustsettings
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0203AdjustSettings">
+    insert into t0203adjustsettings (id, itemName, settingType, 
+      setting, option1, option2, 
+      createtime, createuser, updatetime, 
+      updateuser, delflg)
+    values (#{id,jdbcType=VARCHAR}, #{itemName,jdbcType=NVARCHAR}, #{settingType,jdbcType=CHAR}, 
+      #{setting,jdbcType=NVARCHAR}, #{option1,jdbcType=VARCHAR}, #{option2,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0203AdjustSettings">
+    insert into t0203adjustsettings
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemName != null">
+        itemName,
+      </if>
+      <if test="settingType != null">
+        settingType,
+      </if>
+      <if test="setting != null">
+        setting,
+      </if>
+      <if test="option1 != null">
+        option1,
+      </if>
+      <if test="option2 != null">
+        option2,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="settingType != null">
+        #{settingType,jdbcType=CHAR},
+      </if>
+      <if test="setting != null">
+        #{setting,jdbcType=NVARCHAR},
+      </if>
+      <if test="option1 != null">
+        #{option1,jdbcType=VARCHAR},
+      </if>
+      <if test="option2 != null">
+        #{option2,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0203AdjustSettings">
+    update t0203adjustsettings
+    <set>
+      <if test="itemName != null">
+        itemName = #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="settingType != null">
+        settingType = #{settingType,jdbcType=CHAR},
+      </if>
+      <if test="setting != null">
+        setting = #{setting,jdbcType=NVARCHAR},
+      </if>
+      <if test="option1 != null">
+        option1 = #{option1,jdbcType=VARCHAR},
+      </if>
+      <if test="option2 != null">
+        option2 = #{option2,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0203AdjustSettings">
+    update t0203adjustsettings
+    set itemName = #{itemName,jdbcType=NVARCHAR},
+      settingType = #{settingType,jdbcType=CHAR},
+      setting = #{setting,jdbcType=NVARCHAR},
+      option1 = #{option1,jdbcType=VARCHAR},
+      option2 = #{option2,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

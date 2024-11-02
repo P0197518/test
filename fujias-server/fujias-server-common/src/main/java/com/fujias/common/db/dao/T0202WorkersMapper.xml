@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0202WorkersMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0202Workers">
+    <id column="yearMonth" jdbcType="CHAR" property="yearMonth" />
+    <id column="workerName" jdbcType="NVARCHAR" property="workerName" />
+    <result column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    <result column="workType" jdbcType="CHAR" property="workType" />
+    <result column="shareFlag" jdbcType="BIT" property="shareFlag" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    yearMonth, workerName, departmentId, workType, shareFlag, createtime, createuser, 
+    updatetime, updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.T0202WorkersKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0202workers
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.T0202WorkersKey">
+    delete from t0202workers
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0202Workers">
+    insert into t0202workers (yearMonth, workerName, departmentId, 
+      workType, shareFlag, createtime, 
+      createuser, updatetime, updateuser, 
+      delflg)
+    values (#{yearMonth,jdbcType=CHAR}, #{workerName,jdbcType=NVARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+      #{workType,jdbcType=CHAR}, #{shareFlag,jdbcType=BIT}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, 
+      #{delflg,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0202Workers">
+    insert into t0202workers
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        yearMonth,
+      </if>
+      <if test="workerName != null">
+        workerName,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="workType != null">
+        workType,
+      </if>
+      <if test="shareFlag != null">
+        shareFlag,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        #{yearMonth,jdbcType=CHAR},
+      </if>
+      <if test="workerName != null">
+        #{workerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null">
+        #{workType,jdbcType=CHAR},
+      </if>
+      <if test="shareFlag != null">
+        #{shareFlag,jdbcType=BIT},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0202Workers">
+    update t0202workers
+    <set>
+      <if test="departmentId != null">
+        departmentId = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null">
+        workType = #{workType,jdbcType=CHAR},
+      </if>
+      <if test="shareFlag != null">
+        shareFlag = #{shareFlag,jdbcType=BIT},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0202Workers">
+    update t0202workers
+    set departmentId = #{departmentId,jdbcType=VARCHAR},
+      workType = #{workType,jdbcType=CHAR},
+      shareFlag = #{shareFlag,jdbcType=BIT},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and workerName = #{workerName,jdbcType=NVARCHAR}
+  </update>
+</mapper>

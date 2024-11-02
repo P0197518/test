@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<title>[[#{S0100505.pageaddup}]]</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body onload="loadfocus()">
+
+	<div class="edit-page-content">
+		<div id="form1" th:object="${formdata}" class="form-horizontal" style="width: 100%; min-width: 800px;">
+			<input id="id" class="mini-hidden" th:field="*{id}" /> <input id="mode" class="mini-hidden" th:field="*{mode}" /> 
+			<input name="type" id="type" class="mini-hidden" value="2" />
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100503.resouname}]]:</label>
+
+							<div class="col-sm-3">
+								<input name="resourceName" id="resourceName" th:field="*{resourceName}" class="mini-textbox" vtype="maxLength:32" maxlength="32" required="true" requiredErrorText="[[#{S0100503.notnull}]]" />
+							</div>
+
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100505.resouno}]]：</label>
+
+							<div class="col-sm-3">
+								<input name="resourceCd" id="resourceCd" th:field="*{resourceCd}" vtype="halfonly;maxLength:32" maxlength="32" class="mini-textbox" />
+							</div>
+						</div>
+
+						<div class="space-4"></div>
+
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100505.resoupath}]]:</label>
+
+							<div class="col-sm-3">
+								<input name="resourceUrl" id="resourceUrl" th:field="*{resourceUrl}" class="mini-textbox" vtype="maxLength:250" maxlength="250" required="true" requiredErrorText="空をなしてはならない" />
+							</div>
+
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100505.imagepath}]]：</label>
+
+							<div class="col-sm-3">
+								<input name="imgValue" id="imgValue" th:field="*{imgValue}" vtype="maxLength:250" maxlength="250" class="mini-textbox" />
+							</div>
+						</div>
+
+						<div class="space-4"></div>
+
+						<div class="form-group">
+
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100505.parresou}]]:</label>
+
+							<div class="col-sm-3">
+								<input id="parentId" name="parentId" th:field="*{parentId}" class="mini-buttonedit" onbuttonclick="onButtonEdit" th:attr="text=*{parentname}" />
+							</div>
+
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100505.order}]]：</label>
+
+							<div class="col-sm-3">
+								<input name="sortOrder" id="sortOrder" th:field="*{sortOrder}" class="mini-textbox" vtype="halfonly;maxLength:30" maxlength="30" required="true" requiredErrorText="空をなしてはならない" />
+							</div>
+						</div>
+						<div class="form-group">
+
+							<label class="col-sm-1 control-label no-padding-right" for="form-field-username">[[#{S0100505.isornotshow}]]:</label>
+
+							<div class="col-sm-3">
+								<input id="showInMenu" name="showInMenu" th:field="*{showInMenu}" class="mini-combobox" textField="text" valueField="value" 
+								value="1" th:url="@{/common/getKbn?codeTypeCd=39}" ajaxType="post"/>
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+				</div>
+			</div>
+
+			<div style="text-align: center; padding: 10px;">
+				<a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> [[#{S0100401.sure}]]
+				</a>
+				&nbsp; &nbsp;
+				<a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button">
+					<i class="ace-icon fa fa-undo bigger-110"></i> [[#{S0100401.cancel}]]
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- /.page-content -->
+
+	<script type="text/javascript">
+        var form = new mini.Form("#form1");
+        mini.parse();
+
+        //选择父级资源
+        function onButtonEdit() {
+            var btnEdit = this;
+            var popupParam = openCommonPopupParam("/S0100505Resources/tree",
+                    "[[#{S0100505.pareselect}]]");
+            popupParam.width = 510;
+            popupParam.height = 385;
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {
+                    var iframe = this.getIFrameEl();
+                    var data = iframe.contentWindow.GetData();
+                    data = mini.clone(data);
+
+                    if(mini.get("id").getValue() == data.id){
+                        businessMessage.alert("E00007");
+                        return;
+                    }
+                    if (data) {
+                        btnEdit.setValue(data.id);
+                        btnEdit.setText(data.resourceName);
+                    }
+                } else if(action == "clear") {
+                    btnEdit.setValue("");
+                    btnEdit.setText("");
+                }
+            };
+            mini.open(popupParam);
+        }
+
+        function onOk() {
+            form.validate();
+            if (form.isValid() == false) {
+                businessMessage.alert("E00006");
+                return;
+            }
+            businessMessage.alert("Q00002", null, oksave);
+        }
+        function oksave() {
+            var data = form.getData();
+            var accessurl  = "";
+            if(mini.get("mode").value == "create"){
+                accessurl = "/S0100505Resources/add";
+            } else{
+                accessurl = "/S0100505Resources/update";
+            }
+            doAjax(accessurl, data, function(obj) {
+                if (obj.status == "SUCCESS") {
+                    businessMessage.alert("IC0001", null, function() {
+                        CloseWindow("ok");
+                    });
+                }
+            });
+        }
+        
+        // 初始化时focus
+        function loadfocus() {
+            mini.get("resourceName").focus();
+        }
+    </script>
+</body>
+
+</html>

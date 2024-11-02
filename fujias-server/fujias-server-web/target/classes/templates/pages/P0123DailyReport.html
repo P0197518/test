@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head
+    th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{::head/script},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>生产日报查看</title>
+<script th:src="@{/js/jquery.form.js}" type="text/javascript"></script>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content"id="form1">
+			<div class="main-content-inner" >
+			
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden" value="P0123" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">搜索条件</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+							<div class="widget-main">
+								<div class="search-item">
+									<label for="departmentId" class="control-label col-sm-0"> 部门: </label> <input id="departmentId" name="departmentId" class="mini-combobox" allowInput="false" th:value="${formdata.departmentId}" valueField="value" emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+								</div>
+								<!-- showNullItem="true" nullItemText="所有部门" emptyText="所有部门" -->
+								<div class="search-item">
+									<label for="itemName" class="control-label col-sm-0"> 品名: </label> <input id="itemName" name="itemName" class="mini-textbox" th:field="${formdata.itemName}" onenter="search()" vtype="maxLength:30" maxlength="32" />
+								</div>
+								<div class="search-item">
+									<label for="classification" class="control-label col-sm-0"> 分类: </label> <input id="classification" name="classification" class="mini-combobox" th:url="@{/P0709Item/getClassification}" ajaxType="post" showNullItem="true" th:field="${formdata.classification}" onenter="search()" />
+								</div>
+								<div class="search-item">
+									<label for="workerName" class="control-label col-sm-0"> 工作人员: </label> <input id="workerName" name="workerName" class="mini-textbox" th:field="${formdata.workerName}" onenter="search()" vtype="maxLength:32" maxlength="32" />
+								</div>
+								<div class="search-item">
+									<label for="prodInstrNo" class="control-label col-sm-0"> 指示号: </label> <input id="prodInstrNo" name="prodInstrNo" class="mini-textbox" th:field="${formdata.prodInstrNo}" onenter="search()" vtype="maxLength:30" maxlength="32" />
+								</div>
+								<div class="search-item">
+									<label for="technicsCD" class="control-label col-sm-0"> 工序: </label> <input id="technicsCD" name="technicsCD" class="mini-combobox" th:url="@{/P0123DailyReport/getTechnicsCD}" ajaxType="post" th:field="${formdata.technicsCD}" onenter="search()" valueField="text" textField="text" showNullItem="true" />
+								</div>
+								<div class="search-item">
+									<label for="badContent" class="control-label col-sm-0"> 不良内容: </label> <input id="badContent" name="badContent" class="mini-textbox" th:field="${formdata.badContent}" onenter="search()" vtype="maxLength:30" maxlength="32" />
+								</div>
+								<div class="search-item">
+									<label for="name" class="control-label col-sm-0"> 期间: </label> <input id="startTime" name="startTime" class="mini-datepicker" th:field="${formdata.startTime}" onenter="search()" vtype="maxLength:30" maxlength="32" /> ~ <input id="endTime" name="endTime" class="mini-datepicker" th:field="${formdata.endTime}" onenter="search()" vtype="maxLength:30" maxlength="32" />
+								</div>
+
+
+								<a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()"> <i class="ace-icon fa fa-search"> </i> [[#{S0100501.search}]]
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+
+	<div class="mini-toolbar">
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><a id="export" class="mini-button btn btn-default btn-round autoAuth" type="button" onclick="exportData()"> <i class="ace-icon fa fa-cloud-upload"></i> 导出日报结果
+				</a> <a id="compare" class="mini-button btn btn-info btn-round autoAuth" type="button" onclick="importChange()"> <i class="ace-icon fa fa-cloud-download"></i> 入库比较
+				</a> <a id="import" class="mini-button btn btn-info btn-round autoAuth" type="button" onclick="importWorkData()"> <i class="ace-icon fa fa-cloud-download"></i> 冲压不良导入
+                </a></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="mini-fit">
+		<div id="grid1" th:url="@{/P0123DailyReport/getList}" class="mini-datagrid" idField="username" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="itemName" sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field=prodInstrNo name="prodInstrNo" width="100" sortField="prodInstrNo" headerAlign="center" allowSort="true" align="center">指示编号</div>
+				<div field="itemName" name="itemName" width="150" sortField="itemName" headerAlign="center" allowSort="true" align="center">品名</div>
+				<div field="prodInstrNum" name="prodInstrNum" width="100" sortField="prodInstrNum" headerAlign="center" allowSort="true" align="center">指示数</div>
+				<div field="machineNo" name="machineNo" width="100" sortField="machineNo" headerAlign="center" allowSort="true" align="center">机器编号</div>
+				<div field="workDay" name="workDay" width="80" sortField="workDay" headerAlign="center" allowSort="true" dateFormat="yyyy/MM/dd">小日程番号</div>
+				<div field="technicsCD" name="technicsCD" width="90" sortField="technicsCD" headerAlign="center" allowSort="true" align="center">工序</div>
+				<div field="count" name="count" width="80" sortField="count" headerAlign="center" allowSort="true" align="center">良品数</div>
+				<div field="badCount" name="badCount" width="80" sortField="badCount" headerAlign="center" allowSort="true" align="center">不良品数</div>
+				<div field="startTime" name="startTime" width="80" sortField="startTime" headerAlign="center" allowSort="true" align="center">开始时间</div>
+				<div field="endTime" name="endTime" width="80" sortField="endTime" headerAlign="center" allowSort="true" align="center">结束时间</div>
+				<div field="workMinutes" name="workMinutes" width="80" sortField="workMinutes" headerAlign="center" allowSort="true" align="center">作业时间</div>
+				<div field="badMinutes" name="badMinutes" width="80" sortField="badMinutes" headerAlign="center" allowSort="true" align="center">不良时间</div>
+				<div field="badContent" name="badContent" width="120" sortField="badContent" headerAlign="center" allowSort="true">不良内容</div>
+				<div field="remark" name="remark" width="120" sortField="remark" headerAlign="center" allowSort="true">备注</div>
+				<div field="workerName" name="workerName" width="80" sortField="workerName" headerAlign="center" allowSort="true">员工号码</div>
+				<div field="departmentId" name="departmentId" width="120" sortField="departmentId" headerAlign="center" allowSort="true">部门</div>
+				<div field="createuser" name="createuser" width="120" sortField="createuser" headerAlign="center" allowSort="true">录入人</div>
+				<div field="importDate" name="importDate" width="120" sortField="importDate" headerAlign="center" allowSort="true" align="center" dateFormat="yyyy/MM/dd">录入时间</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+		var form = new mini.Form("#form1");
+		grid.load();
+		var date = new Date();
+		var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+		var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+		mini.get("startTime").setValue(firstDay);
+		mini.get("endTime").setValue(lastDay);
+		// 查询操作
+		function search() {
+
+			var searchcondation = getJsonObject("searchCondation");
+
+			grid.load(getPagerInfo("grid1", searchcondation));
+
+		}
+
+		function onSaveSearchCondation() {
+			saveSearchCondation(search);
+		}
+
+		$(function() {
+			getSearchCondation(search);
+		});
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("departmentId").focus();
+		}
+
+		//入库比较
+		function importChange() {
+
+			var popupParam = openCommonPopupParam(
+					"/P0123DailyReport/indexEdit", "入库比较");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					grid.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+
+	      //导入考勤数据
+	        function importWorkData() {
+	            /*
+	            document.getElementById("btnfile").click();
+	             */
+	            var popupParam = openCommonPopupParam(
+	                    "/P0123DailyReport/badImport?mode=import", "冲压不良导入");
+	            popupParam.ondestroy = function(action) {
+	                if (action == "ok") {
+	                    grid.reload();
+	                }
+	            };
+	            mini.open(popupParam);
+	        }
+	</script>
+</body>
+
+</html>

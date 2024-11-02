@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.TNumberMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.TNumber">
+    <id column="ID" jdbcType="VARCHAR" property="ID" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="createUser" jdbcType="VARCHAR" property="createUser" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updateUser" jdbcType="VARCHAR" property="updateUser" />
+    <result column="delFlg" jdbcType="CHAR" property="delFlg" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="customerCode" jdbcType="VARCHAR" property="customerCode" />
+    <result column="drawingCode" jdbcType="VARCHAR" property="drawingCode" />
+    <result column="varietyCode" jdbcType="VARCHAR" property="varietyCode" />
+    <result column="productCode1" jdbcType="VARCHAR" property="productCode1" />
+    <result column="productCode2" jdbcType="VARCHAR" property="productCode2" />
+    <result column="productCode3" jdbcType="VARCHAR" property="productCode3" />
+    <result column="productCode4" jdbcType="VARCHAR" property="productCode4" />
+    <result column="productCode5" jdbcType="VARCHAR" property="productCode5" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, createTime, createUser, updateTime, updateUser, delFlg, code, customerCode, drawingCode, 
+    varietyCode, productCode1, productCode2, productCode3, productCode4, productCode5
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_number
+    where ID = #{ID,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_number
+    where ID = #{ID,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.TNumber">
+    insert into t_number (ID, createTime, createUser, 
+      updateTime, updateUser, delFlg, 
+      code, customerCode, drawingCode, 
+      varietyCode, productCode1, productCode2, 
+      productCode3, productCode4, productCode5
+      )
+    values (#{ID,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{delFlg,jdbcType=CHAR}, 
+      #{code,jdbcType=VARCHAR}, #{customerCode,jdbcType=VARCHAR}, #{drawingCode,jdbcType=VARCHAR}, 
+      #{varietyCode,jdbcType=VARCHAR}, #{productCode1,jdbcType=VARCHAR}, #{productCode2,jdbcType=VARCHAR}, 
+      #{productCode3,jdbcType=VARCHAR}, #{productCode4,jdbcType=VARCHAR}, #{productCode5,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.TNumber">
+    insert into t_number
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ID != null">
+        ID,
+      </if>
+      <if test="createTime != null">
+        createTime,
+      </if>
+      <if test="createUser != null">
+        createUser,
+      </if>
+      <if test="updateTime != null">
+        updateTime,
+      </if>
+      <if test="updateUser != null">
+        updateUser,
+      </if>
+      <if test="delFlg != null">
+        delFlg,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="customerCode != null">
+        customerCode,
+      </if>
+      <if test="drawingCode != null">
+        drawingCode,
+      </if>
+      <if test="varietyCode != null">
+        varietyCode,
+      </if>
+      <if test="productCode1 != null">
+        productCode1,
+      </if>
+      <if test="productCode2 != null">
+        productCode2,
+      </if>
+      <if test="productCode3 != null">
+        productCode3,
+      </if>
+      <if test="productCode4 != null">
+        productCode4,
+      </if>
+      <if test="productCode5 != null">
+        productCode5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ID != null">
+        #{ID,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null">
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="drawingCode != null">
+        #{drawingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="varietyCode != null">
+        #{varietyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode1 != null">
+        #{productCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode2 != null">
+        #{productCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode3 != null">
+        #{productCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode4 != null">
+        #{productCode4,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode5 != null">
+        #{productCode5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.TNumber">
+    update t_number
+    <set>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        createUser = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        updateUser = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null">
+        customerCode = #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="drawingCode != null">
+        drawingCode = #{drawingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="varietyCode != null">
+        varietyCode = #{varietyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode1 != null">
+        productCode1 = #{productCode1,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode2 != null">
+        productCode2 = #{productCode2,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode3 != null">
+        productCode3 = #{productCode3,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode4 != null">
+        productCode4 = #{productCode4,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode5 != null">
+        productCode5 = #{productCode5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{ID,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.TNumber">
+    update t_number
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      createUser = #{createUser,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      updateUser = #{updateUser,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=CHAR},
+      code = #{code,jdbcType=VARCHAR},
+      customerCode = #{customerCode,jdbcType=VARCHAR},
+      drawingCode = #{drawingCode,jdbcType=VARCHAR},
+      varietyCode = #{varietyCode,jdbcType=VARCHAR},
+      productCode1 = #{productCode1,jdbcType=VARCHAR},
+      productCode2 = #{productCode2,jdbcType=VARCHAR},
+      productCode3 = #{productCode3,jdbcType=VARCHAR},
+      productCode4 = #{productCode4,jdbcType=VARCHAR},
+      productCode5 = #{productCode5,jdbcType=VARCHAR}
+    where ID = #{ID,jdbcType=VARCHAR}
+  </update>
+</mapper>

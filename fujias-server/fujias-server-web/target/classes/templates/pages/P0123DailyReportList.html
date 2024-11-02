@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>入库比较</title>
+<style>
+.function-item {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.function-item input {
+	vertical-align: bottom;
+}
+</style>
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="main-container">
+		<div id="form1" th:object="${formdata}" style="width: 100%; min-width: 800px;">
+			<input id="resourcecd" name="resourcecd" type="hidden" value="P0231" /> <input id="id" class="mini-hidden" /> <input id="mode" class="mini-hidden" /> <input id="delFlg" class="mini-hidden" />
+			<div class="page-content">
+				<div class="widget-box">
+					<h4 class="header blue bolder smaller">比较条件</h4>
+					<div class="col-sm-12" id="searchCondation">
+						<div class="search-item">
+							<label for="name" class="col-sm-1 control-label">比较年月:</label> <input id="txtStartDate" class="mini-datepicker" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" th:field="*{txtStartDate}" required="true" /> <label for="isusedate" class="control-label"> ～ </label> <input id="txtEndDate" class="mini-datepicker" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" th:field="*{txtEndDate}" required="true" />
+						</div>
+
+						<!-- <div class="search-item">
+                        
+                            <label for="formPartment" class="control-label col-sm-0"> 比较部门: </label> <input id="formPartment" name="formPartment" class="mini-combobox" allowInput="false" th:value="*{formPartment}" valueField="value" required="true" onenter="search()" ajaxType="post" th:url="@{/P0123DailyReport/getDepartList}"/>
+                        </div> -->
+						<div class="search-item">
+							<label for="formPartment" class="control-label col-sm-0"> 比较部门: </label> <input id="formPartment" name="formPartment" class="mini-combobox" allowInput="false" th:value="${formdata.formPartment}" valueField="value" required = "true" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+						</div>
+						<div class="search-item col-sm-1">
+							<a id="import" class="mini-button btn btn-info btn-round autoAuth" type="button" onclick="compareDiff()"> <i class="ace-icon fa fa-cloud-download"></i> 执行比较
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mini-toolbar">
+				<h4 class="header blue bolder smaller">入库比较结果</h4>
+				<div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%;" sortField="" sortOrder="asc">
+					<div property="columns">
+						<div field="prodInstrNo" width="120" headerAlign="center" align="center">指示号&nbsp;</div>
+						<div field="itemName" width="120" headerAlign="center" align="center">品名&nbsp;</div>
+						<div field="dailyCount" width="40" headerAlign="center" align="right">日报数量&nbsp;</div>
+						<div field="num" width="40" headerAlign="center" align="right">入库数量&nbsp;</div>
+						<div field="compareResult" width="120" headerAlign="center" align="left">比较结果&nbsp;</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="text-align: center; padding: 10px;">
+		<a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button"> <i class="ace-icon fa fa-undo bigger-110"></i> [[#{S0100401.cancel}]]
+		</a>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+		var form = new mini.Form("#form1");
+
+		// 页面加载完成处理
+		$(function() {
+
+		});
+		grid.on("beforeload", function(e) {
+			e.cancel = true;
+			var pageIndex1 = e.data.pageIndex, pageSize1 = e.data.pageSize;
+			compareDiff(pageIndex1, pageSize1);
+		});
+		function compareDiff(pageIndex1, pageSize1) {
+			if (mini.get("txtStartDate").getValue() == "") {
+				businessMessage.alert("E00048");
+				return;
+			}
+			if (mini.get("txtEndDate").getValue() == "") {
+				businessMessage.alert("E00048");
+				return;
+			}
+			if (mini.get("formPartment").getValue() == "") {
+				businessMessage.alert("E00047");
+				return;
+			}
+			if (mini.get("formPartment").getValue() == "2000" || mini.get("formPartment").getValue() == "5000"
+				|| mini.get("formPartment").getValue() == "8000" || mini.get("formPartment").getValue() == "7600") {
+                businessMessage.alert("E00051");
+                return;
+            }
+			var searchcondation = getJsonObject("searchCondation");
+			doAjax("/P0123DailyReport/compareDiff", searchcondation, function(
+					obj) {
+				var data = obj.data, totalCount = obj.total;
+				var arr = [];
+				if (typeof pageIndex1 == 'undefined'
+						&& typeof pageSize1 == 'undefined') {
+					var pageIndex = grid.pageIndex;
+					var pageSize = grid.pageSize;
+				} else {
+					var pageIndex = pageIndex1;
+					var pageSize = pageSize1;
+				}
+
+				var start = pageIndex * pageSize, end = start + pageSize;
+				for (var i = start, l = end; i < l; i++) {
+					var record = data[i];
+					if (!record)
+						continue;
+					arr.push(record);
+				}
+
+				grid.setTotalCount(totalCount);
+				grid.setPageIndex(pageIndex);
+				grid.setPageSize(pageSize);
+				grid.setData(arr);
+
+			});
+		}
+	</script>
+</body>
+
+</html>

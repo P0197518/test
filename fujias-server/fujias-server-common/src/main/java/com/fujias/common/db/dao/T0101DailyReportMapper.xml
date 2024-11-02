@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0101DailyReportMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0101DailyReport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    <result column="prodInstrNo" jdbcType="CHAR" property="prodInstrNo" />
+    <result column="itemName" jdbcType="NVARCHAR" property="itemName" />
+    <result column="prodInstrNum" jdbcType="NUMERIC" property="prodInstrNum" />
+    <result column="machineNo" jdbcType="NVARCHAR" property="machineNo" />
+    <result column="workDay" jdbcType="DATE" property="workDay" />
+    <result column="technicsCD" jdbcType="NVARCHAR" property="technicsCD" />
+    <result column="count" jdbcType="NUMERIC" property="count" />
+    <result column="badCount" jdbcType="NUMERIC" property="badCount" />
+    <result column="startTime" jdbcType="CHAR" property="startTime" />
+    <result column="endTime" jdbcType="CHAR" property="endTime" />
+    <result column="workMinutes" jdbcType="NUMERIC" property="workMinutes" />
+    <result column="badMinutes" jdbcType="NUMERIC" property="badMinutes" />
+    <result column="badContent" jdbcType="NVARCHAR" property="badContent" />
+    <result column="remark" jdbcType="NVARCHAR" property="remark" />
+    <result column="workerName" jdbcType="NVARCHAR" property="workerName" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+    <result column="machineTime" jdbcType="NUMERIC" property="machineTime" />
+    <result column="importDate" jdbcType="DATE" property="importDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, departmentId, prodInstrNo, itemName, prodInstrNum, machineNo, workDay, technicsCD, 
+    count, badCount, startTime, endTime, workMinutes, badMinutes, badContent, remark, 
+    workerName, createtime, createuser, updatetime, updateuser, delflg, machineTime, 
+    importDate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0101dailyreport
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t0101dailyreport
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0101DailyReport">
+    insert into t0101dailyreport (id, departmentId, prodInstrNo, 
+      itemName, prodInstrNum, machineNo, 
+      workDay, technicsCD, count, 
+      badCount, startTime, endTime, 
+      workMinutes, badMinutes, badContent, 
+      remark, workerName, createtime, 
+      createuser, updatetime, updateuser, 
+      delflg, machineTime, importDate
+      )
+    values (#{id,jdbcType=INTEGER}, #{departmentId,jdbcType=VARCHAR}, #{prodInstrNo,jdbcType=CHAR}, 
+      #{itemName,jdbcType=NVARCHAR}, #{prodInstrNum,jdbcType=NUMERIC}, #{machineNo,jdbcType=NVARCHAR}, 
+      #{workDay,jdbcType=DATE}, #{technicsCD,jdbcType=NVARCHAR}, #{count,jdbcType=NUMERIC}, 
+      #{badCount,jdbcType=NUMERIC}, #{startTime,jdbcType=CHAR}, #{endTime,jdbcType=CHAR}, 
+      #{workMinutes,jdbcType=NUMERIC}, #{badMinutes,jdbcType=NUMERIC}, #{badContent,jdbcType=NVARCHAR}, 
+      #{remark,jdbcType=NVARCHAR}, #{workerName,jdbcType=NVARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createuser,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, 
+      #{delflg,jdbcType=BIT}, #{machineTime,jdbcType=NUMERIC}, #{importDate,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0101DailyReport">
+    insert into t0101dailyreport
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="prodInstrNo != null">
+        prodInstrNo,
+      </if>
+      <if test="itemName != null">
+        itemName,
+      </if>
+      <if test="prodInstrNum != null">
+        prodInstrNum,
+      </if>
+      <if test="machineNo != null">
+        machineNo,
+      </if>
+      <if test="workDay != null">
+        workDay,
+      </if>
+      <if test="technicsCD != null">
+        technicsCD,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="badCount != null">
+        badCount,
+      </if>
+      <if test="startTime != null">
+        startTime,
+      </if>
+      <if test="endTime != null">
+        endTime,
+      </if>
+      <if test="workMinutes != null">
+        workMinutes,
+      </if>
+      <if test="badMinutes != null">
+        badMinutes,
+      </if>
+      <if test="badContent != null">
+        badContent,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="workerName != null">
+        workerName,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+      <if test="machineTime != null">
+        machineTime,
+      </if>
+      <if test="importDate != null">
+        importDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodInstrNo != null">
+        #{prodInstrNo,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="prodInstrNum != null">
+        #{prodInstrNum,jdbcType=NUMERIC},
+      </if>
+      <if test="machineNo != null">
+        #{machineNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="workDay != null">
+        #{workDay,jdbcType=DATE},
+      </if>
+      <if test="technicsCD != null">
+        #{technicsCD,jdbcType=NVARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=NUMERIC},
+      </if>
+      <if test="badCount != null">
+        #{badCount,jdbcType=NUMERIC},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=CHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=CHAR},
+      </if>
+      <if test="workMinutes != null">
+        #{workMinutes,jdbcType=NUMERIC},
+      </if>
+      <if test="badMinutes != null">
+        #{badMinutes,jdbcType=NUMERIC},
+      </if>
+      <if test="badContent != null">
+        #{badContent,jdbcType=NVARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=NVARCHAR},
+      </if>
+      <if test="workerName != null">
+        #{workerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+      <if test="machineTime != null">
+        #{machineTime,jdbcType=NUMERIC},
+      </if>
+      <if test="importDate != null">
+        #{importDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0101DailyReport">
+    update t0101dailyreport
+    <set>
+      <if test="departmentId != null">
+        departmentId = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodInstrNo != null">
+        prodInstrNo = #{prodInstrNo,jdbcType=CHAR},
+      </if>
+      <if test="itemName != null">
+        itemName = #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="prodInstrNum != null">
+        prodInstrNum = #{prodInstrNum,jdbcType=NUMERIC},
+      </if>
+      <if test="machineNo != null">
+        machineNo = #{machineNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="workDay != null">
+        workDay = #{workDay,jdbcType=DATE},
+      </if>
+      <if test="technicsCD != null">
+        technicsCD = #{technicsCD,jdbcType=NVARCHAR},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=NUMERIC},
+      </if>
+      <if test="badCount != null">
+        badCount = #{badCount,jdbcType=NUMERIC},
+      </if>
+      <if test="startTime != null">
+        startTime = #{startTime,jdbcType=CHAR},
+      </if>
+      <if test="endTime != null">
+        endTime = #{endTime,jdbcType=CHAR},
+      </if>
+      <if test="workMinutes != null">
+        workMinutes = #{workMinutes,jdbcType=NUMERIC},
+      </if>
+      <if test="badMinutes != null">
+        badMinutes = #{badMinutes,jdbcType=NUMERIC},
+      </if>
+      <if test="badContent != null">
+        badContent = #{badContent,jdbcType=NVARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=NVARCHAR},
+      </if>
+      <if test="workerName != null">
+        workerName = #{workerName,jdbcType=NVARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+      <if test="machineTime != null">
+        machineTime = #{machineTime,jdbcType=NUMERIC},
+      </if>
+      <if test="importDate != null">
+        importDate = #{importDate,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0101DailyReport">
+    update t0101dailyreport
+    set departmentId = #{departmentId,jdbcType=VARCHAR},
+      prodInstrNo = #{prodInstrNo,jdbcType=CHAR},
+      itemName = #{itemName,jdbcType=NVARCHAR},
+      prodInstrNum = #{prodInstrNum,jdbcType=NUMERIC},
+      machineNo = #{machineNo,jdbcType=NVARCHAR},
+      workDay = #{workDay,jdbcType=DATE},
+      technicsCD = #{technicsCD,jdbcType=NVARCHAR},
+      count = #{count,jdbcType=NUMERIC},
+      badCount = #{badCount,jdbcType=NUMERIC},
+      startTime = #{startTime,jdbcType=CHAR},
+      endTime = #{endTime,jdbcType=CHAR},
+      workMinutes = #{workMinutes,jdbcType=NUMERIC},
+      badMinutes = #{badMinutes,jdbcType=NUMERIC},
+      badContent = #{badContent,jdbcType=NVARCHAR},
+      remark = #{remark,jdbcType=NVARCHAR},
+      workerName = #{workerName,jdbcType=NVARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT},
+      machineTime = #{machineTime,jdbcType=NUMERIC},
+      importDate = #{importDate,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

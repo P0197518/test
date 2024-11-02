@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{::head/style})">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>首页</title>
+<meta name="description" content="overview &amp; stats" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<style type="text/css">
+.table {
+	border-collapse: collapse;
+	border-spacing: 0
+}
+
+td, th {
+	padding: 0
+}
+/* 
+.parent {
+	width: 100%;
+	-moz-column-count: 2;
+	-webkit-column-count: 22;
+	column-count: 2;
+}
+
+.child {
+	margin-bottom: 20px;
+	-moz-page-break-inside: avoid;
+	-webkit-column-break-inside: avoid;
+	break-inside: avoid;
+	-moz-page-break-inside: avoid;
+} */
+.widget-header {
+	cursor: pointer;
+}
+</style>
+</head>
+
+<body class="no-skin" style="overflow-y: hidden; overflow-x: hidden">
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container ace-save-state" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.loadState('main-container')
+			} catch (e) {
+			}
+		</script>
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner parent" id="form1" th:object="${formdata}">
+				<div style="width: 47%; float: left;">
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 私の確認待ちリスト
+								</h4>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped" id="abc">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 承認番号</th>
+												<th class="hidden-480">承認種類</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">作成日</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.confirmList}">
+												<td class="hidden-480"><a href="javascript:void(0)"
+													th:onclick="'javascript:acknowledge(\''+${item.type}+'\',\''+${item.orderid}+'\')'" th:text="${item.orderid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.type}"></td>
+												<td class="hidden-480" th:text="${item.creationusername}"></td>
+												<td class="hidden-480" th:text="${item.creationday}"></td>
+												<td class="hidden-480"><span th:text="${item.statusname}" class="label label-success arrowed-in arrowed-in-right"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /.widget-main -->
+						</div>
+						<!-- /.widget-body -->
+					</div>
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 受注未出庫
+								</h4>
+							</div>
+							<div class="widget-body" id="packingdate">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>受注番号</th>
+												<th class="hidden-480">販売先</th>
+												<th class="hidden-480">ETD</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.todayOrderWaitoutList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:showOrderDetail(\''+${item.orderid}+'\')'"
+													th:text="${item.orderid}" style="color: black"></a></td>
+												<td class="hidden-480" th:text="${item.customname}"></td>
+												<td class="hidden-480"><span th:if="${item.lateKbn==true}" th:text="${item.etd}" Style="color: red"></span><span
+													th:if="${item.lateKbn==false}" th:text="${item.etd}" Style="color: green"> </span></td>
+												<td class="hidden-480" th:text="${item.creationuser}"></td>
+												<td class="hidden-480"><span th:if="${item.orderstatus=='2'}" th:text="${item.statusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.orderstatus=='3'}" th:text="${item.statusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.orderstatus=='4'}" th:text="${item.statusname}"
+													class="label label-warning arrowed arrowed-right"> </span> <span th:if="${item.orderstatus=='5'}" th:text="${item.statusname}"
+													class="label label-success arrowed-right arrowed-in"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /.widget-main -->
+						</div>
+					</div>
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 今日の出庫予定
+								</h4>
+							</div>
+							<div class="widget-body" id="packingdate">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>予定出庫</th>
+												<th class="hidden-480">販売先</th>
+												<th class="hidden-480">予定出庫日</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.todayOutPlanList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:outplan(\''+${item.outplanid}+'\')'"
+													th:text="${item.outplanid}" style="color: black"></a></td>
+												<td class="hidden-480" th:text="${item.customname}"></td>
+												<td class="hidden-480"><span th:if="${item.qufenstuts==true}" th:text="${item.packingdate}" Style="color: red"></span><span
+													th:if="${item.qufenstuts==false}" th:text="${item.packingdate}" Style="color: green"> </span></td>
+												<td class="hidden-480" th:text="${item.planuser}"></td>
+												<td class="hidden-480"><span th:if="${item.status=='1'}" th:text="${item.statusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.status=='2'}" th:text="${item.statusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.status=='3'}" th:text="${item.statusname}"
+													class="label label-warning arrowed arrowed-right"> </span> <span th:if="${item.status=='4'}" th:text="${item.statusname}"
+													class="label label-success arrowed-right arrowed-in"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /.widget-main -->
+						</div>
+					</div>
+					<!-- /.widget-box -->
+					<div class="child" th:if="${formdata.departmentid!=null and formdata.isLogDep=='1'}">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 物流予約待ちリスト
+								</h4>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th class="hidden-480"><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 出庫予定番号</th>
+												<th class="hidden-480">販売先</th>
+												<th class="hidden-480">予定納期</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.logistics}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:text="${item.outplanid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.customname}"></td>
+												<td class="hidden-480" th:text="${item.packingdate}"></td>
+												<td class="hidden-480" th:text="${item.planuser}"></td>
+												<td class="hidden-480"><span th:if="${item.status=='1'}" th:text="${item.statusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.status=='2'}" th:text="${item.statusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.status=='3'}" th:text="${item.statusname}"
+													class="label label-warning arrowed arrowed-right"> </span> <span th:if="${item.status=='4'}" th:text="${item.statusname}"
+													class="label label-success arrowed-right arrowed-in"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- /.widget-main -->
+							</div>
+						</div>
+						<!-- /.widget-body -->
+					</div>
+
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 発注未支払 <a onclick="seach('tab8','発注未支払','../S0400301PaymentShow/index')"
+										style="float: right; font-size: 14px; padding-right: 10px;"> もっと </a>
+								</h4>
+							</div>
+							<div class="widget-body" id="arrivaldate">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 手配依頼書番号</th>
+												<th class="hidden-480">仕入先</th>
+												<th class="hidden-480">支払予定日</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">支払状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.fazhuPlanList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:purchaseorder1(\''+${item.purchaseorderid}+'\')'"
+													th:text="${item.purchaseorderid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.suppliername}"></td>
+												<td class="hidden-430"><span th:if="${item.qufenstuts==true}" th:text="${item.planpaydate1}" Style="color: red"></span><span
+													th:if="${item.qufenstuts==false}" th:text="${item.planpaydate1}" Style="color: green"> </span></td>
+												<td class="hidden-430" th:text="${item.orderusername}"></td>
+												<td class="hidden-480"><span th:if="${item.moneystatus=='1'}" th:text="${item.moneystatusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.moneystatus=='2'}" th:text="${item.moneystatusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.moneystatus=='3'}" th:text="${item.moneystatusname}"
+													class="label label-warning arrowed arrowed-right"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--  /.widget-main -->
+							</div>
+						</div>
+						<!--  /.widget-body -->
+					</div>
+				</div>
+				<div style="width: 47%; float: left;margin-left:20px;">
+					<div class="child" th:if="${formdata.isManDep =='1'}">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 発注支払待ち
+								</h4>
+							</div>
+
+							<div class="widget-body" id="arrivaldate">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>支払番号</th>
+												<th class="hidden-480">仕入先</th>
+												<th class="hidden-480">希望支払日</th>
+												<th class="hidden-480">支払人</th>
+												<th class="hidden-480">支払状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.payPlanList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:payid(\''+${item.payid}+'\')'" th:text="${item.payid}"
+													style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.suppliername}"></td>
+												<td class="hidden-430"><span th:if="${item.qufenstuts==true}" th:text="${#dates.format(item.hopepaydate,'yyyy/MM/dd')}"
+													Style="color: red"></span><span th:if="${item.qufenstuts==false}" th:text="${#dates.format(item.hopepaydate,'yyyy/MM/dd')}"
+													Style="color: green"> </span></td>
+												<td class="hidden-430" th:text="${item.applicantname}"></td>
+												<td class="hidden-480"><span th:if="${item.status=='1'}" th:text="${item.statusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.status=='2'}" th:text="${item.statusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.status=='3'}" th:text="${item.statusname}"
+													class="label label-warning arrowed arrowed-right"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--  /.widget-main -->
+							</div>
+						</div>
+						<!--  /.widget-body -->
+					</div>
+
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 差戻して、私が再修正すべきリスト
+								</h4>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 承認番号</th>
+												<th class="hidden-480">承認種類</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">作成日</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.cannelList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:repulse(\''+${item.type}+'\',\''+${item.orderid}+'\')'"
+													th:text="${item.orderid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.type}"></td>
+												<td class="hidden-480" th:text="${item.creationusername}"></td>
+												<td class="hidden-480" th:text="${item.creationday}"></td>
+												<td class="hidden-480"><span th:text="${item.statusname}" class="label label-danger arrowed"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- /.widget-main -->
+							</div>
+						</div>
+						<!-- /.widget-body -->
+					</div>
+					<!-- /.widget-box -->
+					<div class="child" th:if="${formdata.isProductDep =='1'}">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 商品問合待ちリスト
+								</h4>
+							</div>
+
+							<div class="widget-body">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th class="hidden-480"><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>問合番号</th>
+												<th class="hidden-480">販売先</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">作成日</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.quotation}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:consult(\''+${item.quotationid}+'\')'"
+													th:text="${item.quotationid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.customname}"></td>
+												<td class="hidden-480" th:text="${item.creationusername}"></td>
+												<td class="hidden-480" th:text="${item.creationday}"></td>
+												<td class="hidden-480"><span th:if="${item.quotationstatus=='2'}" th:text="${item.statusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.quotationstatus=='3'}" th:text="${item.statusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!-- /.widget-main -->
+							</div>
+						</div>
+						<!-- /.widget-body -->
+					</div>
+
+
+					<!-- /.widget-box -->
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 今日の入庫予定
+								</h4>
+							</div>
+							<div class="widget-body" id="arrivaldate">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i> 手配依頼書番号</th>
+												<th class="hidden-480">仕入先</th>
+												<th class="hidden-480">納品予定日</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.todayInPlanList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:purchaseorder(\''+${item.purchaseorderid}+'\')'"
+													th:text="${item.purchaseorderid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.suppliername}"></td>
+												<td class="hidden-480"><span th:if="${item.qufenstuts==true}" th:text="${item.arrivaldate}" Style="color: red"></span><span
+													th:if="${item.qufenstuts==false}" th:text="${item.arrivaldate}" Style="color: green"> </span></td>
+												<td class="hidden-480" th:text="${item.planuser}"></td>
+												<td class="hidden-480"><span th:if="${item.status=='1'}" th:text="${item.statusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.status=='2'}" th:text="${item.statusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.status=='3'}" th:text="${item.statusname}"
+													class="label label-warning arrowed arrowed-right"> </span> <span th:if="${item.status=='4'}" th:text="${item.statusname}"
+													class="label label-success arrowed-right arrowed-in"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--  /.widget-main -->
+							</div>
+						</div>
+						<!--  /.widget-body -->
+					</div>
+
+
+					<div class="child">
+						<div class="widget-box transparent">
+							<div class="widget-header widget-header-flat">
+								<h4 class="widget-title lighter">
+									<i class="ace-icon fa fa-bell-o orange"></i> 受注未入金 <a onclick="seach('tab32','受注未入金','../S0400401CollectShow/index')"
+										style="float: right; font-size: 14px; padding-right: 10px;"> もっと </a>
+								</h4>
+							</div>
+
+							<div class="widget-body" id="arrivaldate">
+								<div class="widget-main no-padding">
+									<table class="table table-bordered table-striped">
+										<thead class="thin-border-bottom">
+											<tr>
+												<th><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>受注番号</th>
+												<th class="hidden-480">販売先</th>
+												<th class="hidden-480">予定支払日</th>
+												<th class="hidden-480">作成者</th>
+												<th class="hidden-480">入金状態</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="item:${formdata.shouzhuPlanList}">
+												<td class="hidden-480"><a href="javascript:void(0)" th:onclick="'javascript:orderid(\''+${item.orderid}+'\')'"
+													th:text="${item.orderid}" style="color: black"></a></td>
+												<td class="hidden-430" th:text="${item.customname}"></td>
+												<td class="hidden-430"><span th:if="${item.qufenstuts==true}" th:text="${item.gracepayment1}" Style="color: red"></span><span
+													th:if="${item.qufenstuts==false}" th:text="${item.gracepayment1}" Style="color: green"> </span></td>
+												<td class="hidden-430" th:text="${item.orderusername}"></td>
+												<td class="hidden-480"><span th:if="${item.moneystatus=='1'}" th:text="${item.moneystatusname}"
+													class="label label-info arrowed-right arrowed-in"> </span> <span th:if="${item.moneystatus=='2'}" th:text="${item.moneystatusname}"
+													class="label label-success arrowed-in arrowed-in-right"> </span> <span th:if="${item.moneystatus=='3'}" th:text="${item.moneystatusname}"
+													class="label label-warning arrowed arrowed-right"> </span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--  /.widget-main -->
+							</div>
+						</div>
+						<!--  /.widget-body -->
+					</div>
+				</div>
+				<!-- /.widget-box -->
+			</div>
+			<!-- /.row -->
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+		<!-- /.col -->
+	</div>
+	<!-- /.row -->
+</body>
+<script>
+	var form = new mini.Form("#form1");
+	mini.parse();
+	function showMore(url, title) {
+		var tabs = window.parent.mini.get("mainTabs");
+		var tab = {};
+		tab.name = title;
+		tab.id = url;
+		tab.title = title;
+		tab.showCloseButton = true;
+		tab.url = url + ".html";
+		tabs.addTab(tab);
+		tabs.activeTab(tab);
+	}
+
+	//私の確認待ちリスト
+	function acknowledge(type, orderid) {
+		if (type == "支払") {
+			var popupParam = openCommonPopupParam(
+					"/S0400101Payment/indexEdit?payid=" + orderid + "&mode=4",
+					"発注支払承認");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					location.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+		if (type == "受注") {
+			var popupParam = openCommonPopupParam(
+					"/S0200201Order/indexEdit?orderid=" + orderid + "&mode=4",
+					"受注承認");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					location.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+		if (type == "問合") {
+			var popupParam = openCommonPopupParam(
+					"/S0200701QuotationPrice/finalConfirm?quotationid="
+							+ orderid, "最終確認入力");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					location.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+	}
+
+	//差戻して、私が再修正すべきリスト
+	function repulse(type, orderid) {
+		if (type == "支払") {
+			var popupParam = openCommonPopupParam(
+					"/S0400101Payment/indexEdit?payid=" + orderid + "&mode=3",
+					"発注支払編集");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					location.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+		if (type == "受注") {
+			var popupParam = openCommonPopupParam(
+					"/S0200201Order/indexEdit?orderid=" + orderid + "&mode=3",
+					"受注編集");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					location.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+		if (type == "問合") {
+
+			var popupParam = openCommonPopupParam(
+					"/S0200701QuotationPrice/resultEdit?quotationid=" + orderid,
+					"問合結果入力");
+			popupParam.ondestroy = function(action) {
+				if (action == "ok") {
+					location.reload();
+				}
+			};
+			mini.open(popupParam);
+		}
+	}
+
+	//商品問合待ちリスト
+	function consult(quotationid) {
+		var popupParam = openCommonPopupParam(
+				"/S0200701QuotationPrice/note?quotationid=" + quotationid,
+				"問合結果照会");
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+			}
+		};
+		mini.open(popupParam);
+	}
+
+	//今日の出庫予定
+	function outplan(outplanid) {
+		var popupParam = openCommonPopupParam(
+				"/S0200601Invoice/indexEdit1?outplanid=" + outplanid
+						+ "&mode=4", "出庫予定照会");
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+				location.reload();
+			}
+		};
+		mini.open(popupParam);
+	}
+
+	//今日の入庫予定
+	function purchaseorder(purchaseorderid) {
+		var popupParam = openCommonPopupParam(
+				"/S0300101PurchaseOrder/indexEdit?purchaseorderid="
+						+ purchaseorderid + "&mode=4", "手配依頼書照会");
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+				location.reload();
+			}
+		};
+		mini.open(popupParam);
+	}
+
+	function orderid(orderid) {
+		var popupParam = openCommonPopupParam(
+				"/S0200201Order/indexEdit?orderid=" + orderid + "&mode=7",
+				"受注明細照会");
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+				location.reload();
+			}
+		};
+		mini.open(popupParam);
+	}
+	function purchaseorder1(purchaseorder) {
+		var popupParam = openCommonPopupParam(
+				"/S0300101PurchaseOrder/indexEdit?purchaseorderid="
+						+ purchaseorder + "&mode=5", "発注未支払照会");
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+				location.reload();
+			}
+		};
+		mini.open(popupParam);
+	}
+
+	function payid(payid) {
+		var popupParam = openCommonPopupParam(
+				"/S0400101Payment/indexEdit?payid=" + payid + "&mode=7",
+				"発注支払実行");
+
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+				location.reload();
+			}
+		};
+		mini.open(popupParam);
+	}
+
+	function showOrderDetail(id) {
+		var popupParam = openCommonPopupParam(
+				"/S0200201Order/indexEdit?orderid=" + id + "&mode=8", "受注明細照会");
+		popupParam.ondestroy = function(action) {
+			if (action == "ok") {
+				location.reload();
+			}
+		};
+		mini.open(popupParam);
+	}
+
+	$(function() {
+		$(".widget-header").click(function() {
+			if ($(this).parent().find(".widget-body").is(':hidden')) {
+				$(this).parent().find(".widget-body").show();
+			} else {
+				$(this).parent().find(".widget-body").hide();
+			}
+		});
+	});
+	function formatDate(source) {
+		return $.formatDateSelf(source);
+	}
+
+	function seach(id, text, url) {
+		var id = "tab$" + id;
+		;
+		var tab = window.parent.tabs.getTab(id);
+		if (!tab) {
+			tab = {};
+			tab.name = id;
+			tab.title = text;
+			tab.showCloseButton = true;
+			tab.url = url;
+			window.parent.tabs.addTab(tab);
+
+		}
+		window.parent.tabs.activeTab(tab);
+	}
+</script>
+
+</html>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0102ProductBilityInfoMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0102ProductBilityInfo">
+    <id column="yearMonth" jdbcType="CHAR" property="yearMonth" />
+    <id column="departmentId" jdbcType="VARCHAR" property="departmentId" />
+    <result column="allCount" jdbcType="NUMERIC" property="allCount" />
+    <result column="workTime" jdbcType="NUMERIC" property="workTime" />
+    <result column="adjuestTime" jdbcType="NUMERIC" property="adjuestTime" />
+    <result column="allTime" jdbcType="NUMERIC" property="allTime" />
+    <result column="productbilityCount" jdbcType="NUMERIC" property="productbilityCount" />
+    <result column="directTime" jdbcType="NUMERIC" property="directTime" />
+    <result column="directProductbilityCount" jdbcType="NUMERIC" property="directProductbilityCount" />
+    <result column="indirectTime" jdbcType="NUMERIC" property="indirectTime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    yearMonth, departmentId, allCount, workTime, adjuestTime, allTime, productbilityCount, 
+    directTime, directProductbilityCount, indirectTime, createtime, createuser, updatetime, 
+    updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fujias.common.db.entity.T0102ProductBilityInfoKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0102productbilityInfo
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fujias.common.db.entity.T0102ProductBilityInfoKey">
+    delete from t0102productbilityInfo
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0102ProductBilityInfo">
+    insert into t0102productbilityInfo (yearMonth, departmentId, allCount, 
+      workTime, adjuestTime, allTime, 
+      productbilityCount, directTime, directProductbilityCount, 
+      indirectTime, createtime, createuser, 
+      updatetime, updateuser, delflg
+      )
+    values (#{yearMonth,jdbcType=CHAR}, #{departmentId,jdbcType=VARCHAR}, #{allCount,jdbcType=NUMERIC}, 
+      #{workTime,jdbcType=NUMERIC}, #{adjuestTime,jdbcType=NUMERIC}, #{allTime,jdbcType=NUMERIC}, 
+      #{productbilityCount,jdbcType=NUMERIC}, #{directTime,jdbcType=NUMERIC}, #{directProductbilityCount,jdbcType=NUMERIC}, 
+      #{indirectTime,jdbcType=NUMERIC}, #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0102ProductBilityInfo">
+    insert into t0102productbilityInfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        yearMonth,
+      </if>
+      <if test="departmentId != null">
+        departmentId,
+      </if>
+      <if test="allCount != null">
+        allCount,
+      </if>
+      <if test="workTime != null">
+        workTime,
+      </if>
+      <if test="adjuestTime != null">
+        adjuestTime,
+      </if>
+      <if test="allTime != null">
+        allTime,
+      </if>
+      <if test="productbilityCount != null">
+        productbilityCount,
+      </if>
+      <if test="directTime != null">
+        directTime,
+      </if>
+      <if test="directProductbilityCount != null">
+        directProductbilityCount,
+      </if>
+      <if test="indirectTime != null">
+        indirectTime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="yearMonth != null">
+        #{yearMonth,jdbcType=CHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="allCount != null">
+        #{allCount,jdbcType=NUMERIC},
+      </if>
+      <if test="workTime != null">
+        #{workTime,jdbcType=NUMERIC},
+      </if>
+      <if test="adjuestTime != null">
+        #{adjuestTime,jdbcType=NUMERIC},
+      </if>
+      <if test="allTime != null">
+        #{allTime,jdbcType=NUMERIC},
+      </if>
+      <if test="productbilityCount != null">
+        #{productbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="directTime != null">
+        #{directTime,jdbcType=NUMERIC},
+      </if>
+      <if test="directProductbilityCount != null">
+        #{directProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="indirectTime != null">
+        #{indirectTime,jdbcType=NUMERIC},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0102ProductBilityInfo">
+    update t0102productbilityInfo
+    <set>
+      <if test="allCount != null">
+        allCount = #{allCount,jdbcType=NUMERIC},
+      </if>
+      <if test="workTime != null">
+        workTime = #{workTime,jdbcType=NUMERIC},
+      </if>
+      <if test="adjuestTime != null">
+        adjuestTime = #{adjuestTime,jdbcType=NUMERIC},
+      </if>
+      <if test="allTime != null">
+        allTime = #{allTime,jdbcType=NUMERIC},
+      </if>
+      <if test="productbilityCount != null">
+        productbilityCount = #{productbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="directTime != null">
+        directTime = #{directTime,jdbcType=NUMERIC},
+      </if>
+      <if test="directProductbilityCount != null">
+        directProductbilityCount = #{directProductbilityCount,jdbcType=NUMERIC},
+      </if>
+      <if test="indirectTime != null">
+        indirectTime = #{indirectTime,jdbcType=NUMERIC},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0102ProductBilityInfo">
+    update t0102productbilityInfo
+    set allCount = #{allCount,jdbcType=NUMERIC},
+      workTime = #{workTime,jdbcType=NUMERIC},
+      adjuestTime = #{adjuestTime,jdbcType=NUMERIC},
+      allTime = #{allTime,jdbcType=NUMERIC},
+      productbilityCount = #{productbilityCount,jdbcType=NUMERIC},
+      directTime = #{directTime,jdbcType=NUMERIC},
+      directProductbilityCount = #{directProductbilityCount,jdbcType=NUMERIC},
+      indirectTime = #{indirectTime,jdbcType=NUMERIC},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where yearMonth = #{yearMonth,jdbcType=CHAR}
+      and departmentId = #{departmentId,jdbcType=VARCHAR}
+  </update>
+</mapper>

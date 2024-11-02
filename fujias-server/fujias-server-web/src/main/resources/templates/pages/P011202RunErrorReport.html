@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>错误报告</title>
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="main-container">
+		<input id="resourcecd" name="resourcecd" type="hidden"
+			value="S0100502" />
+		<div id="form1" th:object="${formdata}" class="form-horizontal"
+			style="width: 100%; min-width: 800px;">
+			<input id="id" class="mini-hidden" th:field="*{id}" />
+			<input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<!-- <input id="delFlg" class="mini-hidden" th:field="*{delFlg}" /> -->
+			<div>
+				<div class="tab-content profile-edit-tab-content">
+					<div id="edit-basic" class="tab-pane in active">
+						<h4 class="header blue bolder smaller">计算条件</h4>
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">执行批次号:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="id" name="id" allowInput="false" th:value="${formdata.id}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">执行年月:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="yearmonth" name="yearmonth" allowInput="false" th:value="${formdata.yearmonth}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-1 control-label no-padding-right"
+								for="form-field-username">执行部门:</label>
+							<div class="col-sm-3">
+								<input class="mini-textbox" width="200" id="depName" name="depName" allowInput="false" th:value="${formdata.depName}" />
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+				</div>
+			</div>
+			<div class="mini-toolbar">
+				<h4 class="header blue bolder smaller">错误清单</h4>
+				<div id="grid1" th:url="@{/P0122ProductbilityReport/getRunErrorList}" class="mini-datagrid" idField="username" allowResize="false" allowCellSelect="true" multiSelect="false"
+					editNextOnEnterKey="true" style="width: 100%; height: 400px;" sortField="errorTarget" sortOrder="asc">
+					<div property="columns">
+						<div type="checkcolumn" width="10"></div>
+						<div field="errorTarget" name="errorTarget" width="30" headerAlign="center" sortField="errorTarget" align="center" allowSort="true">错误参数</div>
+						<!-- <div field="productName" name="productName" width="80" headerAlign="center" sortField="productName" align="center" allowSort="true">品名</div> -->
+						<div field="errorContent" name="errorContent" width="180" headerAlign="center" sortField="errorContent" align="left" allowSort="true">错误内容</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+		
+		var searchcondation = new Object();
+		searchcondation.id = mini.get("id").getValue();
+		grid.load(getPagerInfo("grid1", searchcondation));
+		
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("id").focus();
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>[[#{S0100501.userlist}]]</title>
+</head>
+<body class="no-skin" onload="loadfocus()">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner" id="form1" th:object="${formdata}">
+				<!-- #section:basics/content.breadcrumbs -->
+				<input id="resourcecd" name="resourcecd" type="hidden" value="P0211" />
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+					<div class="widget-box">
+						<div class="widget-header">
+							<h5 class="smaller">[[#{S0100501.searchco}]]</h5>
+						</div>
+						<!-- /.page-header -->
+						<div class="widget-body" id="searchCondation">
+						<input th:field="*{workType}" id="workType" class="mini-hidden" />
+							<div class="widget-main">
+
+								<div class="search-item">
+									<label for="workerName" class="control-label col-sm-0">
+										人员名: </label> <input id="workerName" name="workerName"
+										class="mini-textbox" onenter="search()" vtype="maxLength:30"
+										maxlength="30" th:field="*{workerName}"/>
+								</div>
+								<div class="search-item">
+									<label for="departmentId" class="control-label col-sm-0">
+										部门: </label> <input id="departmentId" name="departmentId" class="mini-combobox" allowInput="false" th:value="${formdata.departmentId}" valueField="value" 
+                                           emptyText="" textField="text" showNullItem="true" nullItemText="所有部门" onenter="search()" ajaxType="post" th:url="@{/common/getDepList}" />
+                                </div>
+								<div class="search-item">
+									<label for="workType" class="control-label col-sm-0">
+										工作类型: </label>
+										<input id="workType1" name="workType1"class="mini-checkbox" onenter="search()" trueValue="true" falseValue="false"
+                                        text="直接人员" />
+                                        <input id="workType2" name="workType2"class="mini-checkbox" onenter="search()" trueValue="true" falseValue="false"
+                                        text="间接人员" />
+									
+								</div>
+								<a class="mini-button btn btn-info btn-round btn-search"
+									type="button" onclick="search()"> <i
+									class="ace-icon fa fa-search"> </i> [[#{S0100501.search}]]
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.main-content -->
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+	<div>
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 100%; height: 30px;"><input type="file"
+					id="btnfile" style="display: none"><a id="export"
+                        class="mini-button btn btn-default btn-round autoAuth"
+                        type="button" onclick="exportData()">
+                        <i class="ace-icon fa fa-cloud-upload"></i> 导出工作人员列表
+                    </a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="mini-fit">
+		<div id="grid1" th:url="@{/P0211WorkerList/getList}" 
+			class="mini-datagrid" idField="id" allowResize="false"
+			allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true"
+			sortField="workerName" sortOrder="asc">
+			<div property="columns">
+				<div type="checkcolumn"></div>
+				<div field="departmentId" name="departmentId" width="60"
+					sortField="departmentId" headerAlign="center" allowSort="true"
+					align="left">所属部门</div>
+				<div field="workerName" name="workerName" width="60"
+					sortField="workerName" headerAlign="center" align="left"
+					allowSort="true">人员姓名</div>
+				<div field="workType" name="workType" width="40"
+					sortField="workType" headerAlign="center" align="center"
+					allowSort="true">工作类型</div>
+				
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+		grid.load();
+        var form = new mini.Form("#form1");
+		$(function() {
+			getSearchCondation(search);
+            var InUse = mini.get("departmentId");
+            var param = {
+            		codeTypeCd : '02'
+                };
+
+
+                mini.get('workType1').setValue("true");
+                mini.get('workType2').setValue("true");
+                
+        });
+
+
+
+		// 查询操作
+		function search() {
+           if (mini.get("workType1").getValue() == "true" && mini.get("workType2").getValue() == "true") {
+				mini.get("workType").setValue("");
+			} else if(mini.get("workType2").getValue() == "true") {
+				mini.get("workType").setValue("02");
+			} else if(mini.get("workType1").getValue() == "true") {
+				mini.get("workType").setValue("01");
+			} else {
+				mini.get("workType").setValue("");
+			}
+			grid.load(getPagerInfo("grid1", form.getData())); 
+
+		}
+	     function onSaveSearchCondation() {
+	         saveSearchCondation(search);
+	     }
+		//导出人员列表
+		function exportData() {
+			var searchcondation = getJsonObject("searchCondation");
+			downloadExcel("/P0211WorkerList/exportData", searchcondation);
+		}
+	      // 初始化时focus
+        function loadfocus() {
+            mini.get("workerName").focus();
+        }
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+    <title>[[#{S0100505.pagepower}]]</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+
+<body class="no-skin">
+    <input id="resourcecd" name="resourcecd" type="hidden" value="S0100505" />
+    <div class="mini-toolbar" style="padding: 0px; border-top: 0; margin-top: 5px; margin-bottom: 5px;">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width:100%;height:30px;">
+                    <a class="mini-button btn btn-warning btn-round autoAuth" onclick="add()" id="add" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110"></i>[[#{add}]]
+                    </a>
+                    <a class="mini-button btn btn-success btn-round autoAuth" onclick="edit()" id="edit" type="button">
+                        <i class="ace-icon fa fa-pencil-square-o"></i>[[#{update}]]
+                    </a>
+                    <a class="mini-button btn btn-danger btn-round autoAuth" onclick="removeItem()" id="removeItem"type="button">
+                        <i class="ace-icon fa fa-times-circle"></i>[[#{delete}]]
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="mini-fit">
+        <div id="grid1" th:url="@{/S0100505Resources/getList}" class="mini-treegrid" style="width: 100%; height: 100%;" showTreeIcon="true" treeColumn="resourcename" idField="id" parentField="parentid" resultAsTree="false" allowResize="false" expandOnLoad="true">
+            <div property="columns">
+                <div type="checkcolumn">[[#{S0100403.select}]]</div>
+                <div name="resourceName" field="resourceName" width="160">[[#{S0100503.resouname}]]</div>
+                <div field="resourceUrl" headerAlign="center" align="left" width="80">[[#{S0100505.resoupath}]]</div>
+                <div field="imgValue" headerAlign="center" align="left" width="80">[[#{S0100505.imagepath}]]</div>
+                <div field="resourceCd" headerAlign="center" align="left" width="80">[[#{S0100505.resouno}]]</div>
+                <div field="sortOrder" headerAlign="center" align="right" width="80">[[#{S0100505.order}]]</div>
+                <div field="cz" width="80" headerAlign="center" align="center" renderer="onActionRenderer">[[#{S0100505.do}]]</div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        mini.parse();
+
+        var grid = mini.get("grid1");
+        grid.load();
+
+        //操作按钮
+        function onActionRenderer(e) {
+            if (e.row.type == "1") {
+                return "";
+            }
+            return '<a class="New_Button" href="javascript:showAction()"><i class="fa fa-cog fa-lg red" aria-hidden="true"></i>设定</a>';
+        }
+
+        function showAction() {
+            var tree = mini.get("grid1");
+            var row = grid.getSelected();
+            if (!tree.hasChildren(tree.getSelectedNode())) {
+                var popupParam = openCommonPopupParam("/S0100505Resources/authEdit?id=" + row.id,
+                    "[[#{S0100503.powermana}]]");
+                mini.open(popupParam);
+            } else {
+                businessMessage.alert("E00002"); //父级菜单无操作权限
+            }
+
+        }
+
+        // 添加操作
+        function add() {
+            var popupParam = openCommonPopupParam("/S0100505Resources/indexEdit",
+                "[[#{S0100505.pageadd}]]");
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {
+                    grid.reload();
+                }
+            };
+            mini.open(popupParam);
+        }
+
+        //编辑操作
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+
+                var popupParam = openCommonPopupParam(
+                    "/S0100505Resources/indexEdit?id=" + row.id, "[[#{S0100505.pageedit}]]");
+                popupParam.ondestroy = function(action) {
+                    if (action == "ok") {
+                        grid.reload();
+                    }
+                };
+                mini.open(popupParam);
+            } else {
+                mini.alert(businessMessage.get("E00002"));
+            }
+        }
+
+        //删除
+        function removeItem() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                if (grid.hasChildren(grid.getSelectedNode())) {
+                    businessMessage.alert("Q00004", null, okDelete);
+                } else {
+                    businessMessage.alert("Q00001", null, okDelete);
+                }
+            } else {
+                businessMessage.alert("E00002");
+            }
+        }
+
+        function okDelete() {
+            var rows = grid.getSelecteds();
+            doAjax("/S0100505Resources/delete", rows[0], function(obj) {
+                if (obj.status == "SUCCESS") {
+                    businessMessage.alert(obj.text);
+                    grid.reload();
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

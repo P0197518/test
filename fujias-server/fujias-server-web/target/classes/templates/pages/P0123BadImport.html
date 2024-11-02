@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head
+	th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{::head/script},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>冲压不良导入</title>
+<script th:src="@{/js/jquery.form.js}" type="text/javascript"></script>
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="main-container">
+		<div id="form1" th:object="${formdata}" style="width: 100%;">
+
+			<form th:action="@{/P0123DailyReport/importData}" method="post"
+				enctype="multipart/form-data">
+
+				<input id="resourcecd" name="resourcecd" type="hidden" value="P0221" />
+
+				<div class="page-content">
+					<div class="widget-box">
+						<h4 class="header blue bolder smaller">导入基本信息</h4>
+						<div class="col-sm-12">
+							<div class="search-item ">
+								<label for="importYearAndMonth" class="control-label col-sm-5">
+									导入年月: </label>
+								<input id="importYearAndMonth" name="importYearAndMonth"
+									class="mini-datepicker" required="true" 
+									maxlength="30" format="yyyyMM" vtype="date:yyyyMMdd"/>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="search-item ">
+								<label for="importFile" class="control-label col-sm-5">
+									导入文件: </label>
+								<input name="importData" id="importData" type="file" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div style="text-align: center; padding: 10px;">
+					<a class="mini-button btn btn-info btn-round " onclick="imports()"
+						type="button">
+						<i class="ace-icon glyphicon glyphicon-upload"></i> 执行导入
+					</a>
+					&nbsp; &nbsp;
+					<a class="mini-button btn btn-warning btn-round"
+						onclick="onCancel()" type="button">
+						<i class="ace-icon fa fa-undo bigger-110"></i>
+						[[#{S0100401.cancel}]]
+					</a>
+				</div>
+				<div id="divErrorReport" class="mini-toolbar">
+					<h4 class="header blue bolder smaller">导入错误列表</h4>
+					<div id="grid1" class="mini-datagrid" allowCellEdit="true"
+						idField="id" skipReadOnlyCell="true" allowResize="false"
+						allowCellSelect="true" multiSelect="false"
+						editNextOnEnterKey="true" sortOrder="asc" showPager="false">
+						<div property="columns">
+
+							<div field="row" width="60" headerAlign="center" sortField="jan"
+								allowSort="false" align="center">错误行&nbsp;</div>
+							<div field="errorContent" width="120" headerAlign="center"
+								sortField="jan" allowSort="false" align="center">错误内容&nbsp;</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<script type="text/javascript">
+		mini.parse();
+		var grid = mini.get("grid1");
+		var form = new mini.Form("#form1");
+
+		// 页面加载完成处理
+		$(function() {
+			$("#divErrorReport").hide();
+		});
+
+		// 保存操作
+		function imports() {
+            if (mini.get("importYearAndMonth").getValue() == "") {
+            	businessMessage.alert("E00044");
+            	return;
+            }
+			if (document.getElementById("importData").value == "") {
+				businessMessage.alert("EC0093");
+				return;
+			}
+            var hideForm = $('form');
+			var options = {
+				dataType : "json",
+				beforeSubmit : function() {
+
+				},
+				success : function(result) {
+
+					if (result.checkMessages != null
+							&& result.checkMessages.length > 0) {
+						for (var i = 0; i < result.checkMessages.length; i++) {
+							result.checkMessages[i].errorContent = businessMessage
+									.get(result.checkMessages[i].code,
+											result.checkMessages[i].args);
+						}
+						grid.setData(result.checkMessages);
+						$("#divErrorReport").show();
+
+						businessMessage.alert("EC0020", null);
+					} else {
+						businessMessage.alert("IC0008", null, function() {
+                        CloseWindow("ok");
+						});
+					}
+				},
+				error : function(result) {
+				}
+			};
+			hideForm.ajaxSubmit(options);
+
+			/* form.validate();
+			if (document.getElementById("btnfile").value == "") {
+				businessMessage.alert("请选择文件");
+				return;
+			}
+			if (form.isValid() == false) {
+				businessMessage.alert("E00006");
+				return;
+			}
+			businessMessage.alert("Q00002", null, oksave); */
+		}
+
+		// 初始化时focus
+		function loadfocus() {
+			mini.get("importYearAndMonth").focus();
+		}
+	</script>
+</body>
+
+</html>

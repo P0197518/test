@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.common.db.dao.T0001ItemsMapper">
+  <resultMap id="BaseResultMap" type="com.fujias.common.db.entity.T0001Items">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="itemName" jdbcType="NVARCHAR" property="itemName" />
+    <result column="frameName" jdbcType="NVARCHAR" property="frameName" />
+    <result column="gc" jdbcType="NVARCHAR" property="gc" />
+    <result column="dpsKubun" jdbcType="NVARCHAR" property="dpsKubun" />
+    <result column="itaSheetKubun" jdbcType="NVARCHAR" property="itaSheetKubun" />
+    <result column="ringSize" jdbcType="NVARCHAR" property="ringSize" />
+    <result column="guideKubun" jdbcType="NVARCHAR" property="guideKubun" />
+    <result column="dpsSize" jdbcType="NVARCHAR" property="dpsSize" />
+    <result column="foot" jdbcType="NVARCHAR" property="foot" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="createuser" jdbcType="VARCHAR" property="createuser" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="updateuser" jdbcType="VARCHAR" property="updateuser" />
+    <result column="delflg" jdbcType="BIT" property="delflg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, itemName, frameName, gc, dpsKubun, itaSheetKubun, ringSize, guideKubun, dpsSize, 
+    foot, createtime, createuser, updatetime, updateuser, delflg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t0001items
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t0001items
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fujias.common.db.entity.T0001Items">
+    insert into t0001items (id, itemName, frameName, 
+      gc, dpsKubun, itaSheetKubun, 
+      ringSize, guideKubun, dpsSize, 
+      foot, createtime, createuser, 
+      updatetime, updateuser, delflg
+      )
+    values (#{id,jdbcType=INTEGER}, #{itemName,jdbcType=NVARCHAR}, #{frameName,jdbcType=NVARCHAR}, 
+      #{gc,jdbcType=NVARCHAR}, #{dpsKubun,jdbcType=NVARCHAR}, #{itaSheetKubun,jdbcType=NVARCHAR}, 
+      #{ringSize,jdbcType=NVARCHAR}, #{guideKubun,jdbcType=NVARCHAR}, #{dpsSize,jdbcType=NVARCHAR}, 
+      #{foot,jdbcType=NVARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=VARCHAR}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{delflg,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fujias.common.db.entity.T0001Items">
+    insert into t0001items
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemName != null">
+        itemName,
+      </if>
+      <if test="frameName != null">
+        frameName,
+      </if>
+      <if test="gc != null">
+        gc,
+      </if>
+      <if test="dpsKubun != null">
+        dpsKubun,
+      </if>
+      <if test="itaSheetKubun != null">
+        itaSheetKubun,
+      </if>
+      <if test="ringSize != null">
+        ringSize,
+      </if>
+      <if test="guideKubun != null">
+        guideKubun,
+      </if>
+      <if test="dpsSize != null">
+        dpsSize,
+      </if>
+      <if test="foot != null">
+        foot,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="createuser != null">
+        createuser,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+      <if test="updateuser != null">
+        updateuser,
+      </if>
+      <if test="delflg != null">
+        delflg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="frameName != null">
+        #{frameName,jdbcType=NVARCHAR},
+      </if>
+      <if test="gc != null">
+        #{gc,jdbcType=NVARCHAR},
+      </if>
+      <if test="dpsKubun != null">
+        #{dpsKubun,jdbcType=NVARCHAR},
+      </if>
+      <if test="itaSheetKubun != null">
+        #{itaSheetKubun,jdbcType=NVARCHAR},
+      </if>
+      <if test="ringSize != null">
+        #{ringSize,jdbcType=NVARCHAR},
+      </if>
+      <if test="guideKubun != null">
+        #{guideKubun,jdbcType=NVARCHAR},
+      </if>
+      <if test="dpsSize != null">
+        #{dpsSize,jdbcType=NVARCHAR},
+      </if>
+      <if test="foot != null">
+        #{foot,jdbcType=NVARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        #{delflg,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fujias.common.db.entity.T0001Items">
+    update t0001items
+    <set>
+      <if test="itemName != null">
+        itemName = #{itemName,jdbcType=NVARCHAR},
+      </if>
+      <if test="frameName != null">
+        frameName = #{frameName,jdbcType=NVARCHAR},
+      </if>
+      <if test="gc != null">
+        gc = #{gc,jdbcType=NVARCHAR},
+      </if>
+      <if test="dpsKubun != null">
+        dpsKubun = #{dpsKubun,jdbcType=NVARCHAR},
+      </if>
+      <if test="itaSheetKubun != null">
+        itaSheetKubun = #{itaSheetKubun,jdbcType=NVARCHAR},
+      </if>
+      <if test="ringSize != null">
+        ringSize = #{ringSize,jdbcType=NVARCHAR},
+      </if>
+      <if test="guideKubun != null">
+        guideKubun = #{guideKubun,jdbcType=NVARCHAR},
+      </if>
+      <if test="dpsSize != null">
+        dpsSize = #{dpsSize,jdbcType=NVARCHAR},
+      </if>
+      <if test="foot != null">
+        foot = #{foot,jdbcType=NVARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuser != null">
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateuser != null">
+        updateuser = #{updateuser,jdbcType=VARCHAR},
+      </if>
+      <if test="delflg != null">
+        delflg = #{delflg,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fujias.common.db.entity.T0001Items">
+    update t0001items
+    set itemName = #{itemName,jdbcType=NVARCHAR},
+      frameName = #{frameName,jdbcType=NVARCHAR},
+      gc = #{gc,jdbcType=NVARCHAR},
+      dpsKubun = #{dpsKubun,jdbcType=NVARCHAR},
+      itaSheetKubun = #{itaSheetKubun,jdbcType=NVARCHAR},
+      ringSize = #{ringSize,jdbcType=NVARCHAR},
+      guideKubun = #{guideKubun,jdbcType=NVARCHAR},
+      dpsSize = #{dpsSize,jdbcType=NVARCHAR},
+      foot = #{foot,jdbcType=NVARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      createuser = #{createuser,jdbcType=VARCHAR},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      delflg = #{delflg,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

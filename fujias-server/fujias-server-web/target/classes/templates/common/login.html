@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{::head/link},~{::head/script},~{::head/style})">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>[[#{login.tip}]]</title>
+    <link rel="stylesheet" th:href="@{/css/login/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/login/supersized.css}">
+    <link rel="stylesheet" th:href="@{/css/login/style.css}">
+    <script th:src="@{/js/login/jquery-1.9.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/login/jquery.placeholder.min.js}"></script>
+    <script th:src="@{/js/login/browser.js}" type="text/javascript"></script>
+    <script th:src="@{/js/login/layer.js}"></script>
+    <script th:src="@{/js/login/base64.js}" type="text/javascript"></script>
+    <script th:src="@{/js/login/jquery.tips.js}" type="text/javascript"></script>
+    <script th:src="@{/js/login/supersized.3.2.7.min.js}"></script>
+    <script th:src="@{/js/login/supersized-init.js}"></script>
+
+    <style>
+        .yanzhengma {
+            width: 70px;
+            float: left;
+        }
+        
+        .yzm {
+            float: left;
+            margin-top: 19px;
+            margin-left: 15px;
+            width: 70px;
+            height: 35px;
+        }
+        
+        .jzmm {
+            float: right;
+            height: 44px;
+            line-height: 40px;
+        }
+        
+        .jzmm input {
+            width: auto;
+            float: left;
+        }
+        
+        .jzmm span {
+            float: left;
+            padding-top: 12px;
+            font-size: 14px;
+        }
+        
+        .page-container {
+            float: right;
+        }
+        
+        .biaod input {
+            border: none;
+        }
+        
+        .left_bg img {
+            float: left;
+        }
+        
+        .login_main {
+            width: 1000px;
+            margin: 0 auto;
+            margin-top: 9%;
+        }
+        
+        #errormessage {
+            font-size: 13px;
+            margin-top: 20;
+            color: red;
+        }
+        
+        .footer {
+            color: #FFF;
+            font-size: 12px;
+            position: absolute;
+            margin-top: 500px;
+            width: 360px;
+            left: 50%;
+            margin-left: -180px;
+            text-align: center;
+        }
+        
+        span#span_zhuce {
+            cursor: pointer;
+        }
+        
+        .logostyle {
+            width: 349px;
+            height: 45px;
+            margin-left: 20px;
+            margin-top: 20px;
+            background-size: cover;
+            float: left;
+            _display: inline;
+            color: #ffffff;
+            font-size: 25pt;
+            font-family: "微软雅黑";
+        }
+        
+        .mini-messagebox-content-text{
+        color:black;}
+    </style>
+</head>
+
+<body style="min-width:1000px;">
+    <div class="login_main">
+        <div class="left_bg">
+            <img src="../images/login/left.png">
+        </div>
+        <div class="page-container" id="loginbox">
+
+            <div class="logostyle">
+              [[#{login.tip}]]
+            </div>
+            <form id="form" name="form" th:action="@{/login/dologin}" method="post" onsubmit="return check();">
+                <input type="text" name="username" id="username" class="username" th:placeholder="#{login.username}">
+                <div class="space-4"></div>
+                <input type="password" name="password" id="password" class="password" th:placeholder="#{login.password}">
+                <div class="jzmm">
+                    <input type="checkbox" id="rememberme" name="rememberme" style="border:none;background:transparent;box-shadow:none;height:auto;margin-top:26px;">
+                    <span>[[#{login.remember}]]</span>
+                </div>
+                <input type="hidden" name="openid" value="">
+                <div style="float: left; margin-top: 10px;width: 100%;text-align: left;">
+                </div>
+                <button type="button" onclick="denglu();">[[#{login.btn}]]</button>
+                <div style="float: left; margin-top: 10px;width: 100%;text-align: left;">
+                </div>
+                <div id="errormessage">
+                </div>
+            </form>
+            
+            
+ <!--            <a class="btn btn-sm" th:href="?l=zh_CN">中文</a>
+            <a class="btn btn-sm" th:href="?l=th_TH">泰文</a>
+            <a class="btn btn-sm" th:href="?l=ja_JP">セーター</a> -->
+            
+            <!-- <div id="lang_cn"  class="btn btn-sm" onclick="SetCookie('lang', 'cn')">中文</div >
+<div  id="lang_jp"  class="btn btn-sm" onclick="SetCookie('lang', 'jp')">セーター</div >
+<div  id="lang_th"  class="btn btn-sm" onclick="SetCookie('lang', 'en')">English</div > -->
+            
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript">
+    $(function() {
+        $("#username").focus();
+    });
+    var login = "${base}";
+
+    function denglu() {
+
+        if (check()) {
+            var param = {};
+            param.username = $("#username").val();
+            param.password =  $("#password").val();
+            param.rememberme =  $("#rememberme").is(':checked');
+            doAjax("/login/dologin",param,function(backData){
+            	if(backData.status == "SUCCESS"){
+                    if($("#rememberme").is(':checked')){
+                        // 如果已存在cookie，则先删除再添加
+                        if(getCookieValue("remember") == "ture"){
+                            deleteCookie("remember","/");
+                            deleteCookie("username","/");
+                            deleteCookie("password","/");
+                        }
+                        addCookie("remember",$("#rememberme").is(':checked'),30,"/");
+                        addCookie("username",$("#username").val(),30,"/");
+                        addCookie("password",$("#password").val(),30,"/");
+                    }        
+            		window.parent.location.href = bootPATH +"menu/index";
+            	}
+            });
+
+        }
+    }
+
+    /**添加设置cookie**/
+    function addCookie(name, value, days, path) {
+        //username-password-天数-路径
+        var name = escape(name);
+        var value = escape(value);
+        var expires = new Date();
+        expires.setTime(expires.getTime() + days * 3600000 * 24);
+        //path=/，表示cookie能在整个网站下使用，path=/temp，表示cookie只能在temp目录下使用
+        path = path == "" ? "" : ";path=" + path;
+        //GMT(Greenwich Mean Time)是格林尼治平时，现在的标准时间，协调世界时是UTC
+        //参数days只能是数字型
+        var _expires = (typeof days) == "string" ? "" : ";expires=" + expires.toUTCString();
+        document.cookie = name + "=" + value + _expires + path;
+    }
+
+    function quxiao() {
+        $("#username").val('');
+        $("#password").val("");
+    }
+    /**实现功能，保存用户的登录信息到cookie中。当登录页面被打开时，就查询cookie**/
+    if (isBrowserErr()) {
+        location.href = "${base}/browserr.jsp";
+    }
+    var logname = "";
+
+    window.onload = function() {
+            var remember = getCookieValue("remember");
+            if (remember == "true") {
+                document.getElementById("rememberme").checked = true;
+                var usernameValue = getCookieValue("username");
+                if (usernameValue != "") {
+                    $("#username").val(usernameValue);
+                }
+                var companyValue = getCookieValue("company");
+                if (companyValue != "") {
+                    $("#company").val(utf8to16(base64_decode(companyValue)));
+                }
+                var passwordValue = getCookieValue("password");
+                if (passwordValue != "") {
+                    $("#password").val(passwordValue);
+                }
+                $('input, textarea').placeholder();
+                
+                //自动登录
+                var param = {};
+                param.username = $("#username").val();
+                param.password =  $("#password").val();
+                param.rememberme =  $("#rememberme").is(':checked');
+                doAjax("/login/dologin",param,function(backData){
+                    if(backData.status == "SUCCESS"){           
+                        window.parent.location.href = bootPATH +"menu/index";
+                    } else {
+                        // 如果登录失败，则删除cookie
+                        deleteCookie("remember","/");
+                        deleteCookie("username","/");
+                        deleteCookie("password","/");
+                    }
+                });
+
+            } else {
+                $('input, textarea').placeholder();
+            }
+        }
+        /**获取cookie的值，根据cookie的键获取值**/
+    function getCookieValue(name) {
+        //用处理字符串的方式查找到key对应value
+        var name = escape(name);
+        //读cookie属性，这将返回文档的所有cookie 
+        var allcookies = document.cookie;
+        //查找名为name的cookie的开始位置
+        name += "=";
+        var pos = allcookies.indexOf(name);
+        //如果找到了具有该名字的cookie，那么提取并使用它的值
+        //如果pos值为-1则说明搜索"version="失败
+        if (pos != -1) {
+            //cookie值开始的位置
+            var start = pos + name.length;
+            //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+            var end = allcookies.indexOf(";", start);
+            //如果end值为-1说明cookie列表里只有一个cookie
+            if (end == -1) end = allcookies.length;
+            //提取cookie的值
+            var value = allcookies.substring(start, end);
+            //对它解码 
+            return (value);
+        } else { //搜索失败，返回空字符串
+            return "";
+        }
+    }
+    /**根据cookie的键，删除cookie，其实就是设置其失效**/
+    function deleteCookie(name, path) {
+        var name = escape(name);
+        var expires = new Date(0);
+        path = path == "" ? "" : ";path=" + path;
+        document.cookie = name + "=" + ";expires=" + expires.toUTCString() + path;
+    }
+    document.getElementById("username").onkeydown = keyDownSearch;
+    document.getElementById("password").onkeydown = keyDownSearch;
+
+    function keyDownSearch(e) {
+        // 兼容FF和IE和Opera    
+        var theEvent = e || window.event;
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+        if (code == 13) {
+            denglu(); //具体处理函数    
+            return false;
+        }
+        return true;
+    }
+    
+    
+  //设置Cookie
+    function SetCookie(name, value) {
+	  var d = new Date();
+	  d.setTime(d.getTime() + (30*24*60*60*1000));
+	  var expires = "expires=" + d.toGMTString();
+	  document.cookie = name + "=" + value + ";" + expires + ";path=/";
+	  if(value=="cn"){
+		  location.href="?lang=zh_CN";
+	  }else if(value=="jp"){
+		  location.href="?lang=ja_JP";}
+	  else if(value=="en"){
+		  location.href="?lang=en_US";}
+    };
+
+    
+    function check() {
+        if ($("#username").val() == "") {
+            $("#username").tips({
+                side: 2,
+                msg: 'アカウントを入力してください ',
+                bg: '#AE81FF',
+                time: 3
+            });
+            setTimeout(function() {
+                $("#username").focus();
+            }, 100)
+            return false;
+        } else {
+            $("#username").val(jQuery.trim($('#username').val()));
+        }
+
+        if ($("#password").val() == "") {
+            $("#password").tips({
+                side: 2,
+                msg: 'パスワードを入力してください',
+                bg: '#AE81FF',
+                time: 3
+            });
+            $("#password").focus();
+            return false;
+        }
+
+        return true;
+    }
+   
+</script>
+</html>

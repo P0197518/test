@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p07.P0711UserListMapper">
+    <select id="getListByPage"
+        parameterType="com.fujias.business.forms.p07.P0711UserListForm"
+        resultType="com.fujias.business.forms.p07.P0711UserListForm">
+        select
+          users.username
+          , users.createTime
+          , users.createUser
+          , users.updateTime
+          , users.updateUser
+          , users.employeeId
+          , users.gender
+          , users.password
+          , users.name
+          , kbn1.codeName as gendername
+          , UserRoles.roleid AS roleid 
+          , bKbn.codeName AS delFlgText
+          , department = STUFF( 
+            ( 
+                select
+                    ',' + dep.name 
+                from
+                    mdepartment as dep 
+                    left join muserdepartments as userdep 
+                        on dep.depId = userdep.depId 
+                where
+                    dep.delFlg = '0' 
+                    and userdep.userId = users.username for xml path ('')
+            ) 
+            , 1
+            , 1
+            , ''
+        )
+        from
+          musers as users 
+          left join mkbn as kbn1 
+            on kbn1.codeTypeCd = '02' 
+            and kbn1.codeCd = users.gender 
+          left join muserroles as UserRoles 
+            on UserRoles.userId = users.username 
+          <!-- LEFT JOIN ( 
+            select
+              dep.name
+              , userdep.userId 
+            from
+              mdepartment as dep 
+              left join muserdepartments as userdep 
+                on dep.depId = userdep.depId 
+            where
+              dep.delFlg = '0' 
+            GROUP BY
+              dep.name
+              , userdep.userId
+          ) departments 
+            on departments.userId = users.username -->
+          LEFT JOIN mkbn bKbn
+            ON bKbn.codeCd = users.delFlg
+            AND bKbn.codeTypeCd = '08'
+        where
+        users.username != 'admin'
+        <if test="delFlg != null">
+            AND users.delFlg = ${delFlg}
+        </if>
+        <if test="name != null and name != ''">
+            AND users.name like '%${name}%'
+        </if>
+        <if test="employeeId != null and employeeId != ''">
+            AND users.employeeId like '%${employeeId}%'
+        </if>
+        group by
+    users.username
+    , users.createTime
+    , users.createUser
+    , users.updateTime
+    , users.updateUser
+    , users.employeeId
+    , users.gender
+    , users.password
+    , users.name
+    , kbn1.codeName
+    , UserRoles.roleid
+    , bKbn.codeName
+        <if test="pager.sortField != null and pager.sortField != ''">
+                order by ${pager.sortField} ${pager.sortOrder}
+            </if>
+    </select>
+    <select id="getSingleById" parameterType="String"
+        resultType="com.fujias.business.forms.p07.P0711UserListForm">
+        select
+          users.username
+          , users.createTime
+          , users.createUser
+          , users.updateTime
+          , users.updateUser
+          , users.delFlg
+          , users.email
+          , users.employeeId
+          , users.gender
+          , users.password
+          , users.tel
+          , users.name
+          , users.nameEn
+          , users.entranceTime
+          , users.leaveTime
+          , users.birthday
+          , UserRoles.roleid AS roleid
+          , depid = STUFF( 
+            ( 
+                select
+                    ',' + dep.depId 
+                from
+                    mdepartment as dep 
+                    left join muserdepartments as userdep 
+                        on dep.depId = userdep.depId 
+                where
+                    dep.delFlg = '0' 
+                    and userdep.userId = users.username for xml path ('')
+            ) 
+            , 1
+            , 1
+            , ''
+        ) 
+        from
+          musers as users 
+          left join muserroles as UserRoles 
+            on UserRoles.userId = users.username 
+        where users.username=#{username}
+        group by
+    users.username
+    , users.createTime
+    , users.createUser
+    , users.updateTime
+    , users.updateUser
+    , users.delFlg
+    , users.email
+    , users.employeeId
+    , users.gender
+    , users.password
+    , users.tel
+    , users.name
+    , users.nameEn
+    , users.entranceTime
+    , users.leaveTime
+    , users.birthday
+    , UserRoles.roleid
+    </select>
+    <!-- 部门下拉列表 -->
+    <select id="getEmployeeOptions" resultType="com.fujias.common.entity.SelectItem">
+        select
+        id AS value, name AS text
+        from
+        mdepartment
+        where
+        delFlg = '0'
+    </select>
+    
+    <select id="checkUserRoleExist"
+        parameterType="com.fujias.common.db.entity.MUserRoles"
+        resultType="Integer">
+        select count(*)
+        from MUserRoles
+        where
+        userId =
+        #{userId}
+    </select>
+    <update id="updateUserRoles"
+        parameterType="com.fujias.common.db.entity.MUserRoles">
+        update MUserRoles
+        set roleId = #{roleId}
+        where userId = #{userId}
+    </update>
+    <delete id="deleteDepsByUserId"
+        parameterType="String">
+        delete from MUserDepartments
+        where userId = #{userId}
+    </delete>
+    
+    <select id="checkExist" parameterType="com.fujias.business.forms.p07.P0711UserListForm"
+        resultType="Integer">
+        select count(*)
+            from MUsers as users
+        where
+            users.delFlg = '0'
+            <if test="mode == 'create'">
+                AND (users.employeeId = #{employeeId}
+                OR users.username = #{username})
+            </if>
+            <if test="mode == 'update'">
+                AND users.employeeId = #{employeeId}
+                AND users.username != #{username}
+            </if>
+    </select>
+</mapper>

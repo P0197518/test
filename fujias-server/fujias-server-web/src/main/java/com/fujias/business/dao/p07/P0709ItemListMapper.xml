@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.dao.p07.P0709ItemListMapper">
+    <select id="getListByPage" parameterType="com.fujias.business.forms.p07.P0709ItemListForm"
+        resultType="com.fujias.business.forms.p07.P0709ItemListForm">
+        select
+        t0001items.itemName
+        , t0001items.frameName
+        , t0001items.gc
+        , t0001items.dpsKubun
+        , t0001items.itaSheetKubun
+        , t0001items.ringSize
+        , t0001items.guideKubun
+        , t0001items.dpsSize
+        , t0001items.foot
+        from
+        t0001items
+        where
+        t0001items.delflg = '0'
+        <if test="itemName != null and itemName != ''">
+            AND t0001items.itemName like '%${itemName}%'
+        </if>
+        <if test="pager.sortField != null and pager.sortField != ''">
+            order by ${pager.sortField} ${pager.sortOrder}
+        </if>
+    </select>
+    <!-- 部门下拉列表 -->
+    <select id="getDepartment" resultType="com.fujias.common.entity.SelectItem">
+        select
+        depid AS value,
+        name AS text
+        from
+        mdepartment
+        where
+        delflg = '0'
+        and depid not in (
+        select
+        parentid
+        from mdepartment
+        where delflg = '0'
+        )
+        order by depid
+    </select>
+    <select id="getClassification" resultType="com.fujias.common.entity.SelectItem">
+        select
+        codeCd AS value, codeName AS text
+        from
+        mkbn
+        where
+        delFlg = '0'
+        AND
+        mkbn.codeTypeCd = '01'
+    </select>
+    <select id="getReportData" parameterType="com.fujias.business.forms.p07.P0709ItemListForm"
+        resultType="com.fujias.business.forms.p07.P0709ItemListExcleForm">
+
+        SELECT top (50 * ${page}) * FROM ( select row_number()
+        over(order by itemName asc) as rownumber,
+        t0001items.itemName
+        , t0001items.frameName
+        , t0001items.gc
+        , t0001items.dpsKubun
+        , t0001items.itaSheetKubun
+        , t0001items.ringSize
+        , t0001items.guideKubun
+        , t0001items.dpsSize
+        , t0001items.foot
+        from
+        t0001items
+        where
+        t0001items.delflg = '0'
+        <if test="condation.itemName != null and condation.itemName != ''">
+            AND t0001items.itemName like
+            '%${condation.itemName}%'
+        </if>
+
+        ) t WHERE
+        t.rownumber <![CDATA[>]]>
+        50 * (${page}-1)
+        AND t.rownumber <![CDATA[<=]]>
+        50 * ${page}
+        order by t.rownumber ASC
+    </select>
+</mapper>

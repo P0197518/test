@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>计算调整规则设置</title>
+</head>
+
+<body onload="loadfocus()">
+	<div class="edit-page-content" id="main-container">
+		<div id="form1" th:object="${formdata}" style="width: 100%;">
+			<input id="resourcecd" name="resourcecd" type="hidden" value="P0231" /> <input id="id" class="mini-hidden" th:field="*{id}" /> <input id="mode" class="mini-hidden" th:field="*{mode}" />
+			<div class="page-content">
+				<div class="widget-box" id="searchCondation">
+					<h4 class="header blue bolder smaller">生产性设置基本信息</h4>
+					<div class="col-sm-12">
+						<div class="search-item">
+							<label for="departmentId" class="control-label col-sm-5">部门: </label> <input id="departmentId" name="departmentId" class="mini-combobox" th:url="@{/common/getDepList}" ajaxType="post" required="true" th:field="${formdata.departmentId}" showNullItem="true" nullItemText="所有部门" onenter="search()" vtype="maxLength:30" textField="text" valueField="value" maxlength="30" />
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="search-item">
+							<label for="settingType" class="control-label col-sm-5">设置类型: </label> <input id="settingType" name="settingType" class="mini-combobox" th:url="@{/P0124ProductbilitySetting/getSettingType}" ajaxType="post" required="true" th:field="${formdata.settingType}" showNullItem="true" onvaluechanged="backTypeChange" onenter="search()" vtype="maxLength:30" textField="text" valueField="value" maxlength="30" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mini-toolbar">
+				<h4 class="header blue bolder smaller">生产性设置列表</h4>
+				<table style="width: 100%;">
+					<tr>
+						<td style="width: 100%;"><a class="mini-button" iconCls="icon-add" onclick="addRow()" plain="true">新增</a> <span class="separator"></span> <a class="mini-button" iconCls="icon-remove" onclick="removeRow()" plain="true">删除</a></td>
+					</tr>
+				</table>
+				<div id="grid1"th:url="@{/P0124ProductbilitySetting/getSettingList}" class="mini-datagrid" 
+            allowCellEdit="true" idField="id" skipReadOnlyCell="true" allowResize="false" 
+            allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true"sortField="itemName" sortOrder="asc" 
+            >
+					<div property="columns">
+						<div type="checkcolumn"></div>
+
+						<div field="itemName" name="itemName" width="150" sortField="itemName" headerAlign="center" align="center" allowSort="true">
+							品名 <input id="itemName" name="itemName" property="editor" class="mini-textbox" style="height: 25px" required="true" />
+
+						</div>
+						<div field="itemName" name="preName" width="150" sortField="itemName" headerAlign="center" align="center" allowSort="true">
+							工序名 <input id="item1" name="item1" property="editor" class="mini-combobox" style="width: 100%;" valueField="text" textField="text" th:url="@{/P0124ProductbilitySetting/getSettingGrid}" ajaxType="post" allowInput="false" />
+						</div>
+						<div field="settingType" name="settingType" width="100" sortField="settingType" headerAlign="center">
+							设置类型 <input property="editor" class="mini-combobox" style="width: 100%;" valueField="text" textField="text" th:url="@{/P0124ProductbilitySetting/getSettingType}" ajaxType="post" allowInput="false" />
+						</div>
+						<div field="setting" name="setting" width="100" sortField="setting" headerAlign="center" align="left">
+							设置内容 <input property="editor" class="mini-textbox" style="height: 25px" required="true" />
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="text-align: center">
+
+		<a class="mini-button btn btn-info btn-round" onclick="onOk()" type="button"> <i class="ace-icon fa fa-floppy-o bigger-110"></i> 保存
+		</a> &nbsp; &nbsp; <a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button"> <i class="ace-icon fa fa-undo bigger-110"></i> 取消
+		</a>
+	</div>
+	<script type="text/javascript">
+    mini.parse();
+    var grid = mini.get("grid1");
+    var form = new mini.Form("#form1");
+    
+    // 页面加载完成处理
+    $(function() {
+        // 根据页面mode控制页面显示
+        backTypeChange();
+    	addRow();
+
+
+    });
+
+    function search() {
+    	var searchData=form.getData();
+    	grid.load(getPagerInfo("grid1", searchData));
+    }
+
+    grid.on("select",function(e){
+    	var row = grid.getSelected();
+        grid.updateRow(row,{settingType:mini.get("settingType").getText()});
+        e.cancel = true;
+    })
+    function backTypeChange() {
+    	if (mini.get("settingType").value == "0001") {
+        	grid.updateColumn("itemName", {header: "品名"});
+        	grid.hideColumn("preName");
+        	grid.showColumn("itemName");
+        } else if (mini.get("settingType").value == "0002") {
+            grid.updateColumn("itemName", {header: "工序名"});
+            grid.hideColumn("itemName");
+            grid.showColumn("preName");
+        }else {
+            grid.hideColumn("preName");
+            grid.showColumn("itemName");
+        }
+    }
+
+        // 添加一行
+        function addRow() {
+        	var newRow = {
+        			id:""
+        	};
+            grid.addRow(newRow, grid.getData().length);
+        }
+
+        // 删除操作
+        function removeRow() {
+        	var rows = grid.getSelecteds();
+                if (rows.length > 0) {
+                    // 如果为新添加的一行,则直接删除该行
+                    if(rows[0].id == ""){
+                        grid.removeRow (rows[0], true);
+                        return
+                    }
+                    businessMessage.alert("Q00001", null, okDelete);
+                } else {
+                	businessMessage.alert("请选择要操作的数据。");
+                }
+
+        }
+        
+        function okDelete() {
+            var rows = grid.getSelecteds();
+            doAjax("/P0124ProductbilitySetting/delete", rows[0], function(obj) {
+                if (obj.status == "SUCCESS") {
+                	businessMessage.alert(obj.text);
+                    grid.reload();
+                }
+            });
+        }
+
+        // 保存操作
+        function onOk() {
+        	form.validate();
+            if (mini.get("departmentId").getValue() == "") {
+                businessMessage.alert("请选择部门。");
+                return;
+            } else if (mini.get("settingType").getValue() == "") {
+                businessMessage.alert("请选择设置类型。");
+                return;
+            /* } else if (grid.getData().length <= 1) {
+                businessMessage.alert("调整规则列表无设置内容，请确认。");
+                return; */
+            } /* else if (mini.get("itemName").getValue() != "") {
+                businessMessage.alert("设置内容输入的品名不存在，请确认。");
+                return;
+            } */
+            var gridList = grid.getData();
+            var param = {
+                    itemName : gridList[gridList.length-1].itemName,
+                    settingType : gridList[gridList.length-1].settingType,
+
+                };
+            doAjax("/P0124ProductbilitySetting/getSettingExist", param, function(obj) {
+                if (obj.status == "SUCCESS") {
+                    businessMessage.alert("E00046");
+                    
+                } else {
+                	businessMessage.alert("Q00002", null, oksave);
+                }
+            });
+            
+        }
+
+        function oksave() {
+        	var data = form.getData();
+            var departmentForm = form.getData().departmentId;
+            var settingTypeForm = form.getData().settingType;
+            var gridList = grid.getData();
+            var param = {
+                    departmentId : departmentForm,
+                    settingType : settingTypeForm,
+                    settingList : gridList
+                };
+            var accessurl = "";
+            if (mini.get("mode").value == "create") {
+                accessurl = "/P0124ProductbilitySetting/add";
+            } 
+            doAjax(accessurl, param, function(obj) {
+                businessMessage.alert("IC0001", null, function() {
+                    CloseWindow("ok");
+                });
+            });
+        }
+
+        // 初始化时focus
+        function loadfocus() {
+            mini.get("departmentId").focus();
+        }
+    </script>
+</body>
+
+</html>

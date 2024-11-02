@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujias.business.daoerp.P0123ERPMapper">
+<select id="getERPData" parameterType="com.fujias.business.forms.p01.P0123CompareDiffForm"
+        resultType="com.fujias.business.forms.p01.P0123CompareDiffForm">
+SELECT
+    M00IQDFK.itemCD as itemName
+    , ISNULL(sum(T08IOD.iONum),0) AS num
+    , T08IOD.prodInstrNo
+FROM
+    T_08IOBillDetl T08IOD 
+    LEFT JOIN M_00ItemQDFK M00IQDFK 
+        ON M00IQDFK.itemKey = T08IOD.itemKey 
+        AND M00IQDFK.delFlg = 0 
+    INNER JOIN T_08Bill T08B 
+        ON T08B.billNo = T08IOD.billNo 
+        AND T08B.delFlg = 0 
+where
+    T08B.billFlg = 'BI'
+    <if test="txtStartDate != null and txtStartDate != ''">
+            AND T08B.operatorTime <![CDATA[>=]]> #{txtStartDate}
+    </if>
+    <if test="txtEndDate != null and txtEndDate != ''">
+            AND T08B.operatorTime <![CDATA[<=]]> #{txtEndDate}
+    </if>
+    <if test="processCD != null and processCD != ''">
+            AND M00IQDFK.processCD = #{processCD}
+    </if>
+    <if test="itemTypeList != null and itemTypeList !=''">
+            AND M00IQDFK.itemTypeCD in
+            <foreach collection="itemTypeList" item="id" index="index" open="(" close=")" separator=",">
+			  #{id}
+			</foreach>
+    </if>
+    <if test="stockChkGroup != null and stockChkGroup != ''">
+            AND M00IQDFK.StockChkGroup = #{stockChkGroup}
+    </if>
+    <if test="formPartment != null and formPartment != ''">
+            AND T08B.formPartment = #{formPartment}
+    </if>
+    group by M00IQDFK.itemCD,T08IOD.prodInstrNo
+    order by M00IQDFK.itemCD,T08IOD.prodInstrNo
+
+</select>
+<!--DPS,条形锁扣  -->
+<select id="getDpsData" parameterType="com.fujias.business.forms.p01.P0123CompareDiffForm"
+        resultType="com.fujias.business.forms.p01.P0123CompareDiffForm">
+SELECT
+    M00IQDFK.itemCD as itemName
+    , ISNULL(sum(T08IOD.iONum),0) AS num
+    , T08IOD.prodInstrNo
+FROM
+    T_08IOBillDetl T08IOD 
+    LEFT JOIN M_00ItemQDFK M00IQDFK 
+        ON M00IQDFK.itemKey = T08IOD.itemKey 
+        AND M00IQDFK.delFlg = 0 
+    INNER JOIN T_08Bill T08B 
+        ON T08B.billNo = T08IOD.billNo 
+        AND T08B.delFlg = 0 
+where
+    T08B.billFlg = 'BI'
+    <if test="txtStartDate != null and txtStartDate != ''">
+            AND T08B.operatorTime <![CDATA[>=]]> #{txtStartDate}
+    </if>
+    <if test="txtEndDate != null and txtEndDate != ''">
+            AND T08B.operatorTime <![CDATA[<=]]> #{txtEndDate}
+    </if>
+    <if test="processCD != null and processCD != ''">
+            AND M00IQDFK.processCD = #{processCD}
+    </if>
+    <if test="itemTypeList != null and itemTypeList !=''">
+            AND M00IQDFK.itemTypeCD in
+            <foreach collection="itemTypeList" item="id" index="index" open="(" close=")" separator=",">
+              #{id}
+            </foreach>
+    </if>
+    group by M00IQDFK.itemCD,T08IOD.prodInstrNo
+    order by M00IQDFK.itemCD,T08IOD.prodInstrNo
+</select>
+</mapper>
