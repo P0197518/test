@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>在库列表</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+                        <div class="widget-header">
+                            <h5 class="smaller">检索条件</h5>
+                        </div>
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">图纸编号:</label>
+                                    <input id="drawingNo" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">品番:</label>
+                                    <input id="productNo" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">物料区分:</label>
+                                    <input id="materialType" class="mini-combobox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">物料大分类:</label>
+                                    <input id="bigClassify" class="mini-combobox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">物料小分类:</label>
+                                    <input id="smallClassify" class="mini-combobox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                    <i class="ace-icon fa fa-search">查 询</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+        </a>
+    </div>
+    <!-- 画面列表 -->
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="t0020users.username" sortOrder="asc">
+            <div property="columns">
+                <div field="materialType" width="80" headerAlign="center" sortField="zaiKuShu" align="center">物料区分</div>
+                <div field="smallClassify" width="80" headerAlign="center" sortField="zaiKuShu" align="center">物料小分类</div>
+                <div field="materialName" width="80" headerAlign="center" sortField="dingdanqufen" align="center">品名</div>
+                <div field="texture" width="70" headerAlign="center" sortField="shangpinming" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="dingdanleixing" align="center">图纸编号</div>
+                <div field="productNo" width="80" headerAlign="center" sortField="dingdanleixing" align="center">品番</div>
+                <div field="count" width="80" headerAlign="center" sortField="zaiKuShu" align="right" datatype="currency">在库数</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        var gridData = new Array();
+        for (var i = 0; i < 20; i++) {
+            gridData.push({
+
+                productNo: "E-2861-CG25",
+                materialName: "喷嘴 L2.8",
+                drawingNo: "E-2861",
+                texture: "CG25",
+                count: "2100",
+
+                materialType: "完成品",
+                smallClassify: "合金B"
+
+            });
+        }
+        grid.setData(gridData);
+    </script>
+</body>
+
+</html>

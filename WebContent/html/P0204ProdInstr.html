@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>制造指令书查看</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <!-- #section:basics/content.breadcrumbs -->
+                <!-- /section:basics/content.breadcrumbs -->
+                <div class="page-content">
+                    <div class="widget-box">
+
+                        <!-- /.page-header -->
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									订单号:
+									</label>
+                                    <input id="orderNumber" name="orderNumber" class="mini-textbox" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									制造指令号:
+									</label>
+                                    <input id="productNumber" name="productNumber" class="mini-textbox" vtype="maxLength:30" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">客户:</label>
+                                    <input id="orderNumber" name="supplier" style="width: 50px;" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                    <a class="mini-button btn btn-info btn-round " type="button" onclick="search2()">
+                                        <i class="ace-icon fa fa-search"> </i>
+                                    </a>
+                                    <input name="supplierName" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" required="true" requiredErrorText="不能为空" onenter="onOk()" />
+
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									图纸编号:
+									</label>
+                                    <input id="atlasNumber" name="atlasNumber" class="mini-textbox" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									品番:
+									</label>
+                                    <input id="atlasNumber" name="atlasNumber" class="mini-textbox" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">发行日:</label>
+                                    <input id="dateFeom" name="dateFeom" value="" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="dateTo" name="dateTo" value="" class="mini-datepicker" datePickerFrom="dateFeom" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">指示状态:</label>
+                                    <input id="leixing" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"生产未开始"},{value:"0002",text:"生产中"},{value:"0003",text:"生产完成"}]' />
+                                </div>
+
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()" style="margin-left:20px;">
+                                    <i class="ace-icon fa fa-search">
+                                        </i> 查询
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a id="edit" class="mini-button btn btn-success btn-round" type="button" onclick="edit(productNumber,2)">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 编辑
+                    </a>
+                    <a class="mini-button btn btn-danger btn-round" onclick="remove()">
+                        <i class="ace-icon fa fa-times-circle"> </i> 取消
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="faxing()">
+                        <i class="ace-icon fa fa-print"></i> 发行
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="addSubProd()">
+                        <i class="ace-icon fa fa-pencil-square-o"></i> 添加子指令
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="dailyRecord()">
+                        <i class="ace-icon fa fa-pencil-square-o"></i> 日报录入
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="actualRecord()">
+                        <i class="ace-icon fa fa-pencil-square-o"></i> 制造实际录入
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="biaoqian()">
+                        <i class="ace-icon fa fa-print"></i> 包装标签打印
+                    </a>
+                    <a class="mini-button btn btn-success btn-round">
+                        <i class="ace-icon fa fa-download"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" onLoad="onLoad">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="prodNo" width="80" headerAlign="center" allowSort="false" align="center">制造指令号</div>
+                <div field="orderNo" width="100" headerAlign="center" allowSort="false" align="center">订单号</div>
+                <div field="orderDeliveryDay" width="80" headerAlign="center" allowSort="false" align="center">青岛出货日</div>
+                <div field="customDeliveryDay" width="80" headerAlign="center" allowSort="false" align="center"> 客户交期</div>
+                <div field="contractDeliveryDay" width="80" headerAlign="center" allowSort="false" align="center">回答交期</div>
+                <div field="materialName" width="150" headerAlign="center" sortField="orderoutcount" allowSort="false" align="center">品名</div>
+                <div field="texture" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">图纸编号</div>
+                <div field="productNo" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">品番</div>
+                <div field="orderCount" width="60" headerAlign="center" allowSort="false" datatype="currenc y" align="right">订单数</div>
+                <div field="planCount" width="60" headerAlign="center" allowSort="false" datatype="currency" align="right">安排数</div>
+                <div field="requireCount" width="60" headerAlign="center" allowSort="false" datatype="currency" align="right">必要数</div>
+                <div field="materialStatus" width="80" headerAlign="center" allowSort="false" align="center">原料状况</div>
+                <div field="prodCount" width="60" headerAlign="center" allowSort="false" datatype="currency" align="right">已生产数</div>
+                <div field="remainCount" width="60" headerAlign="center" allowSort="false" datatype="currency" align="right">生产残数</div>
+                <div field="badCount" width="60" headerAlign="center" allowSort="false" datatype="currency" align="right">不良数量</div>
+                <div field="weldPlanDay" width="80" headerAlign="center" allowSort="false" align="center">保护焊计划日</div>
+                <div field="weldDay" width="80" headerAlign="center" allowSort="false" align="center">保护焊完成日</div>
+                <div field="silverPlanDay" width="80" headerAlign="center" allowSort="false" align="center">银焊计划日</div>
+                <div field="silverDay" width="80" headerAlign="center" allowSort="false" align="center">银焊完成日</div>
+                <div field="customName" width="120" headerAlign="center" allowSort="false" align="left">客户名称</div>
+                <div field="address" width="180" headerAlign="center" allowSort="false" align="left">收货方</div>
+                <div field="processStatus" width="80" headerAlign="center" allowSort="false" align="center">工序状态</div>
+                <div field="status" width="80" headerAlign="center" allowSort="false" align="center">制造指令状态</div>
+                <div field="lotNo" width="100" headerAlign="center" allowSort="false" align="center">LOT号</div>
+                <div field="createUser" width="80" headerAlign="center" allowSort="false" align="center">发行人</div>
+                <div field="createDay" width="80" headerAlign="center" allowSort="false" align="center">发行日</div>
+                <div field="remark" width="120" headerAlign="center" allowSort="false" align="left">备注</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+        var gridData = new Array();
+        for (var i = 1; i < 15; i++) {
+            gridData.push({
+                orderNo: "<a id='meisai' onclick='dingDan();' >P993152195</a>",
+                prodNo: "<a id='meisai' onclick='actualRecord();' >QH-J19243</a>",
+                lotNo: "Lot-0001",
+                orderDeliveryDay: '2020/01/01',
+                customDeliveryDay: '2020/01/10',
+                contractDeliveryDay: '2020/01/01',
+                customName: "Haier",
+                address: "Haier(青岛)",
+                materialName: "CH-40KIW-III-B",
+                texture: "TE80",
+                drawingNo: "E-3087",
+                productNo: "E-3087-TE80",
+
+                orderCount: "50",
+                planCount: "50",
+                requireCount: "50",
+                materialStatus: (i > 10 ? "2020/02/30" : "2020/01/30"),
+                remainCount: "50",
+                prodCount: "0",
+                weldPlanDay: '2020/01/01',
+                weldDay: '2020/01/01',
+                silverPlanDay: '2020/01/01',
+                silverDay: '2020/01/01',
+                processStatus: "保护焊",
+                status: "未开始",
+                createUser: "张三",
+                createDay: "2019/01/05",
+                remark: "产品要求"
+            });
+        }
+        grid.setData(gridData);
+
+        grid.on("drawcell", function(e) {
+            if (e.column.field == "materialStatus") {
+
+                e.cellStyle = "text-align:center";
+                e.cellHtml = '<a class="New_Button" href="javascript:materialStatus(' +
+                    e.record.prodNo +
+                    ')">' +
+                    '<i class="ace-icon fa fa-bar-chart-o" style="margin-left: 5px;">' +
+                    '</a>';
+            }
+        });
+
+
+        function materialStatus() {
+            mini.open({
+                title: "原料状况查看",
+                url: "P0206ProdMaterialStatusView.html",
+                width: 850,
+                height: 550,
+                onload: function() {},
+                ondestroy: function(action) {
+                    //grid.reload();
+                }
+            });
+        }
+
+        // 指令书查询
+        function search() {}
+
+        // 指令书编辑
+        function edit() {
+            var popWindow = {
+                url: "P0201ProdEdit.html",
+                title: "制造指令书",
+                width: 1100,
+                height: 650,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function dingDan() {
+            var popWindow = {
+                url: "P0101OrderEdit.html",
+                title: "订单查看",
+                width: 1100,
+                height: 650,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function actualRecord(productNumber) {
+            var popWindow = {
+                url: "P0301ProdResultEdit.html",
+                title: "制造实际",
+                width: 1100,
+                height: 650,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function dailyRecord(productNumber) {
+            var popWindow = {
+                url: "P0301ProdDailyResultEdit.html",
+                title: "制造实际",
+                width: 1000,
+                height: 550,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+
+        // 标签打印
+        function biaoqian() {
+
+            var popWindow = {
+                url: "P0306PackageLabelEditView.html",
+                title: "标签打印",
+                width: 550,
+                height: 400,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+
+        }
+    </script>
+</body>
+
+</html>

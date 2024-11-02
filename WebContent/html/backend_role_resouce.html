@@ -1,0 +1,163 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+    <%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+	pageContext.setAttribute("base", basePath);
+	String id = (String)request.getAttribute("id");
+%>
+        <%@ taglib uri="/WEB-INF/tld/security.tld" prefix="sec"%>
+            <%@ taglib uri="/struts-tags" prefix="s"%>
+
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+                <html xmlns="http://www.w3.org/1999/xhtml">
+
+                <head>
+                    <title></title>
+                    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+
+                    <script src="../boot.js" type="text/javascript"></script>
+
+
+                    <style type="text/css">
+                        html,
+                        body {
+                            padding: 0;
+                            margin: 0;
+                            border: 0;
+                            width: 100%;
+                            height: 100%;
+                            overflow: hidden;
+                        }
+                    </style>
+                </head>
+
+                <body>
+
+                    <div class="mini-toolbar" style="text-align:center;line-height:30px;" borderStyle="border-left:0;border-top:0;border-right:0;">
+
+                        <label>角色名称：</label>
+                        <%if(id.equals("null")){ %>
+
+                            <input id="name" class="mini-textbox" vtype="maxLength:30" style="width:150px;" value="${backendRole.name}" />
+                            <%}else{ %>
+
+                                <input id="name" class="mini-textbox" style="width:150px;" vtype="maxLength:30" value="${backendRole.name}" enabled="false" />
+
+                                <%} %>
+
+                                    <label>描述：</label>
+                                    <input id="desc" class="mini-textbox" style="width:150px;" vtype="maxLength:40" value="${backendRole.description}" />
+                    </div>
+                    <div class="mini-fit">
+                        <ul id="tree1" class="mini-tree" style="width:100%;height:100%;" showTreeIcon="true" textField="text" idField="id" parentField="pid" resultAsTree="false" showCheckBox="true" checkRecursive="false" autoCheckParent="true" expandOnLoad="false" allowSelect="false"
+                            enableHotTrack="false">
+                        </ul>
+
+
+                    </div>
+                    <div class="mini-toolbar" style="text-align:center;padding-top:8px;padding-bottom:8px;" borderStyle="border-left:0;border-bottom:0;border-right:0;">
+                        <a class="mini-button" style="width:60px;" onclick="onOk()">确定</a>
+                        <span style="display:inline-block;width:25px;"></span>
+                        <a class="mini-button" style="width:60px;" onclick="onCancel()">取消</a>
+                    </div>
+
+                </body>
+
+                </html>
+                <script type="text/javascript">
+                    //enter快捷键
+                    $(function() {
+                        $(document).keydown(function(e) {
+                            if (e.keyCode == 13) {
+                                onOk();
+                            }
+                        });
+                    });
+                    mini.parse();
+
+                    var tree = mini.get("tree1");
+
+
+                    tree.load("backend_role!resource.action?id=<%=id%>");
+
+                    function GetCheckedNodes() {
+                        var nodes = tree.getCheckedNodes();
+                        return nodes;
+                    }
+
+                    function GetData() {
+                        var nodes = tree.getCheckedNodes();
+
+                        var ids = [],
+                            texts = [];
+                        for (var i = 0, l = nodes.length; i < l; i++) {
+                            var node = nodes[i];
+                            var part = tree.getAncestors(node)
+                            var a = "true";
+                            ids.push(node.id);
+                            texts.push(node.text);
+                            for (var j = 0; j < part.length; j++) {
+
+                                for (var q = 0; q < ids.length; q++) {
+                                    if (ids[q] == part[j].id)
+                                        a = "false";
+                                }
+                                if (a == "true") {
+                                    ids.push(part[j].id);
+
+                                }
+                            }
+
+
+                        }
+
+                        var data = {};
+                        data.id = ids.join(",");
+                        data.text = texts.join(",");
+                        data.name = mini.get("name").value;
+                        data.desc = mini.get("desc").value;
+                        return data;
+                    }
+
+
+                    function inarray(arry, value) {
+                        for (var i = 0; i < arry.length; i++) {
+                            if (arry[i] == value)
+                                return false;
+                        }
+
+                        return "true";
+                    }
+
+                    function search() {
+                        var key = mini.get("key").getValue();
+                        //grid.load({ key: key });
+                    }
+
+                    function onKeyEnter(e) {
+                        search();
+                    }
+                    //////////////////////////////////
+                    function CloseWindow(action) {
+                        if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+                        else window.close();
+                    }
+
+                    function onOk() {
+                        var node = tree.getSelectedNode();
+                        if (node && tree.isLeaf(node) == false) {
+                            alert("不能选中父节点");
+                            return;
+                        }
+
+                        CloseWindow("ok");
+                    }
+
+                    function onCancel() {
+                        CloseWindow("cancel");
+                    }
+                </script>

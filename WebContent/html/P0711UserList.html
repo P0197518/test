@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>用户列表</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <!-- #section:basics/content.breadcrumbs -->
+
+                <!-- /section:basics/content.breadcrumbs -->
+                <div class="page-content">
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0"> 用户编号: </label>
+                                    <input id="name" name="name" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0"> 用户名称: </label>
+                                    <input id="name" name="name" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0"> 部门: </label>
+                                    <input id="name" name="name" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0"> 角色: </label>
+                                    <input id="name" name="name" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0"> 删除状态 </label>
+                                    <input name="delflg" id="delflg" class="mini-combobox" value="false" valueField="id" textField="text" allowInput="false" ajaxType="post" data='[{"id":"","text":"全部"},{"id":true,"text":"已删除"},{"id":false,"text":"未删除"}]' ; />
+                                </div>
+
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()">
+                                    <i class="ace-icon fa fa-search"> </i> 查 询
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+        </a>
+    </div>
+    <!-- /.main-container -->
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a name="btnAdd" class="mini-button btn btn-warning btn-round" onclick="add()" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110"> </i> 添加
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="edit()">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 编辑
+                    </a>
+                    <a class="mini-button btn btn-danger btn-round" onclick="removeItem()">
+                        <i class="ace-icon fa fa-times-circle"> </i> 删除
+                    </a>
+                    <a class="mini-button btn btn-pink btn-round" onclick="onRecover()" type="button">
+                        <i class="fa fa-undo" aria-hidden="true"></i> 恢复
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false"  allowCellSelect="true" multiSelect="false"  editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="t0020users.username" sortOrder="asc">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="stuffcode" name="stuffcode" width="120" headerAlign="center" align="center">用户编号</div>
+                <div field="name" name="name" width="120" headerAlign="center">用户名称</div>
+                <div field="department" name="department" width="120" headerAlign="center">所属部门</div>
+                <div field="type" name="type" width="120" headerAlign="center" align="center">角色</div>
+                <div field="tel" name="tel" width="120" headerAlign="center" align="center">联系电话</div>
+                <div field="mail" name="mail" width="120" headerAlign="center">Mail</div>
+                <div field="gender" name="gender" width="120" headerAlign="center" align="center" renderer="onGenderRender">性別</div>
+                <div field="birthday" name="birthday" width="120" headerAlign="center" dateFormat="yyyy/MM/dd" align="center">生年月日</div>
+                <div field="joiningdate" name="joiningdate" width="120" headerAlign="center" dateFormat="yyyy/MM/dd" align="center">入司时间</div>
+                <div field="leavingdate" name="leavingdate" width="120" headerAlign="center" dateFormat="yyyy/MM/dd" align="center">离司时间</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        function onGenderRender(e) {
+            if (e.value == "0") {
+                return "男";
+            } else if (e.value == "1") {
+                return "女";
+            }
+        }
+
+        function onDateRender(e) {
+            if (e.value) {
+                var date = new Date(e.value)
+                if (date) {
+                    return mini.formatDate(date, "yyyy/MM/dd");
+                }
+            }
+        }
+
+        //grid.load();
+        var gridData = new Array();
+        gridData.push({
+            "stuffcode": "H0001",
+            "name": "张三",
+            "shortname": "",
+            "nameen": "",
+            "type": "采购人员",
+            "postalcode": "",
+            "address": "",
+            "tel": "",
+            "mail": "",
+            "birthday": "",
+            "joiningdate": "2011/03",
+            "leavingdate": "",
+            "password": "",
+            "gender": "",
+            "department": ""
+        }, {
+            "stuffcode": "H0002",
+            "name": "李四",
+            "shortname": "",
+            "nameen": "",
+            "type": "仓库管理",
+            "postalcode": "",
+            "address": "",
+            "tel": "",
+            "mail": "",
+            "birthday": "",
+            "joiningdate": "2011/03",
+            "leavingdate": "",
+            "password": "",
+            "gender": "",
+            "department": ""
+        }, {
+            "stuffcode": "H0003",
+            "name": "王五",
+            "shortname": "",
+            "nameen": "",
+            "type": "财务人员",
+            "postalcode": "",
+            "address": "",
+            "tel": "",
+            "mail": "",
+            "birthday": "",
+            "joiningdate": "2014/03",
+            "leavingdate": "",
+            "password": "",
+            "gender": "",
+            "department": ""
+        }, {
+            "stuffcode": "H0004",
+            "name": "陈六",
+            "shortname": "",
+            "nameen": "",
+            "type": "技术人员",
+            "postalcode": "",
+            "address": "",
+            "tel": "",
+            "mail": "",
+            "birthday": "",
+            "joiningdate": "2015/04",
+            "leavingdate": "",
+            "password": "",
+            "gender": "",
+            "department": ""
+        });
+        grid.setData(gridData);
+
+        // 查询操作
+        /*function search() {
+        	
+        	var searchcondation = getJsonObject("searchCondation");
+        	
+        	grid.load(getPagerInfo("grid1", searchcondation));
+        }
+
+        search();
+        */
+
+        // 添加操作
+        /*function add() {
+        	var popupParam = openCommonPopupParam("/S9040Users/indexEdit",
+        			"新增用户");
+        	popupParam.ondestroy = function(action) {
+        		if (action == "ok") {
+        			grid.reload();
+        		}
+        	};
+        	mini.open(popupParam);
+        }*/
+
+        function add() {
+            var popWindow = {
+                url: "P0712UserEdit.html",
+                title: "用户添加",
+                width: 1100,
+                height: 600,
+                onload: function() {},
+                ondestroy: function(action) {
+                    //grid.reload();
+                }
+            };
+            mini.open(popWindow);
+        }
+
+        function addData(data) {
+            var newRow = {
+                stuffcode: data.stuffcode,
+                name: data.name,
+                nameen: data.nameen,
+                type: data.type,
+                tel: data.tel,
+                mail: data.mail,
+                birthday: data.birthday,
+                joiningdate: data.joiningdate,
+                leavingdate: data.leavingdate,
+                password: data.password,
+                gender: data.gender,
+                department: data.department
+            };
+            grid.addRow(newRow, 0)
+        }
+
+        // 编辑操作
+        /*function edit() {
+        	var rows = grid.getSelecteds();
+        	if (rows.length == 1) {
+        		var row = grid.getSelected();
+
+        		var popupParam = openCommonPopupParam(
+        				"/S9040Users/indexEdit?id=" + row.id, "编辑用户");
+        		popupParam.ondestroy = function(action) {
+        			if (action == "ok") {
+        				grid.reload();
+        			}
+        		};
+        		mini.open(popupParam);
+        	} else {
+        		mini.alert(businessMessage.get("E0006"));
+        	}
+        }*/
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+                mini.open({
+                    url: "P0712UserEdit.html",
+                    title: "用户编辑",
+                    width: 1100,
+                    height: 600,
+                    onload: function() {
+                        var iframe = this.getIFrameEl();
+                        var data = {
+                            stuffcode: row.stuffcode,
+                            name: row.name,
+                            nameen: row.nameen,
+                            type: row.type,
+                            tel: row.tel,
+                            mail: row.mail,
+                            birthday: row.birthday,
+                            joiningdate: row.joiningdate,
+                            leavingdate: row.leavingdate,
+                            password: row.password,
+                            gender: row.gender,
+                            department: row.department,
+                            mode: 1
+                        };
+                        iframe.contentWindow.SetData(data);
+                    },
+                    ondestroy: function(action) {
+                        //grid.reload();
+                    }
+                });
+            } else {
+                businessMessage.alert('E00002');
+            }
+        }
+
+        function saveData(data) {
+            var newRow = {
+                stuffcode: data.stuffcode,
+                name: data.name,
+                nameen: data.nameen,
+                type: data.type,
+                tel: data.tel,
+                mail: data.mail,
+                birthday: data.birthday,
+                joiningdate: data.joiningdate,
+                leavingdate: data.leavingdate,
+                password: data.password,
+                gender: data.gender,
+                department: data.department
+            };
+
+            grid.updateRow(grid.getSelected(), newRow);
+        }
+
+        // 删除操作
+        /*function removeItem() {
+        	var rows = grid.getSelecteds();
+        	if (rows.length > 0) {
+        		businessMessage.alert("Q0001", null, function() {
+        			doAjax("/S9040Users/delete", rows[0], function(obj) {
+        				if (obj.status == "SUCCESS") {
+        					businessMessage.alert(obj.text);
+        					grid.reload();
+        				} else {
+        					businessMessage.alert(obj.text);
+        				}
+        			});
+        		});
+        	} else {
+        		businessMessage.aert("E0005")
+        	}
+        }*/
+        function removeItem() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                /*businessMessage.alert("Q0001", null, function() {
+                	doAjax("/S9906Departments/delete", rows[0], function(obj) {
+                		if (obj.status == "SUCCESS") {
+                			businessMessage.alert(obj.text);
+                			grid.reload();
+                		} else {
+                			businessMessage.alert(obj.text);
+                		}
+                	});
+                });*/
+                grid.removeRows(rows);
+                mini.alert("删除成功！");
+            } else {
+                businessMessage.alert('E00002');
+            }
+        }
+
+        // 密码重置
+        /* function resetpass() {
+        	var rows = grid.getSelecteds();
+        	if (rows.length > 0) {
+        		mini.confirm("确定要重置选择用户的密码吗?", "确定?", function(action) {
+        			if (action == "ok") {
+        				var ids = [];
+        				for (var i = 0, l = rows.length; i < l; i++) {
+        					var r = rows[i];
+        					ids.push(r.id);
+        				}
+        				var id = ids.join(',');
+        				doAjaxBackJson(
+        						"${pageContext.request.contextPath}/y02/y0211_user!resetpass.action?id="
+        								+ id, null, function(obj) {
+        							if (obj.status == "SUCCESS") {
+        								businessMessage.alert(obj.message);
+        								grid.reload();
+        							} else {
+        								businessMessage.alert(obj.message);
+        							}
+        						});
+        			}
+        		});
+        	} else {
+        		mini.alert(businessMessage.get("E0006"));
+        	}
+        } */
+
+        function resetpass() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                /*businessMessage.alert("Q0001", null, function() {
+                	doAjax("/S9906Departments/delete", rows[0], function(obj) {
+                		if (obj.status == "SUCCESS") {
+                			businessMessage.alert(obj.text);
+                			grid.reload();
+                		} else {
+                			businessMessage.alert(obj.text);
+                		}
+                	});
+                });*/
+                mini.alert("恢复成功");
+            } else {
+                businessMessage.alert('E00002');
+            }
+        }
+
+        function onRecover() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                /*businessMessage.alert("Q0001", null, function() {
+                	doAjax("/S9906Departments/delete", rows[0], function(obj) {
+                		if (obj.status == "SUCCESS") {
+                			businessMessage.alert(obj.text);
+                			grid.reload();
+                		} else {
+                			businessMessage.alert(obj.text);   
+                		}
+                	});
+                });*/
+                businessMessage.alert('I00003');
+            } else {
+                businessMessage.alert('E00002');
+            }
+        }
+    </script>
+</body>
+
+</html>

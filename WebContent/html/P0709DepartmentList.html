@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>部门列表</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+
+    <div class="mini-toolbar" style="/* border-bottom:0; */padding:0px;border-top:0;margin-top:5px;margin-bottom:5px;">
+        <table style="width:100%;">
+            <tr>
+                <td style="width:100%;">
+                    <a class="mini-button btn btn-warning btn-round" onclick="add()" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110"></i>添加
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="edit()">
+                        <i class="ace-icon fa fa-pencil-square-o"></i>编辑
+                    </a>
+                    <a class="mini-button btn btn-danger btn-round" onclick="removeItem()">
+                        <i class="ace-icon fa fa-times-circle"></i>删除
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="mini-fit">
+        <div id="grid" class="mini-treegrid" style="width:100%;height:100%;" showTreeIcon="true" treeColumn="name" idField="depid" parentField="parentid" resultAsTree="false" allowResize="false" expandOnLoad="true" ()">
+            <div property="columns">
+                <div type="checkcolumn">选择</div>
+                <div field="depid" name="depno" width="50" headerAlign="center" align="center">部门编号</div>
+                <div field="name" name="name" width="200" headerAlign="center">部门名</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+
+        var grid = mini.get("grid");
+
+        //grid.load();
+        var gridData = new Array();
+        gridData.push({
+                "name": "経営管理部",
+                "depid": "100",
+                "parentid": "",
+                "sortorder": "1"
+            }, {
+                "name": "財務",
+                "depid": "101",
+                "parentid": "100",
+                "sortorder": "2"
+            }, {
+                "name": "人事/総務",
+                "depid": "102",
+                "parentid": "100",
+                "sortorder": "3"
+            },
+
+            {
+                "name": "営業本部",
+                "depid": "200",
+                "parentid": "",
+                "sortorder": "4"
+            }, {
+                "name": "営業一部",
+                "depid": "201",
+                "parentid": "200",
+                "sortorder": "5"
+            }, {
+                "name": "営業二部",
+                "depid": "202",
+                "parentid": "200",
+                "sortorder": "6"
+            }, {
+                "name": "輸入事業部",
+                "depid": "203",
+                "parentid": "200",
+                "sortorder": "7"
+            },
+
+            {
+                "name": "产品部",
+                "depid": "300",
+                "parentid": "",
+                "sortorder": "8"
+            },
+
+            {
+                "name": "物流部",
+                "depid": "400",
+                "parentid": "",
+                "sortorder": "9"
+            }
+        );
+        grid.loadList(gridData, "depid", "parentid");
+
+        //接收子画面添加画面传递的数据
+        function addData(data) {
+            var newNode = {
+                depid: data.depid,
+                name: data.name,
+                parentid: data.parentid,
+                sortorder: data.sortorder
+            };
+            //查找到节点
+            var nodes = grid.findNodes(function(node) {
+                if (node.depid == data.parentid) {
+                    return true;
+                }
+            });
+            var firstnode = nodes[0];
+            grid.addNode(newNode, 0, firstnode);
+        }
+
+        //接收子画面添加画面传递的数据
+        function saveData(data) {
+            var newNode = {
+                depid: data.depid,
+                name: data.name,
+                parentid: data.parentid,
+                sortorder: data.sortorder
+            };
+            grid.updateNode(grid.getSelectedNode(), newNode);
+
+            var nodes = grid.findNodes(function(node) {
+                if (node.depid == data.parentid) {
+                    return true;
+                }
+            });
+            var firstnode = nodes[0];
+            grid.moveNode(grid.getSelectedNode(), firstnode, "add");
+        }
+
+        // 添加操作
+        /*function add() {
+            var popupParam = openCommonPopupParam("/S9906Departments/indexEdit",
+                    "新增用户");
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {
+                    grid.reload();
+                }
+            };
+            mini.open(popupParam);
+        }*/
+
+        var popWindow = {
+            url: "P0710DepartmentEdit.html",
+            title: "部门编辑",
+            width: 460,
+            height: 400,
+            onload: function() {},
+            ondestroy: function(action) {
+                //grid.reload();
+            }
+        };
+
+        function add() {
+            mini.open(popWindow);
+        }
+
+        // 编辑操作
+        /*function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+
+                var popupParam = openCommonPopupParam(
+                        "/S9906Departments/indexEdit?id=" + row.id, "编辑用户");
+                popupParam.ondestroy = function(action) {
+                    if (action == "ok") {
+                        grid.reload();
+                    }
+                };
+                mini.open(popupParam);
+            } else {
+                mini.alert(businessMessage.get("E0006"));
+            }
+        }*/
+
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+                mini.open({
+                    url: "P0710DepartmentEdit.html",
+                    title: "部门编辑",
+                    width: 460,
+                    height: 400,
+                    onload: function() {
+                        var iframe = this.getIFrameEl();
+                        var data = {
+                            action: "edit",
+                            depid: row.depid,
+                            name: row.name,
+                            parentid: row.parentid,
+                            sortorder: row.sortorder,
+                            mode: 1
+                        };
+                        iframe.contentWindow.SetData(data);
+                    },
+                    ondestroy: function(action) {
+                        //grid.reload();
+                    }
+                });
+            } else {
+                mini.alert("请选择一条记录");
+            }
+        }
+
+        // 删除操作
+        function removeItem() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                if (grid.hasChildren(grid.getSelectedNode())) {
+                    mini.alert("该部门有子部门，不能删除");
+                } else {
+                    /*businessMessage.alert("Q0001", null, function() {
+                        doAjax("/S9906Departments/delete", rows[0], function(obj) {
+                            if (obj.status == "SUCCESS") {
+                                businessMessage.alert(obj.text);
+                                grid.reload();
+                            } else {
+                                businessMessage.alert(obj.text);
+                            }
+                        });
+                    });*/
+                    grid.removeNodes(rows);
+                    mini.alert("删除成功");
+                }
+            } else {
+                mini.alert("请选择一条记录")
+            }
+        }
+    </script>
+</body>
+
+</html>

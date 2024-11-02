@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>采购订单创建和修改</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="edit-page-content">
+        <div id="form1" th:object="${formdata}" class="form-horizontal" style="width: 100%; min-width: 800px;">
+            <input id="id" class="mini-hidden" th:field="*{id}" />
+            <input id="mode" class="mini-hidden" th:field="*{mode}" />
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+                        <h4 class="header blue bolder smaller">基本信息</h4>
+                        <div class="vspace-12-sm"></div>
+                        <div class="space-4"></div>
+                        <div class="form-group">
+                            <label class="col-sm-0 control-label no-padding-right" for="form-field-username">供应商:</label>
+                            <div class="col-sm-4">
+                                <input id="supplierNo" class="mini-textbox" style="width: 50px;" vtype="half:40" maxlength=40 required="true" />
+                                <a class="mini-button btn btn-info btn-round" type="button" onclick="customChoose()" onenter="onOk()" />
+                                <i class="ace-icon fa fa-search"> </i>
+                                </a>
+                                <input name="supplierName" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" required="true" requiredErrorText="不能为空" onenter="onOk()" />
+
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-0 control-label no-padding-right" for="form-field-username">下单人:</label>
+                            <div class="col-sm-3">
+                                <input id="productDate" enabled="false" class="mini-textbox" required="true" />
+                            </div>
+                            <label class="col-sm-0 control-label no-padding-right" for="form-field-username">下单日期:</label>
+                            <div class="col-sm-3">
+                                <input id="orderdate" class="mini-datepicker" required="true" />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+
+                            <label class="col-sm-0 control-label no-padding-right" for="form-field-username">支付条件:</label>
+                            <div class="col-sm-3">
+                                <input id="productDate" class="mini-textbox" required="true" />
+                            </div>
+
+                        </div>
+                        <h4 class="header blue bolder smaller">产品列表</h4>
+                        <div class="vspace-12-sm"></div>
+                        <div class="space-4"></div>
+                        <div class="">
+                            <div class="mini-toolbar">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td style="width:100%;">
+                                            <div class="search-item">
+                                                <label for="name" class="control-label col-sm-0">指令书号:</label>
+                                                <input id="prodNo" name="prodNo" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                            </div>
+
+                                            <div class="search-item">
+                                                <label for="name" class="control-label col-sm-0">原料图号:</label>
+                                                <input id="mingChen" name="mingChen" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                            </div>
+
+                                            <div class="search-item">
+                                                <label for="name" class="control-label col-sm-0">大分类:</label>
+                                                <input id="leixing" class="mini-combobox" textField="text" valueField="value" data='[{value:"0001",text:"钢柄"},{value:"0002",text:"合金"}]' />
+                                            </div>
+                                            <div class="search-item">
+                                                <label for="name" class="control-label col-sm-0">小分类:</label>
+                                                <input id="leixing" class="mini-combobox" textField="text" valueField="value" data='[{value:"0001",text:"A钢柄"},{value:"0002",text:"B钢柄"},{value:"0003",text:"C钢柄"}]' />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div id="grid1" class="mini-datagrid" idField="id" multiSelect="true" skipReadOnlyCell="true" resultAsData="true" showPager="false" allowCellEdit="true" allowCellSelect="true" oncellcommitedit="onCellCommitEdit">
+                                <div property="columns">
+                                    <div type="checkcolumn"></div>
+                                    <div field="prodNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">指令书号</div>
+                                    <div field="pDrawingNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">图纸编号</div>
+                                    <div field="materialName" width="100" headerAlign="center" sortField="zhiZaoFanHao" align="center">原料品名</div>
+                                    <div field="texture" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">原料材质</div>
+                                    <div field="drawingNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">原料图纸编号</div>
+                                    <div field="requireCount" width="80" headerAlign="center" sortField="zaiKuShu" datatype="currency" align="right">生产需要数</div>
+                                    <div field="useStockCount" width="80" headerAlign="center" sortField="zaiKuShu" datatype="currency" align="right">使用库存数</div>
+                                    <div field="buyCount" width="80" headerAlign="center" allowSort="false" align="right">应该采购数</div>
+                                </div>
+                            </div>
+                            <div class="mini-toolbar">
+
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td style="width:100%;">
+                                            <a class="mini-button" iconCls="icon-addnew" onclick="addAll()" plain="true"></i>加入采购</a>
+                                            <span class="separator"></span>
+                                            <a class="mini-button" iconCls="icon-add" onclick="addRow()" plain="true">新增</a>
+                                            <span class="separator"></span>
+                                            <a class="mini-button" iconCls="icon-remove" onclick="removeRow()" plain="true">删除</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="">
+                                <div id="grid2" class="mini-datagrid" idField="id" multiSelect="true" skipReadOnlyCell="true" showPager="false" allowCellEdit="true" allowCellSelect="true">
+                                    <div property="columns">
+                                        <div type="checkcolumn"></div>
+                                        <div field="prodNo" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">指令书号&nbsp;
+                                            <i class="ace-icon fa fa-pencil-square-o"></i><input property="editor" class="mini-textbox" style="width:100%;" /></div>
+                                        <div field="drawingNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">图纸编号&nbsp;
+                                            <i class="ace-icon fa fa-pencil-square-o"></i><input property="editor" class="mini-textbox" style="width:100%;" />
+                                        </div>
+                                        <div field="materialName" width="100" headerAlign="center" sortField="zhiZaoFanHao" align="center">原料品名</div>
+                                        <div field="texture" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">原料材质</div>
+                                        <div field="buyCount" width="80" headerAlign="center" allowSort="false" align="right">采购数量&nbsp;
+                                            <i class="ace-icon fa fa-pencil-square-o"></i>
+                                            <input property="editor" class="mini-textbox" style="width:100%;" /></div>
+                                        <div field="buyCount" width="80" headerAlign="center" allowSort="false" align="right">备注&nbsp;
+                                            <i class="ace-icon fa fa-pencil-square-o"></i>
+                                            <input property="editor" class="mini-textbox" style="width:100%;" /></div>
+                                        <!-- <div field="price" width="80" headerAlign="center" sortField="productname" allowSort="false" datatype="currency" align="right"> 单价</div> -->
+                                        <!-- <div field="totalMoney" width="80" headerAlign="center" sortField="productname" allowSort="false" datatype="currency" align="right">金额小计</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 10px;">
+            <a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+                <i class="ace-icon fa fa-floppy-o bigger-110"></i> 保存草稿
+            </a> &nbsp; &nbsp;
+            <a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+                <i class="ace-icon fa fa-floppy-o bigger-110"></i> 采购
+            </a> &nbsp; &nbsp;
+
+        </div>
+    </div>
+    </div>
+    <!-- /.page-content -->
+    <script type="text/javascript ">
+        mini.parse();
+        //   var form = new mini.Form("#form1 ");
+
+        var grid = mini.get("grid1");
+        var grid2 = mini.get("grid2");
+        var gridData = new Array();
+
+
+        for (var i = 0; i < 20; i++) {
+            gridData.push({
+                id: i,
+                prodNo: "<a id='meisai' onclick='edit();'>QH-J1924" + i + "</a>",
+                pDrawingNo: "E-3087",
+                materialName: "固定刃418-95-28（部品）②TE40/TE60",
+                drawingNo: "E-3087",
+                texture: "TE80",
+                productNo: "E-3087-TE80",
+
+                requireCount: 100,
+                useStockCount: 0,
+                planBuyCount: 100,
+                buyCount: 100,
+
+            });
+        }
+        grid.setData(gridData);
+
+        function addAll() {
+            var items = [];
+            for (var i = 0; i < grid.data.length; i++) {
+                if (grid.getData()[i].buyCount != null && grid.getData()[i].buyCount != 0) {
+                    items.push(grid.getData()[i])
+                }
+            }
+            grid2.addRows(items);
+        }
+
+        function onCellCommitEdit() {
+
+        }
+
+        function addRow() {
+            var newRow = {
+                name: "New Row"
+            };
+            grid2.addRow(newRow, grid.getData().length);
+            grid2.beginEditCell(newRow, "drawingNo");
+        }
+
+        function removeRow() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+
+                grid2.removeRows(rows, true);
+            }
+        }
+
+
+
+        // 保存操作
+        function onOk() {
+            form.validate();
+            if (form.isValid() == false) {
+                businessMessage.alert("E0009 ");
+                return;
+            }
+            businessMessage.alert("Q0002 ", null, oksave);
+        }
+
+        function oksave() {
+            var data = form.getData();
+            data.deliveryaddress = grid.data;
+            var accessurl = " ";
+            if (mini.get("mode ").value == "2 ") {
+                accessurl = "/S9910Customs/add ";
+            } else {
+                accessurl = "/S9910Customs/update ";
+            }
+            doAjax(accessurl, data, function(obj) {
+                if (obj.status == "SUCCESS ") {
+                    businessMessage.alert("I0001 ", null, function() {
+                        CloseWindow("ok ");
+                    });
+                } else if (obj.message == "E0024 ") {
+                    businessMessage.alert(obj.text);
+                    return;
+                }
+            });
+        }
+
+        // 初始化时focus
+        function loadfocus() {}
+    </script>
+</body>
+
+</html>

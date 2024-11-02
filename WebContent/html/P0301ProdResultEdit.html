@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>制造实绩</title>
+    <script src="../boot.js" type="text/javascript"></script>
+    <style>
+        .noBorder {
+            width: 100%;
+            height: 100%;
+            border-style: none;
+            border-width: 0px;
+            outline: none;
+        }
+        
+        .noBorder .mini-textbox-border {
+            border-style: none;
+            border-width: 0px;
+        }
+        
+        .noBorder .mini-buttonedit-border {
+            border-style: none;
+            border-width: 0px;
+        }
+    </style>
+</head>
+
+<body class="no-skin">
+    <div class="edit-page-content">
+        <div id="form1" class="form-horizontal">
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+                        <div class="form-group">
+
+
+                            <label for="name" class="control-label col-sm-0">
+                                        制造指令号:
+                                        </label>
+                            <div class="col-sm-2">
+                                <input id="productNumber" name="productNumber" class="mini-textbox" vtype="maxLength:30" required="ture" />
+                            </div>
+
+
+                        </div>
+
+                        <h4 class="header blue bolder smaller">订单信息</h4>
+
+
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-0">
+                                        订单号:
+                                        </label>
+                            <div class="col-sm-2">
+                                <input id="orderNumber" enabled="false" name="orderNumber" class="mini-textbox" vtype="maxLength:30" enabled="false" />
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="name" class="control-label col-sm-0">
+                                    发行日:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="conductDate" class="mini-datepicker" enabled="false" />
+                            </div>
+
+                            <label for="name" class="control-label col-sm-0">
+									发行人:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="publisher" name="publisher" class="mini-textbox" enabled="false" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="name" class="control-label col-sm-0">
+                                    订单日期:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="orderDate" class="mini-datepicker" enabled="false" />
+                            </div>
+
+                            <label for="name" class="control-label col-sm-0">
+                                    计划交期:
+									</label>
+                            <div class="col-sm-2">
+                                <input id="shipDate" class="mini-datepicker" enabled="false" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="name" class="control-label  col-sm-0">
+                                    客户名称:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="guestName" name="guestName" class="mini-textbox" enabled="false" />
+                            </div>
+
+                            <label for="name" class="control-label  col-sm-0">
+                                    收货方:
+									</label>
+                            <div class="col-sm-2">
+                                <input id="shouHuoFang" name="shouHuoFang" class="mini-textbox" enabled="false" />
+                            </div>
+                        </div>
+                        <h4 class="header blue bolder smaller" style="clear: both;">指令书信息</h4>
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-0">
+                                    图纸编号:
+									</label>
+                            <div class="col-sm-2">
+                                <input id="atlasNumber" name="atlasNumber" enabled="false" class="mini-textbox" required="ture" />
+                            </div>
+
+                            <label for="name" class="control-label  col-sm-0">
+                                    材质:
+									</label>
+                            <div class="col-sm-2">
+                                <input id="texture" name="texture" class="mini-textbox" enabled="false" />
+                            </div>
+
+                            <label for="name" class="control-label col-sm-0">
+									产品名:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="productName" name="productName" class="mini-textbox" enabled="false" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="control-label  col-sm-0">
+                                    产品重量:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="zhongLiang" name="zhongLiang" class="mini-textbox" enabled="false" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="control-label  col-sm-0">
+                                    订单数:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="textureNumber" name="textureNumber" class="mini-textbox" enabled="false" />
+                            </div>
+                            <label for="name" class="control-label  col-sm-0">
+                                    安排数:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="arrangementsNumber" name="arrangementsNumber" class="mini-textbox" enabled="false" />
+                            </div>
+                            <label for="name" class="control-label  col-sm-0">
+                                    必要数:
+                                    </label>
+                            <div class="col-sm-2">
+                                <input id="necessaryNumber" name="necessaryNumber" class="mini-textbox" enabled="false" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- 画面列表 -->
+        <div style="margin-left: 15px;">
+            <h4 class="header blue bolder smaller">工序详情</h4>
+            <div class="vspace-12-sm"></div>
+            <div class="space-4"></div>
+        </div>
+        <div style="margin-left: 15px;">
+            <h5 class=" green bolder smaller">钢柄工序</h5>
+            <div class="vspace-12-sm"></div>
+            <div class="space-4"></div>
+            <table class="" border="1" " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="2 " style=" text-align: center;width: 70px; ">出库</td>
+                    <td rowspan="2 " style="width: 100px; ">
+                        <input class="mini-datepicker noBorder " readonly> </td>
+                    <td style="text-align: center; ">Shank/钢柄</td>
+                    <td style="text-align: center; ">材质</td>
+                    <td style="text-align: center; ">数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr class=" ">
+                    <td ><input class="mini-textbox noBorder "  /></td>
+                    <td><input class="mini-textbox noBorder " /></td>
+                    <td><input class="mini-textbox noBorder " /></td>
+                    <td><input class="mini-textbox noBorder " /> </td>
+                    <td><input class="mini-datepicker noBorder "></td>
+                </tr>
+            </table>
+            <br>
+            <table class=" " border="1 " " style="border-collapse: collapse">
+                <tr class=" ">
+                    <td rowspan="4 " style="text-align: center; width: 70px;">保护焊</td>
+                    <td rowspan="4 " style="width: 100px;"><input class=" mini-datepicker noBorder"> </td>
+                    <td style="text-align: center;  ">电流A</td>
+                    <td style="text-align: center; ">电压V</td>
+                    <td style="text-align: center; ">气体介质</td>
+                    <td style="text-align: center; ">气源压力</td>
+                    <td style="text-align: center; ">焊丝型号</td>
+                    <td style="text-align: center; ">线径</td>
+                </tr>
+
+                <tr>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; ">机器人辅助</td>
+                    <td style="text-align: center; ">工位①数量</td>
+                    <td style="text-align: center; ">工位②数量</td>
+                    <td style="text-align: center; ">工位③数量</td>
+                    <td style="text-align: center; ">合计数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="mini-combobox noBorder" textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+            </table>
+            <br>
+            <table class=" " border="1 " cellpadding="0 " cellspacing="0 " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="4" style="text-align: center; width: 70px; ">银焊前处理</td>
+                    <td rowspan="4" style="width: 100px;"><input class="mini-datepicker noBorder"> </td>
+                    <td style="text-align: center; ">抛丸处理</td>
+                    <td colspan="2" style="text-align: center; ">设定 - 处理时间</td>
+                    <td style="text-align: center; ">数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="mini-combobox noBorder" textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; ">打磨处理</td>
+                    <td style="text-align: center; ">工位①数量</td>
+                    <td style="text-align: center; ">工位②数量</td>
+                    <td style="text-align: center; ">工位③数量</td>
+                    <td style="text-align: center; ">合计数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="mini-combobox noBorder" textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td><input style="width:85%" class="mini-textbox noBorder" /> 件</td>
+                    <td><input style="width:85%" class="mini-textbox noBorder" />件 </td>
+                    <td><input style="width:85%" class="mini-textbox noBorder" /> 件</td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+            </table>
+            <br>
+            <table class=" " border="1 " cellpadding="0 " cellspacing="0 " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="2 " style="text-align: center; width: 70px; ">银焊·徐冷</td>
+                    <td rowspan="2" style="width: 100px;"><input class="mini-datepicker noBorder"> </td>
+                    <td colspan="2" style="text-align: center; ">设备No- 线圈No</td>
+                    <td colspan="2" style="text-align: center; ">频率ｋHz-加热时间</td>
+
+                    <td style="text-align: center; ">到达温度</td>
+                    <td colspan="2" style="text-align: center; ">保温No - 保温时间</td>
+                    <td style="text-align: center; ">数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input style="width:85%" class="mini-textbox noBorder" />℃</td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+            </table>
+            <br>
+
+            <table class=" " border="1 " cellpadding="0 " cellspacing="0 " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="2" style="text-align: center; width: 70px; ">银焊后处理</td>
+                    <td rowspan="2" style="width: 100px;"><input class="mini-datepicker noBorder"> </td>
+                    <td style="text-align: center; ">温水设备No</td>
+                    <td colspan="2" style="text-align: center; ">设定温度-处理时间</td>
+                    <td style="text-align: center; ">抛丸设备</td>
+                    <td colspan="2" style="text-align: center; ">设定A-处理时间</td>
+                    <td style="text-align: center; ">数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+            </table>
+            <br>
+            <table class=" " border="1 " cellpadding="0 " cellspacing="0 " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="4" style="text-align: center; width: 70px; ">检查·出货</td>
+                    <td rowspan="4" style="width: 100px;"><input class="mini-datepicker noBorder"> </td>
+                    <td style="text-align: center; ">外观异常</td>
+                    <td style="text-align: center; ">検査方法</td>
+                    <td style="text-align: center; ">硬度</td>
+
+                    <td style="text-align: center; ">保护焊</td>
+                    <td style="text-align: center; ">良品数</td>
+                    <td style="text-align: center; ">不良数</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="mini-combobox noBorder" textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td><input class="mini-combobox noBorder" textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"全检 "},{distingid:"2 ",distingname:"抽查 "}]' />
+                    </td>
+                    <td><input class="mini-textbox noBorder" /></td>
+
+                    <td><input class="mini-combobox noBorder" textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"良 "},{distingid:"2 ",distingname:"否 "}]' />
+                    </td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; ">“要求”栏项目确认</td>
+                    <td colspan="2" style="text-align: center; ">备注</td>
+
+                    <td style="text-align: center; ">出货数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input class="mini-textbox noBorder" /> </td>
+                    <td colspan="2"><input class="mini-textbox noBorder" /> </td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+            </table>
+        </div>
+        <div style="margin-left: 15px;margin-top: 25px;">
+            <h5 class="green bolder smaller">合金工序</h5>
+            <div class="vspace-12-sm"></div>
+            <div class="space-4"></div>
+            <table class="" border="1" " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="2 " style=" text-align: center;width: 70px; ">出库</td>
+                    <td rowspan="2 " style="width: 100px; ">
+                        <input class="mini-datepicker noBorder "></td>
+                    <td style="text-align: center; ">合金</td>
+                    <td style="text-align: center; ">材质</td>
+                    <td style="text-align: center; ">数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr class=" ">
+                    <td ><input class="mini-textbox noBorder " /></td>
+                    <td ><input class="mini-textbox noBorder " /></td>
+                    <td><input class="mini-textbox noBorder " /></td>
+                    <td><input class="mini-textbox noBorder " /></td>
+                    <td><input class="mini-datepicker noBorder "></td>
+                </tr>
+
+            </table>
+            <br>
+            <table id="291 " class=" " border="1 " " style="border-collapse: collapse">
+                <tr class=" ">
+                    <td rowspan="2" style="text-align: center; width: 70px;">银片</td>
+                    <td rowspan="2" style="width: 100px;"><input class=" mini-datepicker noBorder"> </td>
+                    <td style="text-align: center; ">尺寸使用量</td>
+                    <td style="text-align: center; ">尺寸使用量</td>
+                    <td style="text-align: center; ">尺寸使用量</td>
+                    <td style="text-align: center; ">尺寸使用量</td>
+                    <td style="text-align: center; ">数量</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+
+                <tr>
+                    <td><input style="width:90%" class="mini-textbox noBorder" />g</td>
+                    <td><input style="width:90%" class="mini-textbox noBorder" />g </td>
+                    <td><input style="width:90%" class="mini-textbox noBorder" />g</td>
+                    <td><input style="width:90%" class="mini-textbox noBorder" />g</td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-textbox noBorder" /></td>
+                    <td><input class="mini-datepicker noBorder"></td>
+                </tr>
+
+            </table>
+            <br>
+            <table class=" " border="1" " style="border-collapse: collapse ">
+                <tr class=" ">
+                    <td rowspan="2 " style="text-align: center; width: 70px; ">准备工序</td>
+                    <td rowspan="2 " style="width: 100px; "><input class="mini-datepicker noBorder "> </td>
+                    <td style="text-align: center; ">清洗合金</td>
+                    <td style="text-align: center; ">清洗银片</td>
+                    <td style="text-align: center; ">清洗钢柄</td>
+                    <td style="text-align: center; ">作业人确认</td>
+                    <td style="text-align: center; ">确认日</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="mini-combobox noBorder " textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td>
+                        <input class="mini-combobox noBorder " textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td>
+                        <input class="mini-combobox noBorder " textField="distingname " valueField="distingid " showNullItem="false " data='[{distingid:"1 ",distingname:"有 "},{distingid:"2 ",distingname:"无 "}]' />
+                    </td>
+                    <td><input class="mini-textbox noBorder " /></td>
+                    <td><input class="mini-datepicker noBorder "></td>
+                </tr>
+            </table>
+
+        </div style="margin-left: 15px; ">
+        <div style="text-align: center; padding: 10px; ">
+            <a class="mini-button btn btn-success btn-round " onclick="onOk() " type="button ">
+                <i class="ace-icon fa fa-floppy-o bigger-110 "></i> 保存
+            </a> &nbsp; &nbsp;
+
+        </div>
+        <script type="text/javascript ">
+            mini.parse();
+
+$(function() {
+    debugger;
+    var a = document.getElementById("291 ").getElementsByTagName("input ");
+		 for(var i = 0; i < a.length; i++) {
+    a[i].setAttribute("disabled ","true ");
+}
+		});
+           
+            // var grid = mini.get("grid1 ");
+
+            // var gridData = new Array();
+            // for (var i = 0; i < 20; i++) {
+            //     gridData.push({
+            //         dingDanHao: "QH-S19205 ",
+            //         dingDanRiQI: "2019/01/06 ",
+            //         naPingRiQi: "2020/05/08 ",
+            //         pingMing: "予備用最外周ﾃｨｰｽｶｯﾀｰ（L） ",
+            //         gongYingShang: "弘信商贸有限责任公司 ",
+            //         tuHao: "E-T2053 ",
+            //         caiZhi: "CE60 ",
+            //         faZhuShuLiang: "200 ",
+            //         shuLiang: "165 ",
+            //         danJia: "85 ",
+            //         heJi: "60 ",
+            //         beiKao: "备考 "
+            //     });
+            // }
+            // grid.setData(gridData);
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>安全库存生成采购单</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">指令书号:</label>
+                                    <input id="prodNo" name="prodNo" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">原料图号:</label>
+                                    <input id="mingChen" name="mingChen" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">大分类:</label>
+                                    <input id="leixing" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"钢柄"},{value:"0002",text:"合金"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">小分类:</label>
+                                    <input id="leixing" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"A钢柄"},{value:"0002",text:"B钢柄"},{value:"0003",text:"C钢柄"}]' />
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                    <i class="ace-icon fa fa-search">查 询</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a class="mini-button btn btn-success btn-round" onclick="add()" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110">
+                        </i>生成采购单
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- 画面列表 -->
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" multiSelect="true" allowResize="false" allowCellSelect="true" editNextOnEnterKey="true" style="width: 100%; height: 100%;">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="productNumber" width="100" headerAlign="center" allowSort="false" align="center">制造指令号</div>
+                <div field="atlasNumber" width="80" headerAlign="center" allowSort="false" align="center">图纸编号</div>
+                <div field="texture" width="80" headerAlign="center" allowSort="false" align="center">材质</div>
+                <div field="statisticsNo" width="200" headerAlign="center" sortField="zhiZaoFanHao" align="center">品名</div>
+                <div field="pinlei" width="80" headerAlign="center" sortField="beiKao" align="center">品类</div>
+                <div field="shulaing" width="80" headerAlign="center" sortField="beiKao" align="right">安全指标数</div>
+                <div field="yuanliao" width="100" headerAlign="center" sortField="zhiZaoFanHao" align="center">原料图纸编号</div>
+                <div field="texture" width="100" headerAlign="center" sortField="zhiZaoFanHao" align="center">原料材质</div>
+                <div field="statisticsNo" width="200" headerAlign="center" sortField="zhiZaoFanHao" align="center">原料品名</div>
+                <div field="beginner" width="80" headerAlign="center" sortField="zaiKuShu" datatype="currency" align="right">原料在库数</div>
+                <div field="zuidi" width="80" headerAlign="center" sortField="zaiKuShu" datatype="currency" align="right">安全指标数</div>
+                <div field="biYaoNumber" width="80" headerAlign="center" allowSort="false" align="right">需要原料数</div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+        var gridData = new Array();
+        for (var i = 0; i < 20; i++) {
+            gridData.push({
+                productNumber: "<a id='meisai' onclick='edit();'>QH-J19243</a>",
+                atlasNumber: "E-3087",
+                texture: "TE80",
+                statisticsNo: "固定刃418-95-28（部品）②TE40/TE60",
+                statisticalName: "910完成品安全在库",
+                pinlei: "冲压件",
+                principal: "王圣诞",
+                yuanliao: "R04",
+                shulaing: "100",
+                condition: "差异全部生成",
+                beginner: "4398",
+                zuidi: "3600",
+                jiHuaNumber: "500",
+                anPaiNumber: "450",
+                biYaoNumber: " <span style='color:red'>-50</span>",
+                startTime: "2019/10/31"
+            });
+        }
+        grid.setData(gridData);
+
+        function edit() {
+            var popWindow = {
+                url: "P0301ProdResultEdit.html",
+                title: "制造指令书",
+                width: 1100,
+                height: 650,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function add2() {
+            var popWindow = {
+                url: "P0508SafeStockViewEdit.html",
+                title: "安全库存添加",
+                width: 900,
+                height: 300,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+    </script>
+</body>
+
+</html>

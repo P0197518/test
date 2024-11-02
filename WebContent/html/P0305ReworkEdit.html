@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>返修实际记录</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+                                    制造指令号:
+									</label>
+                                    <input id="orderNumber" name="orderNumber" class="mini-textbox" vtype="maxLength:30" width="200px" value="QH-J19243" />
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button" style="margin-right: 5%;" onclick="search()">
+                                    <i class="ace-icon fa fa-search"> </i> 查 询
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									返修原因:
+									</label>
+                                    <input id="reason" class="mini-combobox" style="width:150px;" textField="text" required="ture" valueField="value" data='[{value:"0001",text:"损伤"},{value:"0002",text:"破裂"},{value:"0003",text:"填充不足"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									不良数量:
+									</label>
+                                    <input id="number" name="number" class="mini-textbox" value="2" width="150px" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label  col-sm-0">
+                                    质检人员:
+									</label>
+                                    <input id="inspector" name="inspector" class="mini-combobox" style="width:150px;" textField="text" required="ture" valueField="value" data='[{value:"0001",text:"张三"},{value:"0002",text:"李四"},{value:"0003",text:"王五"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">
+									返品状态:
+									</label>
+                                    <input id="state" name="state" class="mini-combobox" style="width:150px;" textField="text" required="ture" valueField="value" data='[{value:"0001",text:"在修"},{value:"0002",text:"再修"},{value:"0003",text:"待修"},{value:"0003",text:"待检"}]' />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-box">
+                    <h5 class="header blue bolder smaller">发生工序</h5>
+                    <div class="search-item">
+                        <label for="order$text" id="steelHandle" class="control-label col-sm-0">钢柄工序:</label>
+                        <div id="ck1" name="proposer" class="mini-checkbox" text="出库"></div>
+                        <div id="ck1" name="proposer" class="mini-checkbox" text="保护焊" checked="checked"></div>
+                        <div id="ck2" name="proposer" class="mini-checkbox" text="钢柄处理"> </div>&nbsp;&nbsp;
+                        <div id="ck3" name="proposer" class="mini-checkbox" text="银焊"> </div>&nbsp;&nbsp;
+                        <div id="ck4" name="proposer" class="mini-checkbox" text="徐冷处理"> </div>&nbsp;&nbsp;
+                        <div id="ck5" name="proposer" class="mini-checkbox" text="表面处理1" checked="checked"> </div>&nbsp;&nbsp;
+                        <div id="ck6" name="proposer" class="mini-checkbox" text="检查·出货"> </div>&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div class="widget-box">
+                    <div class="search-item">
+                        <label for="order$text" id="alloy" class="control-label col-sm-0">合金:</label>
+                        <div id="ck1" name="proposer" class="mini-checkbox" text="出库"></div>
+                        <div id="ck1" name="proposer" class="mini-checkbox" text="银片"></div>
+                        <div id="ck2" name="proposer" class="mini-checkbox" text="洗合金"> </div>&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div style="text-align:center;padding:10px;">
+                    <a class="mini-button btn btn-info btn-round" onclick="save()" type="button">
+                        <i class="ace-icon fa fa-floppy-o bigger-110"></i> 保存
+                    </a> &nbsp; &nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.main-container -->
+    <script type="text/javascript">
+        function search() {}
+
+        function save() {}
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>物料入库登记</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="edit-page-content">
+        <div id="form1" class="form-horizontal">
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+                        <h4 class="header blue bolder smaller">物料入库基本信息</h4>
+                        <div>
+                            <div class="form-group">
+                                <label for="name" class="control-label col-sm-0">入库类型:</label>
+                                <div class="col-sm-6">
+                                    <div id="inType" onvaluechanged="inTypeChange" class="mini-radiobuttonlist" value="0001" repeatLayout="table" repeatDirection="vertical" textField="text" valueField="value" value="cn" data='[{value:"0001",text:"生产入库"},{value:"0002",text:"个别入库"},{value:"0003",text:"不良入库"},{value:"0004",text:"产出半成品入库"}]'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-0">入货人:</label>
+                            <div class="col-sm-2">
+                                <input id="invoiceNo" enabled="false" class="mini-textbox" textField="text" required="ture" valueField="value" />
+                            </div>
+                            <div class="search-item">
+                                <label for="name" class="control-label col-sm-0">入货时间:</label>
+                                <input id="dateFrom" name="dateFrom" value="" required="true" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="header blue bolder smaller">待入库物料列表</h4>
+                <div class="vspace-12-sm"></div>
+                <div class="space-4"></div>
+                <div class="mini-toolbar">
+                    <table style="width:100%;">
+                        <tr>
+                            <td style="width:100%;">
+                                <a class="mini-button" iconCls="icon-add" onclick="addRow()" plain="true">新增</a>
+                                <span class="separator"></span>
+                                <a class="mini-button" iconCls="icon-remove" onclick="removeRow()" plain="true">删除</a>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="grid1" class="mini-datagrid" allowCellEdit="true" skipReadOnlyCell="true" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" sortOrder="asc" showPager="false">
+                        <div property="columns">
+                            <div type="checkcolumn"></div>
+                            <div field="prodNo" width="120" headerAlign="center" allowSort="false" align="center">指令书号</div>
+                            <div field="drawingNo" width="80" headerAlign="center" allowSort="false" align="center">
+                                图纸编号 &nbsp;<i class="ace-icon fa fa-pencil-square-o"></i>
+                                <input property="editor" class="mini-textbox" style="width:100%;" minWidth="100%" />
+                            </div>
+                            <div field="materialName" width="120" headerAlign="center" allowSort="false" align="center">品名</div>
+                            <div field="texture" width="80" headerAlign="center" allowSort="false" align="center">材质</div>
+
+                            <div field="planCount" width="80" headerAlign="center" sortField="money" allowSort="false" align="right">安排数 </div>
+                            <div field="inCount" width="80" headerAlign="center" sortField="jan" allowSort="false" align="right">已入库数 </div>
+                            <div field="nowCount" width="80" headerAlign="center" sortField="money" allowSort="false" align="right">
+                                本次入库数 &nbsp;<i class="ace-icon fa fa-pencil-square-o"></i>
+                                <input property="editor" class="mini-textbox" style="width:100%;" minWidth="100%" />
+                            </div>
+                            <div field="remark" width="150" headerAlign="center" sortField="money" allowSort="false" align="left">备注&nbsp;<i class="ace-icon fa fa-pencil-square-o"></i>
+                                <input property="editor" class="mini-textbox" style="width:100%;" /></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;padding:10px;">
+        <a class="mini-button btn btn-info btn-round" onclick="saveDraft()" type="button">
+            <i class="ace-icon fa fa-floppy-o bigger-110"></i> 保存入库
+        </a> &nbsp; &nbsp;
+    </div>
+    </div>
+    </div>
+    <script text="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        initGridData();
+
+        function addRow() {
+            var newRow = {
+                name: "New Row"
+            };
+            grid.addRow(newRow, grid.getData().length);
+            grid.beginEditCell(newRow, "LoginName");
+        }
+
+        function initGridData() {
+            var gridData = new Array();
+            for (var i = 0; i < 10; i++) {
+                gridData.push({
+
+                    prodNo: "SY-J119001",
+                    orderNo: "QH-J19001",
+                    prodNo: "SY-J19001",
+                    drawingNo: "E-3295",
+                    materialName: "固定刃 560-191.03-38   SKC24",
+                    texture: "TE60",
+                    planCount: 300,
+                    inCount: 100,
+                    nowCount: 200,
+
+                    remark: ""
+
+                });
+            }
+            grid.setData(gridData);
+        }
+
+        function inTypeChange() {
+            if (mini.get("inType").getValue() == '0001' || mini.get("inType").getValue() == '0004') {
+                initGridData();
+
+                grid.showColumn(1);
+                grid.showColumn(5);
+                grid.showColumn(6);
+            } else {
+                grid.clearRows();
+
+
+                grid.hideColumn(1);
+                grid.hideColumn(5);
+                grid.hideColumn(6);
+            }
+        }
+
+        function removeRow() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+
+                grid.removeRows(rows, true);
+            } else {
+                mini.alert("没有可删除的数据")
+            }
+        }
+    </script>
+</body>
+
+</html>

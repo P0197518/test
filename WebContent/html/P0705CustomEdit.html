@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>客户新增</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="edit-page-content">
+        <div id="form1" class="form-horizontal" style="width: 100%; min-width: 800px;">
+
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+                        <h4 class="header blue bolder smaller">客户信息</h4>
+                        <div class="vspace-12-sm"></div>
+                        <div class="space-4"></div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-username">客户编号:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="half:15,float" maxlength=15 required="true" />
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-username">客户名称:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="half:15,float" maxlength=15 required="true" />
+                            </div>
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-username">客户名称(英语):</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="half:15,float" maxlength=15 />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">客户地区:</label>
+                            <div class="col-sm-3">
+                                <input id="leixing" class="mini-combobox" textField="text" required="true" valueField="value" ondrawcell="false" data='[{value:"0001",text:"中国"},{value:"0002",text:"日本"},{value:"0003",text:"美国"},{value:"0004",text:"欧洲"}]' />
+                            </div>
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">客户结算币种:</label>
+                            <div class="col-sm-3">
+                                <input id="leixing" class="mini-combobox" textField="text" required="true" valueField="value" ondrawcell="false" data='[{value:"0001",text:"人民币"},{value:"0002",text:"日元"},{value:"0003",text:"美元"},{value:"0004",text:"新币"}]' />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">联络电话:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" vtype="rangeLength:1,11;float" maxlength=20 />
+                            </div>
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-username">FAX:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype=" half:15" maxlength=20 />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">Mail:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" vtype="half:15" maxlength=20 />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">公司银行:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" style="width: 250px;" vtype="half:15" maxlength=20 />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">银行账号:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" style="width: 250px;" vtype="half:15" maxlength=20 />
+                            </div>
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">税号:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" vtype="half:15" maxlength=20 />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-username">法定代表人:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="half:15" maxlength=15 />
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">营业联系人:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" vtype="half:15" maxlength=20 />
+                            </div>
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-kbntypename">营业联系方式:</label>
+                            <div class="col-sm-3">
+                                <input id="hoshiokano" class="mini-textbox" vtype="half:15" maxlength=20 />
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="header blue bolder smaller">详细信息</h4>
+                    <div class="vspace-12-sm"></div>
+                    <div class="space-4"></div>
+                    <div class="mini-toolbar">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="width:100%;">
+                                    <a class="mini-button" iconCls="icon-add" onclick="addRow()" plain="true">新增</a>
+                                    <span class="separator"></span>
+                                    <a class="mini-button" iconCls="icon-remove" onclick="removeRow()" plain="true">删除</a>
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="datagrid1" class="mini-datagrid" allowCellEdit="true" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" sortOrder="asc" showPager="false">
+                            <div property="columns">
+                                <div type="checkcolumn"></div>
+
+                                <div name="birthday" field="birthday" width="100" headerAlign="center" allowSort="true">
+                                    送货地址缩写&nbsp;<i class="ace-icon fa fa-pencil-square-o"></i>
+                                    <input property="editor" class="mini-textbox" style="width:100%;" />
+                                </div>
+                                <div field="zhuWenFanHao" width="120" headerAlign="center" sortField="jan" allowSort="false" align="center">
+                                    送货地址&nbsp;<i class="ace-icon fa fa-pencil-square-o"></i>
+                                    <input property="editor" class="mini-textbox" style="width:100%;" />
+                                </div>
+                                <div field="zhuWenFanHao" width="120" headerAlign="center" sortField="jan" allowSort="false" align="center">
+                                    邮编&nbsp;<i class="ace-icon fa fa-pencil-square-o"></i>
+                                    <input property="editor" class="mini-textbox" style="width:100%;" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div style="text-align: center; padding: 10px;">
+                <a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+                    <i class="ace-icon fa fa-floppy-o bigger-110"></i>保 存
+                </a> &nbsp; &nbsp;
+                <a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button">
+                    <i class="ace-icon fa fa-undo bigger-110"></i> 关 闭
+                </a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var form = new mini.Form("#form1");
+        mini.parse();
+        var grid = mini.get("datagrid1");
+
+        function addRow() {
+            var newRow = {
+                name: "New Row"
+            };
+            grid.addRow(newRow, 0);
+            grid.beginEditCell(newRow, "LoginName");
+        }
+
+        function removeRow() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+
+                grid.removeRows(rows, true);
+            }
+        }
+
+        function onCancel() {
+            debugger
+            window.CloseOwnerWindow();
+        }
+
+        function onOk() {
+            form.validate();
+            if (form.isValid() == false) {
+                return;
+            }
+            window.CloseOwnerWindow();
+        }
+    </script>
+</body>
+
+</html>

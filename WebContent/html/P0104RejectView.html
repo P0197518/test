@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>不良查看</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">客户:</label>
+                                    <input id="orderNumber" name="supplier" style="width: 50px;" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                    <a class="mini-button btn btn-info btn-round " type="button" onclick="search2()">
+                                        <i class="ace-icon fa fa-search"> </i>
+                                    </a>
+                                    <input name="supplierName" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" required="true" requiredErrorText="不能为空" onenter="onOk()" />
+
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">供应商:</label>
+                                    <input id="orderNumber" name="supplier" style="width: 50px;" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                    <a class="mini-button btn btn-info btn-round " type="button" onclick="search2()">
+                                        <i class="ace-icon fa fa-search"> </i>
+                                    </a>
+                                    <input name="supplierName" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" required="true" requiredErrorText="不能为空" onenter="onOk()" />
+
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">发生期间:</label>
+                                    <input id="dateFeom" name="dateFeom" value="" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="dateTo" name="dateTo" value="" class="mini-datepicker" datePickerFrom="dateFeom" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+
+                            </div>
+
+
+                            <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                <i class="ace-icon fa fa-search"> </i>查 询
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a class="mini-button btn btn-success btn-round" onclick="add()">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 添加
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="edit()">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 编辑
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="changeDeliveryDay()">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 填写不良原因
+                    </a>
+                    <a class="mini-button btn btn-danger btn-round" onclick="remove()">
+                        <i class="ace-icon fa fa-times-circle"> </i> 删除
+                    </a>
+                    <a class="mini-button btn btn-success btn-round">
+                        <i class="ace-icon fa fa-download"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="t0020users.username" sortOrder="asc" onshowrowdetail="onShowRowDetail">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="backType" width="80" headerAlign="center" sortField="dingdanfenlei" align="center">退货类型</div>
+                <div field="realteNo" width="80" headerAlign="center" sortField="dingdanfenlei" align="center">关联单号</div>
+                <div field="realteName" width="80" headerAlign="center" sortField="dingdanfenlei" align="center">客户/供应商</div>
+                <div field="returnType" width="80" headerAlign="center" sortField="dingdanfenlei" align="center">不良类型</div>
+                <div field="returnDay" width="80" headerAlign="center" sortField="dingdanfenlei" align="center">发生时间</div>
+                <div field="materialName" width="80" headerAlign="center" sortField="dingdanqufen" align="center">品名</div>
+                <div field="texture" width="70" headerAlign="center" sortField="shangpinming" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="dingdanleixing" align="center">图纸编号</div>
+                <div field="productNo" width="80" headerAlign="center" sortField="dingdanleixing" align="center">品番</div>
+                <div field="badcount" width="60" headerAlign="center" sortField="shangpinzhonglei" datatype="currency" align="right">退货数</div>
+                <div field="badKbn" width="100" headerAlign="center" sortField="dizhi" align="left">问题原因</div>
+                <div field="badReason" width="150" headerAlign="center" sortField="dizhi" align="left">具体不良内容</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        var gridData = new Array();
+        for (var i = 0; i < 10; i++) {
+            gridData.push({
+                backType: "订单退货",
+                realteNo: "S202001010",
+                realteName: "井上",
+                returnType: "不良(可修理)",
+                returnDay: "2019/08/09",
+
+                materialName: "C-50KIRS(インナービット)",
+                drawingNo: "E-3650",
+                productNo: "E-3650-TE60",
+                texture: "TE60",
+
+                badcount: "10",
+                badKbn: "原料问题",
+                badReason: "",
+
+            });
+        }
+        for (var i = 0; i < 10; i++) {
+            gridData.push({
+                backType: "采购退货",
+                realteNo: "QH-J20001",
+                realteName: "青岛技校",
+                returnType: "不良(不可修理)",
+                returnDay: "2019/08/09",
+
+                materialName: "C-50KIRS(インナービット)",
+                drawingNo: "E-3650",
+                productNo: "",
+                texture: "TE60",
+
+                badcount: "10",
+                badKbn: "原料问题",
+                badReason: "",
+
+            });
+        }
+        grid.setData(gridData);
+
+        function customChoose() {
+            var popWindow = {
+                url: "P9902CustomSel.html",
+                title: "客户选择",
+                width: 900,
+                height: 400,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+
+        function viewOrder() {
+            mini.open({
+                title: "退货查看",
+                url: "P0104RejectEdit.html",
+                width: 900,
+                height: 400,
+                onload: function() {},
+                ondestroy: function(action) {
+                    //grid.reload();
+                }
+            });
+        }
+        // 添加
+        function add() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+                mini.open({
+                    title: "添加退货",
+                    url: "P0104RejectEdit.html",
+                    width: 900,
+                    height: 400,
+                    onload: function() {},
+                    ondestroy: function(action) {
+                        //grid.reload();
+                    }
+                });
+            } else {
+                mini.alert("请选择一条记录");
+            }
+        }
+        // 编辑
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+                mini.open({
+                    title: "退货编辑",
+                    url: "P0104RejectEdit.html",
+                    width: 900,
+                    height: 400,
+                    onload: function() {},
+                    ondestroy: function(action) {
+                        //grid.reload();
+                    }
+                });
+            } else {
+                mini.alert("请选择一条记录");
+            }
+        }
+
+        //删除
+        function removeItem() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                grid.removeRows(rows, true);
+                mini.alert("删除成功！");
+
+                /*if (confirm("确定删除选中记录？")) {
+                }*/
+            } else {
+                mini.alert("请选择一条记录");
+            }
+        }
+    </script>
+</body>
+
+</html>

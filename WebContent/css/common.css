@@ -1,0 +1,45 @@
+/* .mini-grid-editwrap .mini-textbox-border{
+	background-color:#FFFFE6;
+ */
+
+.search-item {
+    float: left;
+    padding: 2px;
+}
+
+.btn-search {
+    float: right;
+}
+
+.autoAuth {
+    display: none;
+}
+
+.mini-datagrid .fa-pencil-square-o {
+    color: blue;
+}
+
+.mini-panel-viewport {
+    overflow-y: auto;
+}
+
+.default-title {
+    cursor: pointer;
+}
+
+.mini-pager .mini-button {
+    height: 26px;
+}
+
+.mini-pager .mini-buttonedit {
+    height: 26px;
+}
+
+.mini-pager .mini-buttonedit-border {
+    width: 24px;
+    height: 26px;
+}
+
+.no-input {
+    width: 45px !important;
+}

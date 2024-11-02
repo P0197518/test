@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>委外加工订单详细查看(物料别)</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">委外加工单号:</label>
+                                    <input id="caiGouDanHao" name="Fax" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">委外类型:</label>
+                                    <input id="caiGouZhongLei" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"计划订单"},{value:"0002",text:"索偿订单"},{value:"0003",text:"加工订单"},{value:"0004",text:"测试订单"},{value:"0004",text:"客户订单"},{value:"0006",text:"样品订单"}]'
+                                    />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">图纸编号:</label>
+                                    <input id="drawingNo" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"计划订单"},{value:"0002",text:"索偿订单"},{value:"0003",text:"加工订单"},{value:"0004",text:"测试订单"},{value:"0004",text:"客户订单"},{value:"0006",text:"样品订单"}]'
+                                    />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">大分类:</label>
+                                    <input id="caiGouZhongLei" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"合金"},{value:"0002",text:"钢柄"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">小分类:</label>
+                                    <input id="caiGouZhongLei" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"合金A"},{value:"0002",text:"合金B"},{value:"0003",text:"合金C"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">下单日:</label>
+                                    <input id="xiaDanRiFrom" name="dateFeom" value="" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                    <label for="toDate" class="control-label"> ～ </label>
+                                    <input id="xiaDanRiTo" name="dateTo" value="" class="mini-datepicker" datePickerFrom="dateFeom" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">供应商:</label>
+                                    <input id="gongYingShangNo" class="mini-textbox" style="width:50px;" vtype="half:40" maxlength=40 />
+                                    <a class="mini-button btn btn-info btn-round" type="button" onclick="customChoose()" onenter="onOk()" />
+                                    <i class="ace-icon fa fa-search"> </i></a>
+                                    <input name="gongYingShang" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" onenter="onOk()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">委外状态:</label>
+                                    <input id="zhuangTai" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"草稿中"},{value:"0002",text:"已发注"},{value:"0003",text:"部分到货"},{value:"0004",text:"已到货"}]' />
+                                </div>
+                            </div>
+                            <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                <i class="ace-icon fa fa-search"> </i>查 询
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a class="mini-button btn btn-success btn-round">
+                        <i class="ace-icon fa fa-download"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" onLoad="onLoad">
+            <div property="columns">
+                <div field="purchaseNo" width="100" headerAlign="center" sortField="caiGouDanHao" align="center">委外加工单号</div>
+                <div field="materialName" width="150" headerAlign="center" sortField="pinMing" align="center">品名</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="tuZhiBianHao" align="center">图纸编号</div>
+                <div field="texture" width="80" headerAlign="center" sortField="caiZhi" align="center">材质</div>
+                <div field="planArrivalDay" width="90" headerAlign="center" sortField="xiWangDaoHuoRi" align="center">希望到货日</div>
+                <div field="priceNoTax" width="100" headerAlign="center" sortField="yuJiDanJia" datatype="currency" align="right">单价不含税</div>
+                <div field="price" width="100" headerAlign="center" sortField="yuJiDanJia" datatype="currency" align="right">单价含税</div>
+                <div field="buyCount" width="80" headerAlign="center" sortField="gouMaiShuLiang" datatype="currency" align="right">委外数量</div>
+                <div field="materialCount" width="80" headerAlign="center" sortField="gouMaiShuLiang" datatype="currency" align="right">派料数量</div>
+                <div field="inCount" width="80" headerAlign="center" sortField="ruKuShuLiang" datatype="currency" align="right">入货数量</div>
+                <div field="remainCount" width="80" headerAlign="center" sortField="ruKuShuLiang" datatype="currency" align="right">入货残数</div>
+                <div field="totalmoneyNoTax" width="120" headerAlign="center" sortField="shiJiJinEXiaoJi" datatype="currency" align="right">金额不含税</div>
+                <div field="totalmoney" width="120" headerAlign="center" sortField="shiJiJinEXiaoJiWB" datatype="currency" align="right">金额含税</div>
+                <div field="purchaseStatus" width="100" headerAlign="center" sortField="mingXiZhuangTai" align="center">委外状态</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        var gridData = new Array();
+        for (var i = 0; i < 15; i++) {
+            gridData.push({
+                purchaseNo: "<a id='meisai' onclick='edit();' >QH-S19205</a>",
+                drawingNo: "E-S0291",
+                texture: "TE80",
+                materialName: "CPM" + (i + 1),
+                planArrivalDay: "2019/02/06",
+                priceNoTax: 194.69,
+                price: 220,
+                buyCount: 100,
+                materialCount: 100,
+                inCount: 50,
+                remainCount: 50,
+                totalmoneyNoTax: 9734.51,
+                totalmoney: 11000,
+                purchaseStatus: "已出库"
+            });
+        }
+        grid.setData(gridData);
+
+        function edit() {
+            var popWindow = {
+                url: "P0401PurchaseEdit.html",
+                title: "委外加工修改",
+                width: 1100,
+                height: 650,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+    </script>
+</body>
+
+
+</html>

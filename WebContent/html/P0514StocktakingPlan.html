@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>盘点计划</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">盘点编号:</label>
+                                    <input id="mingChen" name="mingChen" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">盘点名称:</label>
+                                    <input id="faRen" name="faRen" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">状态:</label>
+                                    <input id="invoiceClassification" class="mini-combobox" textField="text" valueField="value" data='[{value:"0001",text:"新生成"},{value:"0002",text:"已开始"},{value:"0003",text:"已结束"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">负责人:</label>
+                                    <input id="Telephone" name="Telephone" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                    <i class="ace-icon fa fa-search">查 询</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+        </a>
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+
+
+                    <a class="mini-button btn btn-success btn-round" onclick="createPlan()">
+                        <i class="ace-icon fa fa-fa-pencil-square-o"></i> 盘点计划作成
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="logReal()">
+                        <i class="ace-icon fa fa-fa-pencil-square-o"></i> 盘点实际录入
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="biaoqian()">
+                        <i class="ace-icon fa fa-print"></i> 盘点清单导出
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- 画面列表 -->
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="t0020users.username" sortOrder="asc">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="inventoryNo" width="100" headerAlign="center" sortField="zhiZaoFanHao" align="center">盘点编号</div>
+                <div field="inventoryName" width="200" headerAlign="center" sortField="pinFanHao" align="left">盘点名称</div>
+                <div field="inventoryUser" width="100" headerAlign="center" sortField="pinMing" align="center">负责人</div>
+                <div field="inventoryDate" width="100" headerAlign="center" sortField="pinFanHao" align="center">盘点时间</div>
+                <div field="inventoryStatus" width="100" headerAlign="center" sortField="pinFanHao" align="center">状态</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        var gridData = new Array();
+        for (var i = 0; i < 20; i++) {
+            gridData.push({
+                inventoryNo: "190101",
+                inventoryName: "910盘点导环一仓库",
+                inventoryDate: "2020/01/30",
+                inventoryUser: "王女士",
+                inventoryStatus: "新生成",
+            });
+        }
+        grid.setData(gridData);
+
+        grid.on("drawcell", function(e) {
+            if (e.column.field == "inventoryNo") {
+                e.cellStyle = "text-align:center";
+                e.cellHtml = '<a href="javascript:createPlan();">' + e.record.inventoryNo + '</a>';
+            }
+        });
+
+        function createPlan() {
+            var popWindow = {
+                url: "P0516StocktakingEdit.html",
+                title: "",
+                width: 1000,
+                height: 600,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function logReal() {
+            var popWindow = {
+                url: "P0516StocktakingEdit.html",
+                title: "",
+                width: 1000,
+                height: 600,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+    </script>
+</body>
+
+</html>

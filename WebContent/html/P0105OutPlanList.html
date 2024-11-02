@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title> 出货计划列表</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin" onload="loadfocus()">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <!-- #section:basics/content.breadcrumbs -->
+
+                <!-- /section:basics/content.breadcrumbs -->
+                <div class="page-content">
+                    <div class="widget-box">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0"> 出货计划编号: </label>
+                                    <div class="col-sm-1">
+                                        <input id="name" name="name" class="mini-textbox" onenter="search()" vtype="maxLength:30" />
+                                    </div>
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">客户:</label>
+                                    <div class="col-sm-3">
+                                        <input id="supplierNo" class="mini-textbox no-input" vtype="half:40" maxlength=40 />
+                                        <a class="mini-button btn btn-info btn-round" type="button" onclick="customChoose()" onenter="onOk()" />
+                                        <i class="ace-icon fa fa-search"> </i>
+                                        </a>
+                                        <input name="supplierName" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" required="true" requiredErrorText="不能为空" onenter="onOk()" />
+                                    </div>
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="dateFeom" class="control-label col-sm-0">计划出货日:</label>
+                                    <input id="planDeliveryDayStart" name="planDeliveryDayStart" value="" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="planDeliveryDayEnd" name="planDeliveryDayEnd" value="" class="mini-datepicker" datePickerFrom="dateFeom" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="status" class="control-label col-sm-0"> 图纸编号: </label>
+                                    <div class="col-sm-1">
+                                        <input name="drawingNo" id="drawingNo" class="mini-textbox" onenter="search()" />
+                                    </div>
+                                </div>
+                                <div class="search-item">
+                                    <label for="status" class="control-label col-sm-0"> 品番: </label>
+                                    <div class="col-sm-1">
+                                        <input name="productNo" id="productNo" class="mini-textbox" onenter="search()" />
+                                    </div>
+                                </div>
+                                <div class="search-item">
+                                    <label for="status" class="control-label col-sm-0"> 出货状态: </label>
+                                    <div class="col-sm-1">
+                                        <input name="status" id="status" class="mini-combobox" textField="text" valueField="value" onenter="search()" th:url="@{/common/getKbn?kbntypecd=14}" allowInput="false" showNullItem="true" ajaxType="post" />
+                                    </div>
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()">
+                                    <i class="ace-icon fa fa-search"> </i> 查 询
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+        </a>
+    </div>
+    <!-- /.main-container -->
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a class="mini-button btn btn-success btn-round" onclick="edit()">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 编辑
+                    </a>
+
+                    <a class="mini-button btn btn-danger btn-round" onclick="removeItem()">
+                        <i class="ace-icon fa fa-times-circle"> </i> 删除
+                    </a>
+                    <a id="orderOutput" class="mini-button btn btn-success btn-round" name="orderOutput" onclick="orderOutput()" type="button">
+                        <i class="ace-icon fa fa-print"></i>印刷
+                    </a>
+                    <a class="mini-button btn btn-success btn-round" onclick="edit()">
+                        <i class="ace-icon fa fa-pencil-square-o"> </i> 出库完成
+                    </a>
+                    <a class="mini-button btn btn-success btn-round">
+                        <i class="ace-icon fa fa-download"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="t0020users.username" sortOrder="asc" onshowrowdetail="onShowRowDetail">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="outplanNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">出货计划编号</div>
+                <div field="customName" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">客户名称</div>
+                <div field="orderDeliveryDay" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">青岛出货日</div>
+                <div field="customDeliveryDay" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">客户交期</div>
+                <div field="contractDeliveryDay" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">回答交期</div>
+                <div field="planDeliveryDay" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">计划出货日</div>
+                <div field="orderNo" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">订单号</div>
+                <div field="materialName" width="150" headerAlign="center" sortField="orderoutcount" allowSort="false" align="center">品名</div>
+                <div field="texture" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">图纸编号</div>
+                <div field="productNo" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">品番</div>
+                <div field="orderCount" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="right">订单数量</div>
+                <div field="nowCount" width="80" headerAlign="center" sortField="Outgoingstock" allowSort="false" align="right">
+                    计划出库数
+                </div>
+                <div field="outCount" width="80" headerAlign="center" sortField="Outgoingstock" allowSort="false" align="right">
+                    实际出库数
+                </div>
+                <div field="priceF" width="80" headerAlign="center" sortField="productname" allowSort="false" datatype="currency" align="right"> 单价JPY</div>
+                <div field="price" width="80" headerAlign="center" sortField="productname" allowSort="false" datatype="currency" align="right"> 单价RMB</div>
+                <div field="totalMoneyF" width="80" headerAlign="center" sortField="productname" allowSort="false" datatype="currency" align="right">金额小计JPY</div>
+                <div field="totalMoney" width="80" headerAlign="center" sortField="productname" allowSort="false" datatype="currency" align="right">金额小计RMB</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        var employee_grid = mini.get("deliveryaddress");
+
+        var detailGrid_Form = document.getElementById("detailGrid_Form");
+
+        var gridData = new Array();
+        for (var i = 0; i < 20; i++) {
+            gridData.push({
+                outplanNo: '191205',
+                customName: "ヤマトロジ在庫",
+                orderDeliveryDay: "2020/01/01",
+                customDeliveryDay: "2020/01/10",
+                contractDeliveryDay: "2020/01/10",
+                planDeliveryDay: "2020/01/01",
+                orderNo: "P9Y328137" + i,
+                drawingNo: "E-1160",
+                texture: "TE60",
+                materialName: "CH-40KIRS-B-CE(TE60)",
+                productNo: "E-1160-TE60",
+                orderCount: 100,
+                prodCount: 0,
+                outCount: 50,
+                nowCount: 50,
+                priceF: 1000,
+                price: 60,
+                totalMoneyF: 50 * 1000,
+                totalMoney: 50 * 60
+
+            });
+        }
+        grid.setData(gridData);
+
+        grid.on("drawcell", function(e) {
+            if (e.column.field == "outplanNo") {
+                e.cellStyle = "text-align:center";
+                e.cellHtml = '<a href="javascript:edit();">' + e.record.outplanNo + '</a>';
+            }
+        });
+
+        // 查询操作
+        function search() {
+
+            var searchcondation = getJsonObject("searchCondation");
+
+            grid.load(getPagerInfo("grid1", searchcondation));
+
+        }
+
+        //search();
+
+
+        // 编辑操作
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var popWindow = {
+                    url: "P0105OutPlanEdit.html",
+                    title: "出货计划作成",
+                    width: 1100,
+                    height: 600,
+                    onload: function() {},
+                    ondestroy: function(action) {}
+                };
+                mini.open(popWindow);
+            } else {
+                mini.alert("请选择一条数据");
+            }
+        }
+
+
+        // 删除操作
+        function removeItem() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                businessMessage.alert("Q0001", null, function() {
+                    doAjax("/S9911Supplier/delete", rows[0], function(obj) {
+                        if (obj.status == "SUCCESS") {
+                            businessMessage.alert(obj.text);
+                            grid.reload();
+                        } else {
+                            businessMessage.alert(obj.text);
+                        }
+                    });
+                });
+            } else {
+                businessMessage.aert("E0005")
+            }
+        }
+
+        function customChoose() {
+            var popWindow = {
+                url: "P9902CustomSel.html",
+                title: "客户选择",
+                width: 1100,
+                height: 600,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        // 焦点设置
+        function loadfocus() {
+            mini.get("name").focus();
+        }
+
+        function onGenderRenderer(e) {
+            for (var i = 0, l = Genders.length; i < l; i++) {
+                var g = Genders[i];
+                if (g.id == e.value) return g.text;
+            }
+            return "";
+        }
+
+        function onShowRowDetail(e) {
+            var grid = e.sender;
+            var row = e.record;
+
+            var td = grid.getRowDetailCellEl(row);
+            td.appendChild(detailGrid_Form);
+            detailGrid_Form.style.display = "block";
+            employee_grid.load({
+                id: row.id
+            });
+        }
+    </script>
+</body>
+
+</html>

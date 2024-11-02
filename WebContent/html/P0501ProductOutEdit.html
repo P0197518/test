@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>完成品出货</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<div class="edit-page-content">
+    <div id="form1" class="form-horizontal" style="width: 100%; min-width: 800px;">
+        <input id="id" class="mini-hidden" />
+        <input id="mode" class="mini-hidden" />
+        <div>
+            <div class="tab-content profile-edit-tab-content">
+                <div id="edit-basic" class="tab-pane in active">
+                    <h4 class="header blue bolder smaller">出货基本信息</h4>
+                    <div class="vspace-12-sm"></div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-0">出货计划编号:</label>
+                        <div class="col-sm-3">
+                            <input id="billNumber" class="mini-textbox" onvaluechanged="productnoChange" textField="text" required="ture" valueField="value" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-0">客户名:</label>
+                        <div class="col-sm-3">
+                            <input id="invoiceNo" class="mini-textbox" enabled="false" textField="text" required="ture" valueField="value" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-0">出货人:</label>
+                        <div class="col-sm-3">
+                            <input id="invoiceNo" class="mini-textbox" enabled="false" textField="text" required="ture" valueField="value" />
+                        </div>
+                        <label for="name" class="control-label col-sm-3">
+                           出货时间:</label>
+
+                        <div class="col-sm-3">
+                            <input id="invoiceDate " allowInput="true" class="mini-datepicker" format="yyyy/MM/dd" showOkButton="true " required="ture" />
+                        </div>
+                    </div>
+
+                    <div class="space-4"></div>
+                    <h4 class="header blue bolder smaller">产品列表</h4>
+                    <div class="vspace-12-sm"></div>
+                    <div class="space-4"></div>
+
+
+                    <div class="">
+
+                        <div id="grid1" class="mini-datagrid" idField="id" allowsort="false" multiSelect="true" resultAsData="true" showPager="false" allowCellEdit="true" allowCellSelect="true" ondrawcell="onDrawCell" oncellcommitedit="onCellCommitEdit">
+                            <div property="columns">
+                                <div type="checkcolumn"></div>
+                                <div field="orderNo" width="80" headerAlign="center" allowSort="false" align="center">订单号</div>
+                                <div field="materialName" width="120" headerAlign="center" allowSort="false" align="center">品名</div>
+                                <div field="texture" width="80" headerAlign="center" allowSort="false" align="center">材质</div>
+                                <div field="drawingNo" width="80" headerAlign="center" allowSort="false" align="center">图纸编号</div>
+                                <div field="productNo" width="100" headerAlign="center" allowSort="false" align="center">品番</div>
+                                <div field="inDay" width="80" headerAlign="center" allowSort="false" align="center">入库时间
+                                </div>
+                                <div field="lotNo" width="80" headerAlign="center" allowSort="false" align="center">LOT.NO
+                                </div>
+                                <div field="orderCount" width="80" headerAlign="center" datetype="curreny" allowSort="false" align="right">订单数量
+                                </div>
+                                <div field="outCount" width="80" headerAlign="center" datetype="curreny" allowSort="false" align="right">已出库数量
+                                </div>
+                                <div field="stockCount" width="80" headerAlign="center" datetype="curreny" allowSort="false" align="right">可用库存
+                                </div>
+                                <div field="nowCount" width="80" headerAlign="center" datetype="curreny" allowSort="false" align="right">应该出库数<i class="ace-icon fa fa-pencil-square-o"></i>
+                                    <input property="editor" class="mini-textbox" style="width:100%;" />
+                                </div>
+                                <div field="remark" width="160" headerAlign="center" allowSort="false" align="left">备注<i class="ace-icon fa fa-pencil-square-o"></i>
+                                    <input property="editor" class="mini-textbox" style="width:100%;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mini-toolbar">
+                            <table style="width:100%;">
+                                <tr>
+                                    <td style="width:100%;">
+                                        <label>托盘规格:</label>
+                                        <input id="containerno" name="containerno" class="mini-textbox" style="width: 140px;" maxlength=40 required="true" />
+                                        <label>包装编号:</label>
+                                        <input id="packageNo" name="packageNo" class="mini-textbox" style="width: 100px;" maxlength=40 required="true" />
+
+                                        <label>包装体积:</label>
+                                        <input id="standard" name="standard" class="mini-textbox" style="width: 100px;" maxlength=40 />
+                                        <label>托盘重量:</label>
+                                        <input id="weight" name="weight" class="mini-textbox" style="width: 100px;" maxlength=40 />
+                                        <a name="btnAdd" class="mini-button btn btn-success btn-round" onclick="addAll()" type="button">
+                                            <i class="ace-icon fa fa-angle-double-down"> </i>包装
+                                        </a>
+                                        <a class="mini-button btn btn-danger btn-round" onclick="removes()">
+                                            <i class="ace-icon fa fa-angle-double-up"> </i> 删除
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="">
+
+                            <div id="grid2" class="mini-datagrid" idField="id" multiSelect="true" showPager="false" allowCellEdit="true" allowCellSelect="false" ondrawsummarycell="onDrawSummaryCell">
+                                <div property="columns">
+                                    <div type="checkcolumn"></div>
+                                    <div field="packageNo" width="80" headerAlign="center" allowSort="false" align="center">packageNo </div>
+
+                                    <div field="orderNo" width="80" headerAlign="center" allowSort="false" align="center">订单号</div>
+                                    <div field="materialName" width="120" headerAlign="center" allowSort="false" align="center">品名</div>
+                                    <div field="texture" width="80" headerAlign="center" allowSort="false" align="center">材质</div>
+                                    <div field="drawingNo" width="80" headerAlign="center" allowSort="false" align="center">图纸编号</div>
+                                    <div field="productNo" width="100" headerAlign="center" allowSort="false" align="center">品番</div>
+                                    <div field="inDay" width="80" headerAlign="center" allowSort="false" align="center">入库时间
+                                    </div>
+                                    <div field="lotNo" width="80" headerAlign="center" allowSort="false" align="center">LOT.NO</div>
+                                    <div field="nowCount" width="80" headerAlign="center" allowSort="false" align="right">数量<i class="ace-icon fa fa-pencil-square-o"></i>
+                                        <input property="editor" class="mini-textbox" style="width:100%;" />
+                                    </div>
+                                    <div field="itemWeight" width="80" headerAlign="center" allowSort="false" align="right">单重</div>
+                                    <div field="weight" width="80" headerAlign="center" allowSort="false" align="right">净重</div>
+                                    <div field="remark" width="160" headerAlign="center" allowSort="false" align="left">备注<i class="ace-icon fa fa-pencil-square-o"></i>
+                                        <input property="editor" class="mini-textbox" style="width:100%;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 10px;">
+                <a class="mini-button btn btn-success btn-round " onclick="onOk()" type="button">
+                    <i class="ace-icon fa fa-floppy-o bigger-110"></i> 保存出库
+                </a> &nbsp; &nbsp;
+
+            </div>
+        </div>
+    </div>
+    <div id="htmlContent" style="padding-left:10px;display:none;">Container No.:
+        <input id="ordernum" type="text" style="width:250px">
+    </div>
+
+    <!-- /.page-content -->
+
+    <script type="text/javascript">
+        var form = new mini.Form("#form1");
+        mini.parse();
+        var grid = mini.get("grid1");
+
+
+        mini.parse();
+        var grid2 = mini.get("grid2");
+
+        function productnoChange() {
+            search();
+        }
+
+        function addAll() {
+            var items = []
+
+            for (var i = 0; i < grid.data.length; i++) {
+                if (grid.getData()[i].nowCount != 0 && grid.getData()[i].nowCount != null) {
+                    grid.getData()[i].packageNo = mini.get("packageNo").getValue();
+                    grid.getData()[i].itemWeight = 10;
+                    grid.getData()[i].weight = grid.getData()[i].itemWeight * grid.getData()[i].nowCount;
+                    items.push(grid.getData()[i])
+                }
+            }
+            grid2.addRows(items);
+        }
+
+        function removes() {
+            var items = grid2.getSelecteds();
+            grid2.removeRows(items);
+        }
+
+        function saveData() {
+            var data = grid2.getData();
+            var json = mini.encode(data);
+            alert(json);
+        }
+        // 查询操作
+        function search() {
+
+            //			var searchcondation = getJsonObject("searchCondation");
+            //			
+            //			grid.load({ id: form.getData().id });
+            //			
+            var gridData = new Array();
+            for (var i = 0; i < 5; i++) {
+                gridData.push({
+                    materialName: "EH-80K/D-SW",
+                    drawingNo: "E-B1921",
+                    productNo: "E-B1921-TE60",
+                    texture: "TE60",
+                    orderNo: "SY12212110",
+                    inDay: '2020/01/21',
+                    lotNo: 'QH-S19568',
+                    orderCount: 120,
+                    outCount: 50
+
+                });
+            }
+            grid.setData(gridData);
+        }
+
+
+
+        // 页面初期化制御
+        function onload(flg) {
+            if (flg == 1) {
+                mini.get("username").enable();
+            } else {
+                mini.get("username").disable();
+            }
+        }
+
+        // 保存操作
+        function onOk() {
+            // form.validate();
+            // if (form.isValid() == false) {
+            //     businessMessage.alert("E0009");
+            //     return;
+            // }
+            // businessMessage.alert("Q0002", null, oksave);
+        }
+
+        function oksave() {
+            // var data = form.getData();
+            // data.deliveryaddress = grid.data;
+            // var accessurl = "";
+            // if (mini.get("mode").value == "2") {
+            //     accessurl = "/S9910Customs/add";
+            // } else {
+            //     accessurl = "/S9910Customs/update";
+            // }
+            // doAjax(accessurl, data, function(obj) {
+            //     if (obj.status == "SUCCESS") {
+            //         businessMessage.alert("I0001", null, function() {
+            //             CloseWindow("ok");
+            //         });
+            //     } else if (obj.message == "E0024") {
+            //         businessMessage.alert(obj.text);
+            //         return;
+            //     }
+            // });
+        }
+
+        //初始化时focus
+        function loadfocus() {
+            mini.get("supplierNo").focus();
+        }
+
+        function addRow() {
+            var newRow = {
+                name: "New Row"
+            };
+            grid.addRow(newRow, grid.getData().length);
+
+            grid.beginEditCell(newRow, "LoginName");
+        }
+
+        function removeRow() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+
+                grid.removeRows(rows, true);
+            }
+        }
+
+        grid.on("celleditenter", function(e) {
+            var index = grid.indexOf(e.record);
+            if (index == grid.getData().length - 1) {
+                var row = {};
+                grid.addRow(row);
+            }
+        });
+
+        grid.on("beforeload", function(e) {
+            if (grid.getChanges().length > 0) {
+                if (confirm("有增删改的数据未保存，是否取消本次操作？")) {
+                    e.cancel = true;
+                }
+            }
+        });
+
+        // 
+        function customChoose() {
+            var popWindow = {
+                url: "P0704CustomList.html",
+                title: "客户选择",
+                width: 1000,
+                height: 500,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+
+        function supplierSelected(data) {
+            mini.get("supplierNo").setValue(data.id);
+            mini.get("supplierName").setValue(data.name);
+            mini.get("address").setValue(data.address);
+            mini.get("telephone").setValue(data.telephone);
+            mini.get("email").setValue(data.email);
+            mini.get("fax").setValue(data.fax);
+            grid.clearRows();
+            search();
+        }
+
+        //提交单元格编辑数据前激发
+        function onCellCommitEdit(e) {
+            var editor = e.editor;
+
+            editor.validate();
+            if (editor.isValid() == false) {
+                alert(editor.getErrorText());
+                e.cancel = true;
+            }
+        }
+
+        function onDrawCell(e) {
+            var record = e.record;
+
+            if (e.field == "money") {
+                // 計算合計額金額
+                var shipped = record.shipped;
+                var price = record.price;
+                var money = shipped * price;
+                e.cellHtml = money;
+                record.money = money;
+            }
+
+        }
+
+
+        function onDrawSummaryCell(e) {
+            var result = e.result;
+            var grid = e.sender;
+            var rows = e.data;
+
+            if (e.field == "money") {
+                var money = 0;
+                for (var i = 0, l = rows.length; i < l; i++) {
+                    var row = rows[i];
+                    money += row.money;
+                }
+                mini.get("totalMoney").setValue(money);
+            }
+        }
+
+        function promptClick() {
+            addAll();
+
+        }
+    </script>
+    </body>
+
+</html>

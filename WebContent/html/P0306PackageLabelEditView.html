@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>品目添加</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="edit-page-content">
+        <div id="form1" class="form-horizontal " style="width: 100%; min-width: 500px;">
+
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+
+                        <div class="vspace-12-sm"></div>
+                        <div class="space-4"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">标签类型:</label>
+                            <div class="col-sm-3">
+                                <input id="leixing" class="mini-combobox" textField="text" required="ture" valueField="value" ondrawcell="false" data='[{value:"0001",text:"标签1"},{value:"0002",text:"标签2"}]' />
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">图纸编号:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="maxLength:20" value="E-3087" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">材质:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="maxLength:20" value="TE80" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">品名:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="maxLength:20" value="CH-40KIW-III-B" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">数量:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="maxLength:20" value="41" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">制造年月:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-datepicker" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">LOT号:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="maxLength:20" value="WA-141" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right" for="form-field-username">备考:</label>
+                            <div class="col-sm-3">
+                                <input id="name" class="mini-textbox" vtype="maxLength:200" value="TE80" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 10px;">
+                <a class="mini-button btn btn-info btn-round " onclick="form1.hide()" type="button">
+                    <i class="ace-icon fa fa-floppy-o bigger-110"></i> 打印
+                </a> &nbsp; &nbsp;
+
+            </div>
+        </div>
+    </div>
+    <!-- /.page-content -->
+
+</body>
+<script type="text/javascript">
+    function onOk() {
+
+        window.CloseOwnerWindow();
+    }
+
+    function onCancel() {
+        CloseWindow("ok");
+    }
+
+    function CloseWindow(action) {
+        if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+        else window.CloseOwnerWindow();
+    }
+</script>
+
+</html>

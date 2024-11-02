@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header::commonHeader(~{::head/meta},~{::head/title},~{},~{},~{})">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>受注明細状況一覧</title>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <input id="resourcecd" name="resourcecd" type="hidden" value="P0103" />
+
+        <div class="main-content">
+            <div class="main-content-inner" id="form">
+                <div class="page-content">
+                    <div class="widget-box" id="form1" th:object="${formdata}">
+                        <!-- /.page-header -->
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">订单号:</label>
+                                    <input id="customOrderNo" th:field="*{customOrderNo}" maxlength="30" class="mini-textbox" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">订单类型:</label>
+                                    <input id="orderType" th:field="*{orderType}" class="mini-combobox" textField="text" valueField="value" th:url="@{/common/getKbn?codeTypeCd=01}" ajaxType="post" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">下单日:</label>
+                                    <input id="orderDayStart" th:field="*{orderDayStart}" class="mini-datepicker" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="orderDayEnd" th:field="*{orderDayEnd}" value="" class="mini-datepicker" showTime="false" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">图纸编号:</label>
+                                    <input id="drawingNo" th:field="*{drawingNo}" class="mini-textbox" maxlength="20" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">材质:</label>
+                                    <input id="texture" th:field="*{texture}" class="mini-combobox" textField="text" valueField="value" th:url="@{/common/getTexture}" ajaxType="post" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="dateFeom" class="control-label col-sm-0">回答交期:</label>
+                                    <input id="contractDeliveryDayStart" th:field="*{contractDeliveryDayStart}" class="mini-datepicker" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="contractDeliveryDayEnd" th:field="*{contractDeliveryDayEnd}" class="mini-datepicker" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">客户:</label>
+                                    <input id="customNo" th:field="*{customNo}" style="width: 50px;" class="mini-textbox" onvaluechanged="customNoChange" maxlength=4 onenter="search()" />
+                                    <a class="mini-button btn btn-info btn-round " type="button" onclick="search2()"> <i class="ace-icon fa fa-search"> </i>
+                                    </a>
+                                    <input id="customName" th:field="*{customName}" class="mini-textbox" enabled="false" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">订单状态:</label>
+                                    <input id="orderStatus" th:field="*{orderStatus}" class="mini-combobox" textField="text" valueField="value" th:url="@{/common/getKbn?codeTypeCd=02}" ajaxType="post" onenter="search()" />
+                                </div>
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button" onclick="search()"> <i class="ace-icon fa fa-search"> </i> 検索
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"> </i>
+        </a>
+    </div>
+    <!-- /.main-container -->
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%; height: 30px;">
+                    <a id="edit" class="mini-button btn btn-success btn-round" onclick="edit()"> <i class="ace-icon fa fa-pencil-square-o"> </i> 编辑订单
+                    </a>
+                    <a id="change" class="mini-button btn btn-success btn-round" onclick="changeDeliveryDay()"> <i class="ace-icon fa fa-pencil-square-o"> </i> 交期变更
+                    </a>
+                    <a id="cancle" class="mini-button btn btn-danger btn-round" onclick="cancle()"> <i class="ace-icon fa fa-times-circle"> </i> 取消订单
+                    </a>
+                    <a id="print" class="mini-button btn btn-success btn-round" onclick="print()"> <i class="ace-icon fa fa-print"></i> 打印合同
+                    </a>
+                    <a id="export" class="mini-button btn btn-success btn-round" onclick="export2()"> <i class="ace-icon fa fa-download"></i>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" th:url="@{/P0101Order/getList}" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" style="width: 100%; height: 100%;" sortField="orderNo" sortOrder="desc">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="customOrderNo" width="100" headerAlign="center" sortField="customOrderNo" allowSort="true" align="center">订单号</div>
+                <div field="bigClassify" width="80" headerAlign="center" sortField="bigClassify" allowSort="true" align="center">大分类</div>
+                <div field="smallClassify" width="80" headerAlign="center" sortField="smallClassify" allowSort="true" align="center">小分类</div>
+                <div field="productNature" width="80" headerAlign="center" sortField="productNature" allowSort="true" align="center">产品性质</div>
+                <div field="orderTypeName" width="80" headerAlign="center" sortField="orderType" allowSort="true" align="center">订单类型</div>
+                <div field="customName" width="80" headerAlign="center" sortField="customName" allowSort="true" align="center">客户</div>
+                <div field="orderDay" width="80" headerAlign="center" dateFormat="yyyy/MM/dd" sortField="orderDay" allowSort="true" align="center">下单日</div>
+                <div field="orderDeliveryDay" width="80" headerAlign="center" dateFormat="yyyy/MM/dd" sortField="orderDeliveryDay" allowSort="true" align="center">青岛出货日</div>
+                <div field="customDeliveryDay" width="80" headerAlign="center" dateFormat="yyyy/MM/dd" sortField="customDeliveryDay" allowSort="true" align="center">客户交期</div>
+                <div field="contractDeliveryDay" width="80" headerAlign="center" dateFormat="yyyy/MM/dd" sortField="contractDeliveryDay" allowSort="true" align="center">回答交期</div>
+                <div field="materialName" width="120" headerAlign="center" sortField="materialName" align="center">品名</div>
+                <div field="texture" width="70" headerAlign="center" sortField="texture" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="drawingNo" allowSort="true" align="center">图纸编号</div>
+                <div field="productNo" width="80" headerAlign="center" sortField="productNo" allowSort="true" align="center">品番</div>
+                <div field="orderCount" width="60" headerAlign="center" sortField="orderCount" datatype="currency" align="right">订单数量</div>
+                <div field="orderPriceF" width="80" headerAlign="center" allowSort="false" datatype="currency" align="right">单价JPY</div>
+                <div field="orderPrice" width="80" headerAlign="center" allowSort="false" datatype="currency" align="right">单价RMB</div>
+                <div field="totalMoneyF" width="80" headerAlign="center" allowSort="false" datatype="currency" align="right">订单金额JPY</div>
+                <div field="totalMoney" width="80" headerAlign="center" allowSort="false" datatype="currency" align="right">订单金额RMB</div>
+                <div field="outCount" width="70" headerAlign="center" allowSort="false" datatype="currency" align="right">已出库数量</div>
+                <div field="remainCount" width="70" headerAlign="center" allowSort="false" datatype="currency" align="right">残留数量</div>
+                <div field="showProd" width="70" headerAlign="center" allowSort="false" datatype="currency" align="right">制造查看</div>
+                <div field="requirement" width="70" headerAlign="center" allowSort="false" align="right">客户要求</div>
+                <div field="orderStatusName" width="80" headerAlign="center" sortField="orderStatus" align="center">订单状态</div>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        function customChoosePage() {
+            customChoose(function(data) {
+                mini.get("customNo").setValue(data.customNo);
+                mini.get("customName").setValue(data.customName);
+                customNoChange();
+            });
+        }
+
+        function customNoChange(e) {
+            if (e != undefined) {
+                formatCustomno(e);
+            }
+
+            var param = {
+                customNo: mini.get("customNo").getValue()
+            };
+            doAjax("/common/getCustomInfo", param, function(obj) {
+                if (obj.data != null) {
+                    mini.get("customName").setValue(obj.data.customName);
+                } else {
+                    mini.get("customName").setValue("");
+                }
+            });
+        }
+
+        // 查询操作
+        function search() {
+            var searchcondation = getJsonObject("searchCondation");
+            grid.load(getPagerInfo("grid1", searchcondation));
+        }
+
+        // 页面加载完处理
+        $(function() {
+            mini.get("customOrderNo").focus();
+            search();
+        });
+
+        grid
+            .on(
+                "drawcell",
+                function(e) {
+                    if (e.column.field == "customOrderNo") {
+                        e.cellStyle = "text-align:center";
+                        e.cellHtml = '<a href="javascript:viewOrder(\'' +
+                            e.record.orderNo + '\');">' +
+                            e.record.customOrderNo + '</a>';
+                    } else if (e.column.field == "showProd") {
+
+                        e.cellStyle = "text-align:center";
+                        e.cellHtml = '<a href="javascript:prodStatus(\'' +
+                            e.record.productNo +
+                            '\')">' +
+                            '<i class="ace-icon fa fa-bar-chart-o" style="margin-left: 5px;">' +
+                            '</a>';
+
+                    } else if (e.column.field == "contractDeliveryDay") {
+                        e.cellStyle = "text-align:center";
+                        e.cellHtml = '<a href="javascript:viewChangeLog(\'' +
+                            e.record.orderNo + '\');">' +
+                            $.formatDateSelf(e.record.contractDeliveryDay, "yyyy/MM/dd") + '</a>';
+                    }
+                });
+
+        grid.on("select", function(e) {
+            if (e.record.orderStatus == "4" || e.record.orderStatus == "5") {
+                mini.get("cancle").disable();
+            } else {
+                mini.get("cancle").enable();
+            }
+
+            if (e.record.orderStatus == "5") {
+                mini.get("edit").disable();
+            } else {
+                mini.get("edit").enable();
+            }
+        });
+
+        // 查看
+        function viewOrder(orderNo) {
+            var popupParam = openCommonPopupParam(
+                "/P0101Order/indexEdit?mode=view&orderNo=" + orderNo, "订单查看");
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {}
+            };
+            mini.open(popupParam);
+        }
+
+        // 查看
+        function viewChangeLog(orderNo) {
+            var popupParam = openCommonPopupParam(
+                "/P0101Order/indexViewChangeDay?orderNo=" + orderNo, "订单交期变更历史查看");
+            popupParam.ondestroy = function(action) {
+                if (action == "ok") {}
+            };
+            mini.open(popupParam);
+        }
+
+        // 编辑
+        function edit() {
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var popupParam = openCommonPopupParam(
+                    "/P0101Order/indexEdit?mode=update&orderNo=" +
+                    rows[0].orderNo, "订单修改");
+                popupParam.ondestroy = function(action) {
+                    if (action == "ok") {
+                        grid.reload();
+                    }
+                };
+                mini.open(popupParam);
+
+            } else {
+                businessMessage.alert("E00002");
+            }
+        }
+
+        // 查看生产状况操作
+        function prodStatus(orderListNo) {
+            var popupParam = openCommonPopupParam(
+                "/P0101Order/indexProdStatus?orderListNo=" +
+                orderListNo, "生产状况查看");
+
+            mini.open(popupParam);
+        }
+
+        // 取消订单操作
+        function cancle() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                businessMessage.alert("Q00001", null, function() {
+                    doAjax("/P0101Order/delete", rows[0], function(obj) {
+                        businessMessage.alert("IC0002");
+                        grid.reload();
+                    });
+                });
+            } else {
+                businessMessage.alert("E00002");
+            }
+        }
+
+        // 修改交期
+        function changeDeliveryDay() {
+            // TODO
+            var rows = grid.getSelecteds();
+            if (rows.length == 1) {
+                var row = grid.getSelected();
+                var popupParam = openCommonPopupParam(
+                    "/P0101Order/indexEdit?mode=update&orderNo=" +
+                    row.orderNo, "订单修改");
+                popupParam.ondestroy = function(action) {
+                    if (action == "ok") {
+                        grid.reload();
+                    }
+                };
+                mini.open(popupParam);
+            } else {
+                businessMessage.alert("E00002");
+            }
+        }
+
+        // 强制出库完成操作
+        function finish() {
+            var rows = grid.getSelecteds();
+            if (rows.length > 0) {
+                businessMessage.alert("Q00005", null, function() {
+                    doAjax("/P0101Order/finish", rows[0], function(obj) {
+                        businessMessage.alert("I00004");
+                        grid.reload();
+                    });
+                });
+            } else {
+                businessMessage.alert("E00002")
+            }
+        }
+    </script>
+</body>
+
+</html>

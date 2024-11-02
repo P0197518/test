@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 transitional//EN" "http://www.w3.org/tr/xhtml1/Dtd/xhtml1-transitional.dtd">
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>权限管理</title>
+    <script src="../boot.js?version=201704271642" type="text/javascript"></script>
+</head>
+
+<body>
+
+
+    <div class="edit-page-content">
+        <div id="editForm1" class="form-horizontal" style="width:100%;min-width:800px;">
+            <input name="id" id="id" class="mini-hidden" value="" />
+            <input name="version" id="version" class="mini-hidden" value="" />
+            <input name="type" id="type" class="mini-hidden" value="ACTION" />
+            <input name="parentname" id="parentname" class="mini-hidden" value="报价作成" />
+            <input name="parentid" id="parentid" class="mini-hidden" value="402881265bd7a4c4015bd7d20d160028" />
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+                        <h4 class="header blue bolder smaller">资源信息</h4>
+
+                        <div class="vspace-12-sm"></div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label no-padding-right" for="form-field-username">权限名:</label>
+
+                            <div class="col-xs-3">
+                                <input name="resourcename" id="resourcename" class="mini-textbox" value="" vtype="maxLength:30" required="true" requiredErrorText="不能为空" />
+                            </div>
+
+                            <label class="col-xs-2 control-label no-padding-right" for="form-field-username">序号：</label>
+
+                            <div class="col-xs-3">
+                                <input name="sortorder" id="sortorder" class="mini-textbox" vtype="maxLength:20; int" value="" vtype="float" required="true" requiredErrorText="不能为空" />
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label no-padding-right" for="form-field-username">URL:</label>
+
+                            <div class="col-xs-3">
+                                <input name="resourceurl" id="resourceurl" class="mini-textbox" vtype="maxLength:50" value="" required="false" requiredErrorText="不能为空" />
+                            </div>
+
+                            <label class="col-xs-2 control-label no-padding-right" for="form-field-username">ModuleId:</label>
+
+                            <div class="col-xs-3">
+                                <input name="moduleid" id="moduleid" class="mini-textbox" vtype="maxLength:30" value="" />
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label no-padding-right" for="form-field-username">ElementName:</label>
+
+                            <div class="col-xs-3">
+                                <input name="elementid" id="elementid" class="mini-textbox" vtype="maxLength:30" value="" />
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center;padding:10px;">
+                <a class="mini-button btn btn-info btn-round " onclick="save()" type="button">
+                    <i class="ace-icon fa fa-floppy-o bigger-110"></i> 确 定
+                </a> &nbsp; &nbsp;
+                <a class="mini-button btn btn-warning btn-round" onclick="cancelRow()" type="button">
+                    <i class="ace-icon fa fa-undo bigger-110"></i> 取 消
+                </a> &nbsp; &nbsp;
+                <a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button">
+                    <i class="ace-icon fa fa-undo bigger-110"></i> 关 闭
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /.page-content -->
+
+    <div class="mini-fit">
+        <div id="datagrid1" class="mini-datagrid" style="width:100%;height:100%;" showPager="false" onselectionchanged="onSelectionChanged">
+
+            <div property="columns">
+                <div type="checkcolumn">选择</div>
+                <div type="indexcolumn" headerAlign="center">编号</div>
+                <div name="resourcename" field="resourcename" headerAlign="center" align="center" width="100">权限名</div>
+                <div field="resourceurl" headerAlign="center" align="center" width="150">URL</div>
+                <div field="sortorder" headerAlign="center" align="center" width="80">序号</div>
+                <div field="elementid" headerAlign="center" align="center" width="80">ElementName</div>
+                <div field="cz" headerAlign="center" align="center" renderer="onActionRenderer" width="80">操作</div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script type="text/javascript">
+        mini.parse();
+        var form = new mini.Form("editForm1");
+        var grid = mini.get("datagrid1");
+
+        var gridData = new Array();
+        for (var i = 0; i <= 2; i++) {
+            gridData.push({
+                resourcename: "估价",
+                resourceurl: "www.baidu.com",
+                sortorder: "1",
+                elementid: "估价",
+            })
+        }
+
+        grid.setData(gridData)
+            //grid.load({parentid:"402881265bd7a4c4015bd7d20d160028"});
+            // grid.sortBy("time", "desc");
+            /***********************************/
+        var Genders = [{
+            id: 0,
+            text: '不显示'
+        }, {
+            id: 1,
+            text: '显示'
+        }];
+
+        function onGenderRenderer(e) {
+            for (var i = 0, l = Genders.length; i < l; i++) {
+                var g = Genders[i];
+                if (g.id == e.value) return g.text;
+            }
+            return "";
+        }
+        /* 删除按钮移动 */
+        function onActionRenderer(e) {
+            ///var grid = e.sender;
+            var record = e.record;
+            var uid = record._uid;
+            //var rowIndex = e.rowIndex;
+
+            var s = '<a class="Delete_Button" href="javascript:delRow(\'' + uid +
+                '\')">删除</a>';
+
+            return s;
+        }
+        /*   */
+        function onSelectionChanged(e) {
+
+            var grid = e.sender;
+            var record = grid.getSelected();
+            if (record) {
+                editRow(record._uid);
+            } else {
+                form.reset();
+            }
+        }
+
+        function newRow() {
+            var row = {};
+            grid.addRow(row, 0);
+            editRow(row._uid);
+        }
+
+        function editRow(row_uid) {
+            var row = grid.getRowByUID(row_uid);
+            if (row) {
+                //表单加载字典信息
+                var form = new mini.Form("editForm1");
+                if (grid.isNewRow(row)) {
+                    form.reset();
+                } else {
+
+                    form.loading();
+                    /*doAjaxBackJson("/XRYY/resource/backend_res!getActionInfo.action?id="+ row.id,
+                    		null,
+                    		function(o) {
+                    			form.setData(o);
+                    			form.unmask();
+                    		});*/
+                }
+                grid.doLayout();
+            }
+        }
+
+        function cancelRow() {
+            form.clear();
+        }
+
+        function delRow(row_uid) {
+            var row = grid.getRowByUID(row_uid);
+            if (row) {
+                mini.confirm("确定要删除选定行的数据吗?", "确定?", function(action) {
+                    if (action == "ok") {
+                        /*doAjaxBackJson("/XRYY/resource/backend_res!delete.action?id=" + row.id,
+	                			   null,
+	                			   function(text) {
+										if (text.status == "success") {
+											grid.reload();
+			        			        	mini.alert("刪除成功！","提示",function(){
+			        			    		    form.clear();
+			        			        	});
+										} else {
+											grid.reload();
+			        			        	mini.alert(text,"提示",function(){
+			        			        	});
+										}
+									});*/
+                    }
+                });
+            }
+        }
+        /*修改*/
+        function save() {
+            var form = new mini.Form("editForm1");
+            form.validate();
+            if (form.isValid() == false)
+                return;
+            mini.get("parentname").setValue("报价作成");
+            mini.get("parentid").setValue("402881265bd7a4c4015bd7d20d160028");
+            var o = form.getData();
+            var json = mini.encode(o);
+
+            /*doAjaxBackJson( "/XRYY/resource/backend_res!saveAction.action",
+            		{data : json},
+            		function(obj) {
+            			if (obj.status == "success") {
+            	        	mini.alert("保存成功！","提示",function(){
+            	    		    form.clear();
+            	    		    grid.reload();
+            	        	});
+            			} else {
+            				mini.alert(obj.message);
+            			}
+            		});*/
+
+        }
+    </script>
+</body>
+
+</html>

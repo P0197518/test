@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>安全库存作成指令书</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="page-content">
+                    <div class="widget-box">
+                        <div class="widget-body" id="searchCondation">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">图纸编号:</label>
+                                    <input id="drawingNo" name="drawingNo" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">品番:</label>
+                                    <input id="productNo" name="productNo" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">大分类:</label>
+                                    <input id="bigClassify" class="mini-combobox" textField="text" valueField="value" data='[{value:"01",text:"本社  土木"},{value:"02",text:"本社  环境"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">小分类:</label>
+                                    <input id="smallClassify" class="mini-combobox" textField="text" valueField="value" data='[{value:"01",text:"アースオーガー"},{value:"02",text:"ケーシング"}]' />
+                                </div>
+
+                                <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                    <i class="ace-icon fa fa-search">查 询</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="mini-toolbar">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 100%;">
+                    <a class="mini-button btn btn-success btn-round" onclick="add()" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110">
+                        </i>做成指令书
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- 画面列表 -->
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" sortField="t0020users.username" sortOrder="asc">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="materialName" width="150" headerAlign="center" sortField="zhiZaoFanHao" align="center">品名 </div>
+                <div field="texture" width="80" headerAlign="center" allowSort="false" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" allowSort="false" align="center">图纸编号</div>
+                <div field="productNo" width="80" headerAlign="center" allowSort="false" align="center">品番</div>
+                <div field="bigClassify" width="80" headerAlign="center" sortField="beiKao" align="center">大分类</div>
+                <div field="smallClassify" width="80" headerAlign="center" sortField="beiKao" align="center">小分类</div>
+                <div field="stockCount" width="80" headerAlign="center" sortField="zaiKuShu" align="right" datatype="currency">当前在库数</div>
+                <div field="safeCount" width="80" headerAlign="center" sortField="zaiKuShu" align="right" datatype="currency">安全在库数</div>
+                <div field="prodCount" width="80" headerAlign="center" sortField="zaiKuShu" align="right" datatype="currency">在制数</div>
+                <div field="diffCount" width="80" headerAlign="center" sortField="zaiKuShu" align="right" datatype="currency">差异数</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+
+        var gridData = new Array();
+        for (var i = 0; i < 20; i++) {
+            gridData.push({
+                zaiZhiShu: "100",
+                texture: "CT90",
+                drawingNo: "E-3124",
+                productNo: "E-3124-CT90",
+                materialName: "固定刃418-95-28（部品）②TE40/TE60",
+                statisticalName: "910完成品安全在库",
+                bigClassify: "完成品",
+                smallClassify: "冲压件",
+
+                stockCount: "2000",
+                safeCount: "3000",
+                prodCount: "0",
+                diffCount: "1000"
+
+            });
+        }
+        grid.setData(gridData);
+
+        function add() {
+            var popWindow = {
+                url: "P0201ProdEdit.html",
+                title: "安全库存制造指令书作成",
+                width: 1150,
+                height: 600,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function add2() {
+            var popWindow = {
+                url: "P0508SafeStockViewEdit.html",
+                title: "安全库存添加",
+                width: 900,
+                height: 300,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+    </script>
+</body>
+
+</html>

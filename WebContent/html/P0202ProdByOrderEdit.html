@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>订单作成指令书</title>
+    <script src="../boot.js" type="text/javascript"></script>
+</head>
+
+<body class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+
+                <div class="page-content">
+                    <div class="widget-box">
+
+                        <!-- /.page-header -->
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">订单编号:</label>
+                                    <input id="Fax" name="Fax" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">订单类型:</label>
+                                    <input id="leixing" class="mini-combobox" textField="text" valueField="value" ondrawcell="false" data='[{value:"0001",text:"客户订单"},{value:"0003",text:"加工订单"},{value:"0002",text:"索偿订单"},{value:"0006",text:"样品订单"}]' />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">下单日:</label>
+                                    <input id="dateFeom" name="dateFeom" value="" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="dateTo" name="dateTo" value="" class="mini-datepicker" datePickerFrom="dateFeom" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">图纸编号:</label>
+                                    <input id="Fax" name="Fax" class="mini-textbox" textField="distingname" valueField="distingid" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="name" class="control-label col-sm-0">品番:</label>
+                                    <input id="productNo" class="mini-textbox" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="dateFeom" class="control-label col-sm-0">合同交期:</label>
+                                    <input id="dateFeom" name="dateFeom" value="" class="mini-datepicker" datePickerTo="dateTo" format="yyyy/MM/dd" allowInput="true" showTime="false" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+                                    <label for="isusedate" class="control-label"> ～ </label>
+                                    <input id="dateTo" name="dateTo" value="" class="mini-datepicker" datePickerFrom="dateFeom" showTime="false" format="yyyy/MM/dd" allowInput="true" showTodayButton="true" onenter="search()" />
+                                </div>
+                                <div class="search-item">
+
+                                    <label for="name" class="control-label col-sm-0">客户:</label>
+                                    <input id="orderNumber" name="supplier" class="mini-textbox no-input" onenter="search()" vtype="maxLength:30" />
+                                    <a class="mini-button btn btn-info btn-round" type="button" onclick="search2()">
+                                        <i class="ace-icon fa fa-search"> </i>
+                                    </a>
+                                    <input name="supplierName" id="supplierName" class="mini-textbox" value="" enabled="false" vtype="maxLength:30" required="true" requiredErrorText="不能为空" onenter="onOk()" />
+
+                                </div>
+                            </div>
+                            <a class="mini-button btn btn-info btn-round btn-search" type="button">
+                                <i class="ace-icon fa fa-search"> </i>查 询
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="mini-toolbar">
+        <table style="width:100%;">
+            <tr>
+                <td style="width:100%;">
+                    <a class="mini-button btn btn-success btn-round" onclick="add()" type="button">
+                        <i class="ace-icon fa fa-plus-circle bigger-110">
+                    </i>做成指令书
+                    </a>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="mini-fit">
+        <div id="grid1" class="mini-datagrid" idField="id" allowResize="false" allowCellSelect="true" multiSelect="false" editNextOnEnterKey="true" style="width: 100%; height: 100%;" onshowrowdetail="onShowRowDetail" onLoad="onLoad">
+            <div property="columns">
+                <div type="checkcolumn"></div>
+                <div field="orderNo" width="100" headerAlign="center" allowSort="false" align="center">订单号</div>
+                <div field="materialName" width="150" headerAlign="center" sortField="orderoutcount" allowSort="false" align="center">品名</div>
+                <div field="texture" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">材质</div>
+                <div field="drawingNo" width="80" headerAlign="center" sortField="productnum" allowSort="false" align="center">图纸编号</div>
+                <div field="productNo" width="100" headerAlign="center" sortField="productnum" allowSort="false" align="center">品番</div>
+                <div field="customer" width="80" headerAlign="center" allowSort="false" align="center">客户</div>
+                <div field="orderType" width="80" headerAlign="center" allowSort="false" align="center">订单类型</div>
+                <div field="orderDate" width="80" headerAlign="center" allowSort="false" align="center">订单日</div>
+                <div field="shipDate" width="80" headerAlign="center" allowSort="false" align="center">青岛出库日</div>
+                <div field="customerPeriod" width="80" headerAlign="center" allowSort="false" align="center">客户交期</div>
+                <div field="responsePeriod" width="80" headerAlign="center" allowSort="false" align="center">回答交期</div>
+                <div field="orders" width="60" headerAlign="center" allowSort="false" align="right" datatype="currency">订单数</div>
+                <div field="shipments" width="60" headerAlign="center" allowSort="false" align="right" datatype="currency">计划数</div>
+                <div field="backorder" width="80" headerAlign="center" allowSort="false" align="right" datatype="currency">计划残</div>
+                <div field="consideration" width="160" headerAlign="center" allowSort="false" align="left">备注</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        mini.parse();
+        var grid = mini.get("grid1");
+        var gridData = new Array();
+        for (var i = 1; i < 15; i++) {
+            gridData.push({
+                orderClassification: "快件",
+                orderType: "部分加工",
+                customer: "HK",
+                orderDate: "2019/9/2",
+                shipDate: "2019/9/18",
+                customerPeriod: "2019/10/9",
+                responsePeriod: "検査表同封",
+                orderNo: "<a id='meisai' onclick='edit();'>P993153650</a>",
+                materialName: "回転刃A 150-110-80",
+                texture: "TE60",
+                drawingNo: "E-3124",
+                productNo: "E-3124-TE60",
+                orders: "2000",
+                consideration: "ナニワテクノス向け",
+                shipments: "2000",
+                backorder: "0",
+                shipment1: "9/28",
+            });
+        }
+        grid.setData(gridData);
+
+        function search() {}
+
+        function select() {
+
+            var ck1 = mini.get("ck1");
+            var ck2 = mini.get("ck2");
+            var ck3 = mini.get("ck3");
+            var ck4 = mini.get("ck4");
+            var ck5 = mini.get("ck5");
+            var ck6 = mini.get("ck6");
+            var ck7 = mini.get("ck7");
+
+        }
+        //  添加
+
+        function add() {
+            var popWindow = {
+                url: "P0201ProdEdit.html",
+                title: "订单制造指令书作成",
+                width: 1150,
+                height: 600,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+
+        function edit() {
+            var popWindow = {
+                url: "P0101OrderEdit.html",
+                title: "订单查看",
+                width: 1100,
+                height: 650,
+                onload: function() {},
+                ondestroy: function(action) {}
+            };
+            mini.open(popWindow);
+        }
+        //编辑
+        // function edit() {
+        //     var rows = grid.getSelecteds();
+        //     if (rows.length == 1) {
+        //         var row = grid.getSelected();
+        //         mini.open({
+        //             title: "订单编辑",
+        //             url: "T0101pinmuguanliedit.html",
+        //             width: 900,
+        //             height: 400,
+        //             onload: function() {},
+        //             ondestroy: function(action) {
+        //                 //grid.reload();
+        //             }
+        //         });
+        //     } else {
+        //         mini.alert("请选择一条记录");
+        //     }
+        // }
+
+        //删除
+        // function removeItem() {
+        //     var rows = grid.getSelecteds();
+        //     if (rows.length > 0) {
+        //         grid.removeRows(rows, true);
+        //         mini.alert("删除成功！");
+
+        //         /*if (confirm("确定删除选中记录？")) {
+        //         }*/
+        //     } else {
+        //         mini.alert("请选择一条记录");
+        //     }
+        // }
+    </script>
+</body>
+
+</html>

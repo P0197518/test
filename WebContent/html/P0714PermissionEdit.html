@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>角色信息</title>
+    <script src="../boot.js?version=201704271642" type="text/javascript"></script>
+    <style>
+        .function-item {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        
+        .function-item input {
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+
+<body onload="loadfocus()">
+
+    <div class="edit-page-content">
+        <div id="form" class="form-horizontal" style="width:100%;min-width:800px;">
+            <input name="id" id="id" class="mini-hidden" value="" />
+            <input name="oldresourcename" id="oldresourcename" class="mini-hidden" value="" />
+            <input name="version" id="version" class="mini-hidden" value="" />
+            <input name="type" id="type" class="mini-hidden" value="MENU" />
+            <div>
+                <div class="tab-content profile-edit-tab-content">
+                    <div id="edit-basic" class="tab-pane in active">
+
+                        <div class="form-group">
+                            <label class=" col-sm-1 control-label no-padding-right" for="form-field-username">权限名:</label>
+                            <input id="rname" class="col-sm-3 mini-textbox" style="width:150px;" vtype="maxLength:30" value="" required="true" requiredErrorText="不能为空" />
+                            <label class="col-sm-1 control-label no-padding-right" for="form-field-username">说明:</label>
+                            <input id="desc" class="col-sm-3 mini-textbox" style="width:150px;" vtype="maxLength:50" value="" />
+
+                        </div>
+
+                        <h4 class="header blue bolder smaller"></h4>
+
+                        <div class="vspace-12-sm"></div>
+
+                        <div class="">
+                            <div id="treegrid1" class="mini-treegrid" treeColumn="resourcename" idField="UID" parentField="ParentTaskUID" resultAsTree="false" allowResize="false" expandOnLoad="true" showTreeIcon="true" allowSelect="false" allowCellSelect="false" enableHotTrack="false"
+                                ondrawcell="ondrawcell">
+
+                                <div property="columns">
+                                    <div type="indexcolumn" headerAlign="center" width="20"></div>
+                                    <div name="resourcename" field="resourcename" width="80">模块名称</div>
+                                    <div field="resourceurl" align="left" width="160">权限</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 10px;">
+                <a class="mini-button btn btn-info btn-round " onclick="onOk()" type="button">
+                    <i class="ace-icon fa fa-floppy-o bigger-110"></i> 确 定
+                </a> &nbsp; &nbsp;
+                <a class="mini-button btn btn-warning btn-round" onclick="onCancel()" type="button">
+                    <i class="ace-icon fa fa-undo bigger-110"></i> 取 消
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /.page-content -->
+
+</body>
+
+</html>
+<script type="text/javascript">
+    mini.parse();
+    var tree = mini.get("treegrid1");
+    var showAllSelect = true;
+
+    var treeData = new Array();
+
+
+    treeData.push({
+
+        "UID": "1",
+        "resourcename": "在庫管理",
+        "resourceurl": "../asdads/",
+        "imgvalue": "2007-01-01T00:00:00",
+        "moduleid": "在庫管理",
+        "sortorder": "1",
+        "PredecessorLink": [],
+        "ParentTaskUID": "-1",
+        "resourceurl": ""
+    }, {
+        "UID": "2",
+        "resourcename": "在庫検索",
+        "resourceurl": "../asdads/",
+        "imgvalue": "",
+        "moduleid": "E01002",
+        "sortorder": "01",
+        "PredecessorLink": [],
+        "ParentTaskUID": "1",
+        "resourceurl": "<input type='button' value='全選' style='border:solid 1px #aaa;'/><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>照会</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>確定</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>取消</label>"
+    }, {
+        "UID": "3",
+        "resourcename": "在庫推算検索",
+        "resourceurl": "../asdads/",
+        "imgvalue": "",
+        "moduleid": "E01003",
+        "sortorder": "02",
+        "PredecessorLink": [],
+        "ParentTaskUID": "1",
+        "resourceurl": "<input type='button' value='全選' style='border:solid 1px #aaa;'/><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>照会</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>確定</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>取消</label>"
+    }, {
+        "UID": "4",
+        "resourcename": "产品入庫",
+        "resourceurl": "../asdads/",
+        "imgvalue": "",
+        "moduleid": "E01004",
+        "sortorder": "03",
+        "PredecessorLink": [],
+        "ParentTaskUID": "1",
+        "resourceurl": "<input type='button' value='全選' style='border:solid 1px #aaa;'/><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>照会</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>確定</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>取消</label>"
+    }, {
+        "UID": "5",
+        "resourcename": "入金・支払管理",
+        "resourceurl": "../asdads/",
+        "imgvalue": "",
+        "moduleid": "入金・支払管理",
+        "sortorder": "1",
+        "PredecessorLink": [],
+        "ParentTaskUID": "",
+        "resourceurl": ""
+    }, {
+        "UID": "6",
+        "resourcename": "采购单支払申請",
+        "resourceurl": "../asdads/",
+        "imgvalue": "",
+        "moduleid": "C01001",
+        "sortorder": "01",
+        "PredecessorLink": [],
+        "ParentTaskUID": "5",
+        "resourceurl": "<input type='button' value='全選' style='border:solid 1px #aaa;'/><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>照会</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>確定</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>取消</label>"
+    }, {
+        "UID": "7",
+        "resourcename": "采购单支払申請承認",
+        "resourceurl": "../asdads/",
+        "imgvalue": "",
+        "moduleid": "C01001",
+        "sortorder": "02",
+        "PredecessorLink": [],
+        "ParentTaskUID": "5",
+        "resourceurl": "<input type='button' value='全選' style='border:solid 1px #aaa;'/><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>照会</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>確定</label><label class='function-item'><input type='checkbox' name='checkboxs' hideFocus/>取消</label>"
+    })
+
+    tree.loadList(treeData, "UID", "ParentTaskUID")
+
+    function ondrawcell(e) {
+        var tree = e.sender,
+            record = e.record,
+            field = e.field,
+            id = record[tree.getIdField()],
+            funs = record.functions;
+
+
+        function createCheckboxs(funs) {
+            if (!funs) return "";
+            var html = "";
+            if (showAllSelect) {
+                var value = record.checkAll !== false ? "全選" : "取消";
+                var clickFn = 'checkAllFunc(\'' + id + '\', this)';
+                html += '<input onclick="' + clickFn + '" type="button" value="' + value + '" style="border:solid 1px #aaa;"/>';
+            }
+            for (var i = 0,
+                    l = funs.length; i < l; i++) {
+                var fn = funs[i];
+                var clickFn = 'checkFunc(\'' + id + '\',\'' + fn.id + '\', this.checked)';
+                var checked = fn.checked ? 'checked' : '';
+                html += '<label class="function-item"><input onclick="' + clickFn + '" ' + checked + ' type="checkbox" name="' + fn.id + '" hideFocus/>' + fn.name + '</label>';
+            }
+            return html;
+        }
+
+        if (field == 'functions') {
+            e.cellHtml = createCheckboxs(funs);
+        }
+    }
+
+
+
+    function getFuns() {
+        var data = tree.getData();
+        var json = mini.encode(data);
+        alert(json);
+    }
+
+    function checkFunc(id, actionId, checked) {
+        var record = tree.getRecord(id);
+        if (!record) return;
+        var funs = record.functions;
+        if (!funs) return;
+
+        function getAction(actionId) {
+            for (var i = 0,
+                    l = funs.length; i < l; i++) {
+                var o = funs[i];
+                if (o.id == actionId) return o;
+            }
+        }
+        var obj = getAction(actionId);
+        if (!obj) return;
+        obj.checked = checked;
+    }
+
+    function checkAllFunc(id, btn) {
+        var record = tree.getRecord(id);
+        if (!record) return;
+        var funs = record.functions;
+        if (!funs) return;
+        var checked = record.checkAll !== false;
+        for (var i = 0,
+                l = funs.length; i < l; i++) {
+            var o = funs[i];
+            o.checked = checked;
+        }
+
+        record.checkAll = !checked;
+        tree.updateRow(record);
+
+    }
+    //////////////////////////////////////////////////////////////////////////////////////
+    function onOk() {
+
+        var form = new mini.Form("form");
+        form.validate();
+        if (form.isValid() == false) {
+            businessMessage.alert("E0009");
+            return;
+        }
+        var data = tree.getData(false, false);
+        var json = mini.encode(data);
+        mini.confirm(businessMessage.get("Q0023"), "确认",
+            function(action) {
+                if (action == "ok") {
+
+                    doAjaxBackJson("../system/backend_role!save.action", {
+                        data: json,
+                        name: mini.get("rname").getValue(),
+                        desc: mini.get("desc").getValue(),
+                        id: ""
+                    }, function(text) {
+                        var result = mini.decode(text);
+                        var obj = eval(result);
+                        if (obj.status == "success") {
+                            $(document).keydown(function(e) {
+                                if (e.keyCode == 32) {
+                                    CloseWindow("ok");
+                                }
+                            });
+                            mini.alert("保存成功!", "提示",
+                                function() {
+                                    CloseWindow("ok");
+                                });
+                        } else {
+                            mini.alert(obj.message);
+                        }
+                    });
+                }
+            });
+
+    }
+    //////////////////////////////////////////////////////////////////////////////////////
+    function CloseWindow(action) {
+        if (window.CloseOwnerWindow) return window.CloseOwnerWindow(action);
+        else window.close();
+    }
+
+    function onCancel() {
+        CloseWindow("cancel");
+    }
+    // 初始化时focus
+    function loadfocus() {
+        mini.get("rname").focus();
+    }
+</script>
