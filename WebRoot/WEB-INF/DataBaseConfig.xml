@@ -1,0 +1,9 @@
+<DataBaseConfig>
+
+    <DataBase key="mysql">
+        <DriverName>org.gjt.mm.mysql.Driver</DriverName>
+        <URL>jdbc:mysql://192.168.1.186:3306/svnmanage?useUnicode=true&amp;characterEncoding=utf8</URL>
+        <User>svnmanage</User>
+        <Password>fbsesvn</Password>
+    </DataBase>
+</DataBaseConfig>

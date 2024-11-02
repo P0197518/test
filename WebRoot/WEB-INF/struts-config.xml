@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+  <data-sources />
+  <form-beans>
+  	<form-bean name="SVNM0110Bean" type="com.fbse.svnm.bean.SVNM0110Bean"></form-bean>
+	<form-bean name="SVNM0210Bean" type="com.fbse.svnm.bean.SVNM0210Bean"></form-bean>
+	<form-bean name="SVNM0211Bean" type="com.fbse.svnm.bean.SVNM0211Bean"></form-bean>
+	<form-bean name="SVNM0212Bean" type="com.fbse.svnm.bean.SVNM0212Bean"></form-bean>
+	<form-bean name="SVNM0213Bean" type="com.fbse.svnm.bean.SVNM0213Bean"></form-bean>
+	<form-bean name="SVNM0310Bean" type="com.fbse.svnm.bean.SVNM0310Bean"></form-bean>
+	<form-bean name="SVNM0311Bean" type="com.fbse.svnm.bean.SVNM0311Bean"></form-bean>
+	<form-bean name="SVNM0312Bean" type="com.fbse.svnm.bean.SVNM0312Bean"></form-bean>
+	<form-bean name="SVNM0410Bean" type="com.fbse.svnm.bean.SVNM0410Bean"></form-bean>
+	<form-bean name="SVNM0411Bean" type="com.fbse.svnm.bean.SVNM0411Bean"></form-bean>
+	<form-bean name="SVNM0412Bean" type="com.fbse.svnm.bean.SVNM0412Bean"></form-bean>
+	<form-bean name="SVNM0413Bean" type="com.fbse.svnm.bean.SVNM0413Bean"></form-bean>
+	<form-bean name="SVNM0511Bean" type="com.fbse.svnm.bean.SVNM0511Bean"></form-bean>
+	<form-bean name="SVNM0610Bean" type="com.fbse.svnm.bean.SVNM0610Bean"></form-bean>
+  </form-beans>
+  <global-exceptions />
+  <global-forwards>
+	<forward name="logoff" path="/jsp/logoff.jsp"/>
+	<forward name="error" path="/jsp/error.jsp"/>
+  </global-forwards>
+  <action-mappings>
+  	<action path="/SVNM0110"
+  			name="SVNM0110Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0110Action"
+  			validate="true"
+  			input="/jsp/SVNM0110.jsp">
+  			<forward name="body" path="/jsp/body.jsp"></forward>
+  	</action>
+  	<action path="/SVNM0210"
+  			name="SVNM0210Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0210Action"
+  			validate="true"
+  			input="/jsp/SVNM0210.jsp">
+  			<forward name="SVNM0211" path="/SVNM0211.do"></forward>
+			<forward name="SVNM0212" path="/SVNM0212.do"></forward>
+			<forward name="SVNM0210" path="/jsp/SVNM0210.jsp"></forward>
+  	</action>
+  	<action path="/SVNM0211"
+  			name="SVNM0211Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0211Action"
+  			validate="true"
+  			input="/jsp/SVNM0211.jsp">
+  			<forward name="SVNM0210" path="/SVNM0210.do"></forward>
+  			<forward name="SVNM0213" path="/SVNM0213.do"></forward>
+  	</action>
+  	<action path="/SVNM0212"
+  			name="SVNM0212Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0212Action"
+  			validate="true"
+  			input="/jsp/SVNM0212.jsp">
+			<forward name="SVNM0210" path="/SVNM0210.do"></forward>
+			<forward name="SVNM0213" path="/SVNM0213.do"></forward>
+  	</action>
+  	<action path="/SVNM0213"
+  			name="SVNM0213Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0213Action"
+  			validate="true"
+  			input="/jsp/SVNM0213.jsp">
+			<forward name="SVNM0210" path="/SVNM0210.do"></forward>
+			<forward name="SVNM0211" path="/SVNM0211.do"></forward>
+			<forward name="SVNM0212" path="/SVNM0212.do"></forward>
+  	</action>
+  	<action path="/SVNM0310"
+  			name="SVNM0310Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0310Action"
+  			validate="true"
+  			input="/jsp/SVNM0310.jsp">
+			<forward name="SVNM0311" path="/SVNM0311.do"></forward>
+			<forward name="SVNM0312" path="/SVNM0312.do"></forward>
+			<forward name="SVNM0510" path="/jsp/SVNM0510.jsp"></forward>
+  	</action>
+  	<action path="/SVNM0311"
+  			name="SVNM0311Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0311Action"
+  			validate="true"
+  			input="/jsp/SVNM0311.jsp">
+			<forward name="SVNM0310" path="/SVNM0310.do"></forward>
+  	</action>
+  	<action path="/SVNM0312"
+  			name="SVNM0312Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0312Action"
+  			validate="true"
+  			input="/jsp/SVNM0312.jsp">
+			<forward name="SVNM0310" path="/SVNM0310.do"></forward>
+  	</action>
+  	<action path="/SVNM0410"
+  			name="SVNM0410Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0410Action"
+  			validate="true"
+  			input="/jsp/SVNM0410.jsp">
+			<forward name="SVNM0411" path="/SVNM0411.do"></forward>
+			<forward name="SVNM0412" path="/SVNM0412.do"></forward>
+			<forward name="SVNM0510" path="/jsp/SVNM0510.jsp"></forward>
+  	</action>
+  	<action path="/SVNM0411"
+  			name="SVNM0411Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0411Action"
+  			validate="true"
+  			input="/jsp/SVNM0411.jsp">
+			<forward name="SVNM0410" path="/SVNM0410.do"></forward>
+  	</action>
+  	<action path="/SVNM0412"
+  			name="SVNM0412Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0412Action"
+  			validate="true"
+  			input="/jsp/SVNM0412.jsp">
+			<forward name="SVNM0410" path="/SVNM0410.do"></forward>
+  	</action>
+	<action path="/SVNM0413"
+  			name="SVNM0413Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0413Action"
+  			validate="true"
+  			input="/jsp/SVNM0413.jsp">
+  	</action>
+  	<action path="/SVNM0511"
+  			name="SVNM0511Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0511Action"
+  			validate="true"
+  			input="/jsp/SVNM0511.jsp">
+  			<forward name="SVNM0511" path="/SVNM0511.do"></forward>
+  			<forward name="SVNM0511jsp" path="/jsp/SVNM0511.jsp"></forward>
+  			<forward name="SVNM0510" path="/jsp/SVNM0510.jsp"></forward>
+  	</action>
+	<action path="/SVNM0610"
+  			name="SVNM0610Bean"
+  			scope="request"
+  			type="com.fbse.svnm.action.SVNM0610Action"
+  			validate="true"
+  			input="/jsp/SVNM0610.jsp">
+  	</action>
+  </action-mappings>
+  <message-resources parameter="svnmmsg" />
+</struts-config>
+

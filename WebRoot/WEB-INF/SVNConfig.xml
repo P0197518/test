@@ -1,0 +1,156 @@
+<SVNConfig>
+    <Option>
+        <leaveDays>30</leaveDays>
+    </Option>
+    <File key="FilePath">
+        <passwords>E:\SVNManage\passwords</passwords>
+        <access>E:\SVNManage\access</access>
+        <library>E:\SVNManage</library>
+        <backup>E:\SVNManage\backup</backup>
+        <remove>E:\SVNManage\remove</remove>
+        <delete>E:\SVNManage\delete</delete>
+        <htpasswd>C:\Program Files\Apache Software Foundation\Apache2.2\bin\htpasswd</htpasswd>
+    </File>
+    <User key="UserId">
+        <admin>root,F0601</admin>
+        <qualityTeam></qualityTeam>
+    </User>
+    <Mail key="MailInfo">
+        <infra>zhm.zhang@fbse.cn</infra>
+        <title1>バックアップ成功</title1>
+        <!--@projectName:プロジェクト名； @pjStartDate：プロジェクト開始日；@pjEndDate：プロジェクト完了日；
+            @pjBackupTime：バックアップ間隔；@pjRemoveDate：SVNフォルダ移動日；@svnFolderName：SVNフォルダ名；
+            @pjMaster:ＰＪ責任者；@pjLeader:ＰＪリーダ；(「*」は行の開始)-->
+        <content1>
+            *インフラ
+            *
+            *お疲れ様です。SVN管理システムです。
+            *
+            *@projectNameについてSVNのディレクトリーはバックアップしました。
+            *具体的な内容は以下に記述してあります。
+            *
+            *プロジェクト名：@projectName
+            *プロジェクト期間：@pjStartDate～@pjEndDate
+            *バックアップ間隔(日)：@pjBackupTime
+            *SVNフォルダ移動日：@pjRemoveDate
+            *訪問アドレス：http://fr02:81/svn/@svnFolderName
+            *
+            *ご確認ください。問題があれば、インフラに連絡してください。
+            *
+            *以上です。宜しくお願いします。
+            ********************************************************************
+            *SVN管理システム
+            *バージョン：v1.0
+            *All Rights Reserved,Copyright © 2008 FBSE
+            ********************************************************************
+            *The contents of this e-mail message and any attachments are confidential and
+            *are intended solely for the addressee. If you have received this
+            *transmission in error, please immediately notify the sender by return e-mail
+            *and delete this message and its attachments. Any unauthorized use, copying
+            *or dissemination of this transmission is prohibited. Neither the
+            *confidentiality nor the integrity of this message can be vouched for
+            *following transmission on the Internet.
+            *--ISO27001--
+        </content1>
+        <emaliSender>zhm.zhang@fbse.cn</emaliSender>
+        <password></password>
+        <server>218.106.248.81</server>
+        <title0>SVNフォルダの申請について</title0>
+        <!--0:プロジェクト新規と更新成功 1:プロジェクトバックアップ成功 2:プロジェクト削除成功 3:プロジェクト修復成功 4:プロジェクト移動成功
+         5:プロジェクト新規と更新失敗 6:プロジェクトバックアップ失敗 7:プロジェクト削除失敗 8:プロジェクト修復失敗 9:プロジェクト移動失敗
+         10:プロジェクト新規と更新失敗、それにファイルを削除失敗 11:プロジェクトバックアップ失敗、それにファイルを削除失敗 
+         12:プロジェクト削除失敗、それにファイルを削除失敗 13:プロジェクト修復失敗、それにファイルを削除失敗 14:プロジェクト移動失敗、それにファイルを削除失敗 -->
+        <title2>title2</title2>
+        <title3>title3</title3>
+        <title4>title4</title4>
+        <title5>title5</title5>
+        <title6>title6</title6>
+        <title7>title7</title7>
+        <title8>title8</title8>
+        <title9>title9</title9>
+        <title10>title10</title10>
+        <title11>title11</title11>
+        <title12>title12</title12>
+        <title13>title13</title13>
+        <title14>title14</title14>
+        <content2>
+            content2
+        </content2>
+        <content3>
+            content3
+        </content3>
+        <content4>
+            content4
+        </content4>
+        <content5>
+            content5
+        </content5>
+        <content6>
+            content6
+        </content6>
+        <content7>
+            content7
+        </content7>
+        <content8>
+            content8
+        </content8>
+        <content9>
+            content9
+        </content9>
+        <content10>
+            content10
+        </content10>
+        <content11>
+            content11
+        </content11>
+        <content12>
+            content12
+        </content12>
+        <content13>
+            content13
+        </content13>
+        <content14>
+            content14
+        </content14>
+        <!--@projectName:プロジェクト名； @pjStartDate：プロジェクト開始日；@pjEndDate：プロジェクト完了日；
+            @pjBackupTime：バックアップ間隔；@pjRemoveDate：SVNフォルダ移動日；@svnFolderName：SVNフォルダ名；
+            @pjMaster:ＰＪ責任者；@pjLeader:ＰＪリーダ；(「*」は行の開始)-->
+        <content0>
+            *@projectNameの全員
+            *    CC)程部長殿、インフラ
+            *
+            *お疲れ様です。SVN管理システムです。
+            *
+            *@projectNameについてSVNのディレクトリーは建築しました。
+            *具体的な内容は以下に記述してあります。
+            *
+            *プロジェクト名：@projectName
+            *プロジェクト期間：@pjStartDate～@pjEndDate
+            *バックアップ間隔(日)：@pjBackupTime
+            *SVNフォルダ移動日：@pjRemoveDate
+            *訪問アドレス：http://fr02:81/svn/@svnFolderName
+            *
+            *ご確認ください。問題があれば、インフラに連絡してください。
+            *
+            *以上です。宜しくお願いします。
+            ********************************************************************
+            *SVN管理システム
+            *バージョン：v1.0
+            *All Rights Reserved,Copyright © 2008 FBSE
+            ********************************************************************
+            *The contents of this e-mail message and any attachments are confidential and
+            *are intended solely for the addressee. If you have received this
+            *transmission in error, please immediately notify the sender by return e-mail
+            *and delete this message and its attachments. Any unauthorized use, copying
+            *or dissemination of this transmission is prohibited. Neither the
+            *confidentiality nor the integrity of this message can be vouched for
+            *following transmission on the Internet.
+            *--ISO27001--
+        </content0>
+    </Mail>
+    <Log>
+        <LogPath>C:\svnlog\svn.log</LogPath>
+        <LogFileSize>1048576</LogFileSize>
+        <IsDayLog>false</IsDayLog>
+    </Log>
+</SVNConfig>

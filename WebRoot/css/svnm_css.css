@@ -1,0 +1,136 @@
+
+.dot_line{
+      PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND: url(../IMG/dot.gif) repeat-x center 50%;
+      PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 100%; PADDING-TOP: 0px
+      }
+
+      .th_font {
+    font-family: "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size: 13px;
+}
+
+.th_font1
+{
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 13px;
+}
+.th_font2
+{
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 11px;
+}
+.td_font {
+    font-family: "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size: 12px;
+}
+#ynsubnav {
+  CLEAR: both; BORDER-RIGHT: #0a1f64 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: #0a1f64 1px solid;
+  PADDING-LEFT: 0px; BACKGROUND: url(img/subnav_bkgd.gif) #122564 repeat-x left top; FLOAT: left;
+  PADDING-BOTTOM: 0px; MARGIN: 0px; BORDER-LEFT: #0a1f64 1px solid; WIDTH: 100%;
+    PADDING-TOP: 0px; height:25px;
+}
+
+#yreglgtb {
+  PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 8px; WIDTH: 253px; PADDING-TOP: 0px; BORDER-COLLAPSE: collapse
+}
+.span_one {
+      PADDING-RIGHT: 0px;
+      PADDING-LEFT: 0px;
+      FONT-SIZE: 13px;
+      PADDING-BOTTOM: 0px;
+        MARGIN: 0px;
+      PADDING-TOP: 0px
+     }
+
+A
+{
+    color: #053799;
+    text-decoration: none;
+}
+A:hover
+{
+    text-decoration: underline;
+}
+
+TABLE.T01
+{
+    font-size           :    12px;
+    background-color    :    #CCCCCC;
+    font-family         :    ‚l‚r ‚oƒSƒVƒbƒN;
+}
+TABLE.TB03
+{
+    background-color    : #999999;
+}
+TABLE.TB05
+{
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+    margin-left         : 0px;
+    margin-top          : 0px;
+    width               : 940px;
+    background-color    : #999999;
+}
+TR.TR01
+{
+    background-color    :    White;
+    font-family         :    ‚l‚r ‚oƒSƒVƒbƒN;
+    font-size           :    12px;
+    height              :    28px;
+}
+TH.TH01
+{
+    background-color    :    #d2d3ff;
+    font-family         :    ‚l‚r ‚oƒSƒVƒbƒN;
+    text-align          :    right;
+}
+TD.TD01
+{
+    background-color    :    White;
+    font-family         :    ‚l‚r ‚oƒSƒVƒbƒN;
+}
+TD.TD02
+{
+    background-color    : #F5F5F5;
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+}
+TD.TD03
+{
+    background-color    : #D2D3FF;
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+}
+IMG.I02
+{
+    border              :    0;
+    width               :    16px;
+    height              :    16px;
+}
+INPUT.TEXT01
+{
+    background-color     : #FFFFE0;
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+   
+}
+INPUT.BUTTON01
+{
+    height              : 21px;
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+    width               : 60px;
+    cursor              : hand;
+}
+TEXTAREA.TEXTAREA01
+{
+    background-color     : #FFFFE0;
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+}
+SELECT.SELECT01
+{
+    background-color     : #FFFFE0;
+    font-family         : "‚l‚r ‚oƒSƒVƒbƒN";
+    font-size           : 12px;
+}
