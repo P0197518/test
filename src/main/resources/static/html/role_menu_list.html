@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="/css/themes/icon.css"/>
+		<link rel="stylesheet" href="/css/themes/default/easyui.css" />
+		<title>角色-菜单列表</title>
+		<script src="/js/jquery.min.js"></script>
+		<script src="/js/jquery.easyui.min.js"></script>
+		<script src="/js/easyui-lang-zh_CN.js"></script>
+		<script src="/js/public.js"></script>
+		<script src="/js/ajaxUtils.js"></script>
+		<script src="/js/role_menu_list.js"></script>
+	</head>
+	
+	<body>
+		<form id="search_form">
+			<table style="border-spacing:5px;">
+				<tr>
+					<td><input id="role_id" /></td>
+					<td><input id="menu_id" /></td>
+
+					<td><a id="search">搜索</a></td>
+					<td><a id="clear">清空</a></td>
+				</tr>
+			</table>
+		</form>
+
+		<div id="menu_dialog" style="display:none;">
+			<form id="menu_form">
+				<input type="hidden" id="id" name="id" />
+
+				<table style="border-spacing:5px;">
+					<tr>
+						<td>角色</td>
+						<td>
+							<input id="roleId" name="roleId" />
+						</td>
+
+						<td>菜单</td>
+						<td>
+							<input id="menuId" name="menuId" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+			
+		<div id="role_menu_list"></div>
+	</body>
+</html>

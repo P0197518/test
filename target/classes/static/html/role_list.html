@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="/css/themes/icon.css"/>
+		<link rel="stylesheet" href="/css/themes/default/easyui.css" />
+		<title>角色列表</title>
+		<script src="/js/jquery.min.js"></script>
+		<script src="/js/jquery.easyui.min.js"></script>
+		<script src="/js/easyui-lang-zh_CN.js"></script>
+		<script src="/js/public.js"></script>
+		<script src="/js/ajaxUtils.js"></script>
+		<script src="/js/role_list.js"></script>
+	</head>
+	
+	<body>
+		<div id="role_dialog" style="display:none;">
+			<form id="role_form">
+				<input type="hidden" id="id" name="id" />
+				
+				<table style="border-spacing:5px;">
+					<tr>
+						<td>角&ensp;色&ensp;名</td>
+						<td><input id="name" name="name" /></td>
+						
+						<td>排&ensp;&ensp;序</td>
+						<td><input id="sort" name="sort" /></td>
+					</tr>
+					
+					<tr>
+						<td>角色描述</td>
+						<td colspan=3>
+							<input id="description" name="description" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+			
+		<table id="role_list"></table>
+	</body>
+</html>

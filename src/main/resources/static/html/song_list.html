@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>歌曲列表</title>
+		<link type="text/css" rel="stylesheet" href="/css/themes/icon.css" />
+		<link type="text/css" rel="stylesheet" href="/css/themes/default/easyui.css" />
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/js/easyui-lang-zh_CN.js"></script>
+		<script type="text/javascript" src="/js/datagrid-filter.js"></script>
+		<script type="text/javascript" src="/js/ajaxUtils.js"></script>
+		<script type="text/javascript" src="/js/song_list.js"></script>
+	</head>
+	
+	<body>
+		<div id="import_dialog" style="display:none;">
+			<form id="import_form">
+				<table style="border-spacing:5px;">
+					<tr>
+						<td>上传文件：</td>
+						<td><input id="select_file" /></td>
+					</tr>
+
+					<tr>
+						<td>文件名称：</td>
+						<td><div id="file-name"></div></td>
+					</tr>
+
+					<tr>
+						<td>文件大小：</td>
+						<td><div id="file-size"></div></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<table id="song_list"></table>
+	</body>
+</html>

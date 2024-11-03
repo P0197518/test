@@ -1,0 +1,25 @@
+package cn.edu.sgu.www.easyui.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
+/**
+ * redis配置类
+ * @author heyunlin
+ * @version 1.0
+ */
+@Configuration
+public class RedisConfig {
+
+    @Bean
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
+        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
+
+        stringRedisTemplate.setConnectionFactory(factory);
+
+        return stringRedisTemplate;
+    }
+
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.sgu.www.easyui.mapper.PermissionMapper">
+
+    <resultMap id="baseMap" type="cn.edu.sgu.www.easyui.entity.Permission">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="type" property="type" />
+        <result column="method" property="method" />
+        <result column="parent_id" property="parentId" />
+    </resultMap>
+
+    <select id="selectByType" resultMap="baseMap">
+        select * from permission where type = #{type}
+    </select>
+
+    <select id="selectByParentId" resultMap="baseMap">
+        select * from permission where parent_id = #{parentId}
+    </select>
+
+    <select id="selectUserPermissions" resultType="java.lang.String">
+        select qxb.value from permission qxb
+        left join role_permission jsqxb on qxb.id = jsqxb.permission_id
+        left join user_role yhjsb on jsqxb.role_id = yhjsb.role_id
+        left join user yhb on yhjsb.user_id = yhb.id
+        where yhb.username = #{username}
+    </select>
+</mapper>

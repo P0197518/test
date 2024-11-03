@@ -1,0 +1,48 @@
+server:
+  port: 8083
+
+# 开启knife4j增强模式
+knife4j:
+  enable: true
+
+logging:
+  level:
+    springfox: error
+    cn.edu.sgu.www.easyui: debug
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+
+spring:
+  application:
+    name: easyui-admin
+  redis:
+    host: localhost
+    database: 0
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    sql-migration-separator: __
+    table: flyway_schema_history
+    locations: classpath:db/migration
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/easyui-admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+# 配置统一数据格式返回处理类忽略的路径
+response:
+  ignore:
+    - /error
+    - /v2/api-docs
+    - /swagger-resources
+
+# 系统设置
+system:
+  settings:
+    enable-authorization: false
+    enable-table-auto-creation: true

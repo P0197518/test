@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.sgu.www.easyui.mapper.MenuMapper">
+    <resultMap id="resultMap" type="cn.edu.sgu.www.easyui.entity.Menu">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="type" column="type" />
+        <result property="icon" column="icon" />
+        <result property="url" column="url" />
+        <result property="parentId" column="parent_id" />
+        <result property="pxh" column="pxh" />
+    </resultMap>
+
+    <select id="selectMinPxh" resultType="java.lang.Integer">
+        select if(yhcd.pxh is null, 1000000, min(yhcd.pxh)) from user_menu yhcd
+        left join menu cd on yhcd.menu_id = cd.id
+        where parent_id = #{parentId}
+    </select>
+
+    <select id="selectMenus" resultMap="resultMap">
+        select
+            cd.id,
+            cd.name,
+            cd.type
+        from user yh
+        left join user_role yhjs on yh.id = yhjs.user_id
+        left join role_menu jscd on yhjs.role_id = jscd.role_id
+        left join menu cd on jscd.menu_id = cd.id
+        where yhjs.user_id = #{userId}
+    </select>
+
+    <select id="selectByParentId" resultMap="resultMap">
+        select
+            cd.id,
+            cd.name,
+            cd.type,
+            cd.url,
+            cd.icon,
+            yhcd.pxh,
+            cd.parent_id
+        from menu cd
+        left join user_menu yhcd on cd.id = yhcd.menu_id
+        where parent_id = #{parentId} order by yhcd.pxh
+    </select>
+
+    <select id="selectRoleMenus" resultMap="resultMap">
+        select
+            cd.id,
+            cd.name,
+            cd.type,
+            cd.url,
+            cd.parent_id
+        from menu cd
+        left join user_menu yhcd on cd.id = yhcd.menu_id
+        where parent_id in (
+            select menu_id from role_menu where role_id = #{roleId}
+        )
+        order by IFNULL(yhcd.pxh, 10000)
+    </select>
+
+    <select id="selectDisplayMenus" resultMap="resultMap">
+        select
+            cd.id,
+            cd.name,
+            cd.type,
+            cd.icon,
+            cd.url,
+            yhcd.pxh,
+            cd.parent_id
+        from user yh
+        left join user_menu yhcd on yh.id = yhcd.user_id
+        left join menu cd on yhcd.menu_id = cd.id
+        where yh.id = #{userId} and yhcd.display = 1
+        order by IFNULL(yhcd.pxh, 10000)
+    </select>
+</mapper>

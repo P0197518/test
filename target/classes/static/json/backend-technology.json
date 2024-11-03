@@ -1,0 +1,46 @@
+{
+  "code": 200,
+  "message": "请求成功",
+  "data": [
+    {
+      "name": "Spring Boot",
+      "note": "容器+MVC框架",
+      "href": "https://spring.io/projects/spring-boot"
+    },
+    {
+      "name": "Apache Shiro",
+      "note": "认证和授权框架",
+      "href": "https://shiro.apache.org/"
+    },
+    {
+      "name": "MyBatis",
+      "note": "ORM框架",
+      "href": "https://blog.mybatis.org/"
+    },
+    {
+      "name": "MyBatis-Plus",
+      "note": "MyBatis增强工具",
+      "href": "https://www.baomidou.com/"
+    },
+    {
+      "name": "Knife4j",
+      "note": "接口文档生成工具",
+      "href": "https://doc.xiaominfo.com/docs/quick-start/"
+    },
+    {
+      "name": "Fastjson",
+      "note": "序列化/反序列化工具",
+      "href": "https://github.com/alibaba/fastjson"
+    },
+    {
+      "name": "Flyway",
+      "note": "数据库版本管理",
+      "href": "https://github.com/flyway/flyway"
+    },
+    {
+      "name": "Easy Excel",
+      "note": "Excel处理工具",
+      "href": "https://easyexcel.opensource.alibaba.com/"
+    }
+  ]
+}
